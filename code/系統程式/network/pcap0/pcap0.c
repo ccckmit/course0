@@ -9,7 +9,7 @@
  *   Linux: gcc -o demo demo.c mypcap.c
  */
 
-#include "mypcap.h"
+#include "pcap0.h"
 
 #include <stdio.h>
 #include <stdlib.h>

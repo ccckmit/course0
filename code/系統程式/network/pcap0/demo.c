@@ -10,7 +10,7 @@
  *   sudo ./demo eth0 20
  */
 
-#include "mypcap.h"
+#include "pcap0.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>

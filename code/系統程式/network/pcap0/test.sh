@@ -1,5 +1,5 @@
 #!/bin/bash
-# test.sh — 編譯並測試 mypcap
+# test.sh — 編譯並測試 pcap0
 set -e
 
 # ── 偵測介面 ────────────────────────────────────────
@@ -12,7 +12,7 @@ fi
 COUNT=10
 
 echo "========================================"
-echo " mypcap 測試腳本"
+echo " pcap0 測試腳本"
 echo " 平台 : $(uname)"
 echo " 介面 : $IFACE"
 echo " 封包數: $COUNT"
@@ -21,7 +21,7 @@ echo ""
 
 # ── 編譯 ─────────────────────────────────────────────
 echo "[1] 編譯..."
-gcc -Wall -Wextra -o demo demo.c mypcap.c
+gcc -Wall -Wextra -o demo demo.c pcap0.c
 echo "    OK"
 echo ""
 
