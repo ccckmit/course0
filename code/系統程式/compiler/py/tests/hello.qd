@@ -1,0 +1,4 @@
+LOAD_NAME        print      _          t0
+LOAD_CONST       "hello"    _          t1
+ARG_PUSH         t1         0          _
+CALL             t0         1          t2

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>即時聊天</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, sans-serif; background: #f0f0f0; height: 100vh; display: flex; }
+    #sidebar { width: 200px; background: #2c3e50; color: white; padding: 1rem; }
+    #sidebar h3 { margin-bottom: 1rem; }
+    #user-list { list-style: none; }
+    #user-list li { padding: 0.5rem; cursor: pointer; border-radius: 4px; margin-bottom: 0.3rem; }
+    #user-list li:hover { background: #34495e; }
+    #user-list li.active { background: #3498db; }
+    #main { flex: 1; display: flex; flex-direction: column; }
+    #messages { flex: 1; padding: 1rem; overflow-y: auto; }
+    .message { margin-bottom: 0.8rem; padding: 0.5rem 1rem; border-radius: 8px; max-width: 70%; }
+    .message.system { background: #ecf0f1; align-self: center; font-size: 0.85rem; }
+    .message.private { background: #e8f4fd; }
+    .message .sender { font-weight: bold; color: #3498db; font-size: 0.85rem; }
+    .message .text { margin-top: 0.3rem; }
+    .message .time { font-size: 0.75rem; color: #7f8c8d; }
+    #input-area { padding: 1rem; background: white; border-top: 1px solid #ddd; display: flex; gap: 0.5rem; }
+    #message-input { flex: 1; padding: 0.7rem; border: 1px solid #ddd; border-radius: 4px; }
+    #send-btn { padding: 0.7rem 1.5rem; background: #3498db; color: white; border: none; border-radius: 4px; cursor: pointer; }
+    #send-btn:hover { background: #2980b9; }
+    .my-message { background: #3498db; color: white; margin-left: auto; }
+    .my-message .sender { color: white; }
+  </style>
+</head>
+<body>
+  <div id="sidebar">
+    <h3>使用者</h3>
+    <ul id="user-list"></ul>
+  </div>
+  <div id="main">
+    <div id="messages"></div>
+    <div id="input-area">
+      <input type="text" id="message-input" placeholder="輸入訊息...">
+      <button id="send-btn">傳送</button>
+    </div>
+  </div>
+  <script src="app.js"></script>
+</body>
+</html>

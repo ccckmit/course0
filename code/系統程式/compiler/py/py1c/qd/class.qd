@@ -1,0 +1,126 @@
+CLASS               Student                                 _                _                 ; class Student
+FUNCTION            _                                       _                __init__          ; function __init__
+ENTER_SCOPE         _                                       _                _               
+PARAM               _                                       _                self            
+PARAM               _                                       _                name            
+PARAM               _                                       _                grades          
+LOAD_NAME           name                                    _                t0                ; load name
+LOAD_NAME           self                                    _                t1                ; load self
+STORE_ATTR          t1                                      name             t0              
+LOAD_NAME           grades                                  _                t2                ; load grades
+LOAD_NAME           self                                    _                t3                ; load self
+STORE_ATTR          t3                                      grades           t2              
+EXIT_SCOPE          _                                       _                _               
+FUNCTION_END        _                                       _                __init__        
+FUNCTION            _                                       _                get_average       ; function get_average
+ENTER_SCOPE         _                                       _                _               
+PARAM               _                                       _                self            
+LOAD_NAME           self                                    _                t4                ; load self
+LOAD_ATTR           t4                                      grades           t5                ; getattr grades
+NOT                 t5                                      _                t6              
+BRANCH_IF_FALSE     t6                                      _                L_else0           ; if not test, go to else
+LOAD_CONST          0                                       _                t7                ; load 0
+RETURN              t7                                      _                _                 ; return value
+JUMP                L_end1                                  _                _                 ; skip else
+L_else0::
+L_end1::
+LOAD_NAME           sum                                     _                t8                ; load sum
+LOAD_NAME           self                                    _                t9                ; load self
+LOAD_ATTR           t9                                      grades           t10               ; getattr grades
+ARG_PUSH            t10                                     0                _               
+CALL                t8                                      1                t11             
+LOAD_NAME           len                                     _                t12               ; load len
+LOAD_NAME           self                                    _                t13               ; load self
+LOAD_ATTR           t13                                     grades           t14               ; getattr grades
+ARG_PUSH            t14                                     0                _               
+CALL                t12                                     1                t15             
+DIV                 t11                                     t15              t16             
+RETURN              t16                                     _                _                 ; return value
+EXIT_SCOPE          _                                       _                _               
+FUNCTION_END        _                                       _                get_average     
+FUNCTION            _                                       _                introduce         ; function introduce
+ENTER_SCOPE         _                                       _                _               
+PARAM               _                                       _                self            
+LOAD_NAME           self                                    _                t17               ; load self
+LOAD_ATTR           t17                                     get_average      t18               ; getattr get_average
+CALL                t18                                     0                t19             
+STORE               t19                                     _                avg               ; assign avg
+LOAD_NAME           print                                   _                t20               ; load print
+LOAD_CONST          "你好，我是 "                                _                t21             
+LOAD_NAME           self                                    _                t22               ; load self
+LOAD_ATTR           t22                                     name             t23               ; getattr name
+LOAD_NAME           str                                     _                t24             
+ARG_PUSH            t23                                     0                _               
+CALL                t24                                     1                t25             
+LOAD_CONST          "，我的平均成績是 "                             _                t26             
+LOAD_NAME           avg                                     _                t27               ; load avg
+LOAD_CONST          ".1f"                                   _                t29             
+LOAD_NAME           format                                  _                t30             
+ARG_PUSH            t27                                     0                _               
+ARG_PUSH            t29                                     1                _               
+CALL                t30                                     2                t28             
+LOAD_CONST          " 分。"                                   _                t31             
+ADD                 t21                                     t25              t32             
+ADD                 t32                                     t26              t33             
+ADD                 t33                                     t28              t34             
+ADD                 t34                                     t31              t35             
+ARG_PUSH            t35                                     0                _               
+CALL                t20                                     1                t36             
+EXIT_SCOPE          _                                       _                _               
+FUNCTION_END        _                                       _                introduce       
+CLASS_END           _                                       _                Student         
+LOAD_NAME           Student                                 _                t37               ; load Student
+LOAD_CONST          "小明"                                    _                t38               ; load string
+LOAD_CONST          85                                      _                t39               ; load 85
+LOAD_CONST          90                                      _                t40               ; load 90
+LOAD_CONST          78                                      _                t41               ; load 78
+LIST_APPEND         t39                                     0                _               
+LIST_APPEND         t40                                     1                _               
+LIST_APPEND         t41                                     2                _               
+BUILD_LIST          3                                       _                t42             
+ARG_PUSH            t38                                     0                _               
+ARG_PUSH            t42                                     1                _               
+CALL                t37                                     2                t43             
+STORE               t43                                     _                student_a         ; assign student_a
+LOAD_NAME           Student                                 _                t44               ; load Student
+LOAD_CONST          "小華"                                    _                t45               ; load string
+LOAD_CONST          92                                      _                t46               ; load 92
+LOAD_CONST          88                                      _                t47               ; load 88
+LOAD_CONST          95                                      _                t48               ; load 95
+LIST_APPEND         t46                                     0                _               
+LIST_APPEND         t47                                     1                _               
+LIST_APPEND         t48                                     2                _               
+BUILD_LIST          3                                       _                t49             
+ARG_PUSH            t45                                     0                _               
+ARG_PUSH            t49                                     1                _               
+CALL                t44                                     2                t50             
+STORE               t50                                     _                student_b         ; assign student_b
+LOAD_NAME           student_a                               _                t51               ; load student_a
+LOAD_ATTR           t51                                     introduce        t52               ; getattr introduce
+CALL                t52                                     0                t53             
+LOAD_NAME           student_b                               _                t54               ; load student_b
+LOAD_ATTR           t54                                     introduce        t55               ; getattr introduce
+CALL                t55                                     0                t56             
+LOAD_NAME           print                                   _                t57               ; load print
+LOAD_CONST          "直接查詢："                                 _                t58             
+LOAD_NAME           student_a                               _                t59               ; load student_a
+LOAD_ATTR           t59                                     name             t60               ; getattr name
+LOAD_NAME           str                                     _                t61             
+ARG_PUSH            t60                                     0                _               
+CALL                t61                                     1                t62             
+LOAD_CONST          " 考了 "                                  _                t63             
+LOAD_NAME           len                                     _                t64               ; load len
+LOAD_NAME           student_a                               _                t65               ; load student_a
+LOAD_ATTR           t65                                     grades           t66               ; getattr grades
+ARG_PUSH            t66                                     0                _               
+CALL                t64                                     1                t67             
+LOAD_NAME           str                                     _                t68             
+ARG_PUSH            t67                                     0                _               
+CALL                t68                                     1                t69             
+LOAD_CONST          " 門科目。"                                 _                t70             
+ADD                 t58                                     t62              t71             
+ADD                 t71                                     t63              t72             
+ADD                 t72                                     t69              t73             
+ADD                 t73                                     t70              t74             
+ARG_PUSH            t74                                     0                _               
+CALL                t57                                     1                t75             

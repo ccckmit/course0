@@ -1,0 +1,36 @@
+COMMENT  factorial function
+
+LABEL    factorial        _       _
+LOAD_FAST n                _       t0
+LOAD_CONST 0               _       t1
+CMP_EQ    t0               t1      t2
+BRANCH_IF_FALSE t2         _       L_else
+
+LOAD_CONST 1               _       t3
+RETURN    t3               _       _
+
+LABEL     L_else           _       _
+LOAD_FAST n                _       t4
+LOAD_FAST n                _       t5
+LOAD_CONST 1               _       t6
+SUB       t5               t6      t7
+
+LOAD_NAME factorial        _       t8
+ARG_PUSH  t7               0       _
+CALL      t8               1       t9
+
+MUL       t4               t9      t10
+RETURN    t10              _       _
+
+COMMENT  program entry
+
+LOAD_CONST 5               _       t11
+LOAD_NAME factorial        _       t12
+ARG_PUSH  t11              0       _
+CALL      t12              1       t13
+STORE     t13              _       result
+
+LOAD_NAME print            _       t14
+LOAD_NAME result           _       t15
+ARG_PUSH  t15              0       _
+CALL      t14              1       t16
