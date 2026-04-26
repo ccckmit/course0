@@ -1,0 +1,9 @@
+README.md
+pyproject.toml
+src/make0/__init__.py
+src/make0/main.py
+src/make0.egg-info/PKG-INFO
+src/make0.egg-info/SOURCES.txt
+src/make0.egg-info/dependency_links.txt
+src/make0.egg-info/entry_points.txt
+src/make0.egg-info/top_level.txt
