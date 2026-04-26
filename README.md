@@ -10,7 +10,7 @@
 |------|------|---------|------|
 | 計算機結構 | [講義](lecture/計算機結構/README.md) / [程式](code/計算機結構/) / [Wiki](wiki/計算機結構/) | Verilog | Nand2tetris / CPU / ALU / 數位邏輯 ...|
 | 系統程式 | [講義](lecture/系統程式/README.md) / [程式](code/系統程式/) / [Wiki](wiki/系統程式/) | C + Python | 編譯器 / 虛擬機/ 作業系統 / Linux ...|
-| 機器學習 | [講義](lecture/機器學習/README.md) / [程式](code/機器學習/) / [Wiki](wiki/機器學習/) | Python | 優化算法習 / 神經網路 / 強化學習 ... |
+| 機器學習 | [講義](lecture/機器學習/README.md) / [程式](code/機器學習/) / [Wiki](wiki/機器學習/) | Python | 優化算法 / 神經網路 / 強化學習 ... |
 | 演算法 | [講義](lecture/演算法/README.md) / [程式](code/演算法/) / [Wiki](wiki/演算法/) | Python | 複雜度 / 查表法 / 貪婪法 / 動態規劃 ... |
 | 網站設計 | [講義](lecture/網站設計/README.md) / [程式](code/網站設計/) / [Wiki](wiki/網頁設計/) | JavaScript | HTML / CSS / JS / Node / React ... |
 | 軟體工程 | [講義](lecture/軟體工程/README.md) / [程式](code/軟體工程/) / [Wiki](wiki/軟體工程/) | Rust + Python | AI 導向 / 測試 / Prompt / Harness / Git ... |
