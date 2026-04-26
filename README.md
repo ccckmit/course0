@@ -8,7 +8,7 @@
 
 | 課程 | 程式 | 主題 |
 |------|------|------|
-| 計算機結構 | [講義](lecture/計算機結構/README.md) / [程式](code/計算機結構/) / [Wiki](wiki/計算機結構/) | Nand2Tetris / CPU / 記憶體 / 暫存器 / ALU / 數位邏輯 / ...|
+| 計算機結構 | [講義](lecture/計算機結構/README.md) / [程式](code/計算機結構/) / [Wiki](wiki/計算機結構/) | Nand2Tetris / CPU / ALU / 數位邏輯 / ...|
 | 系統程式 | [講義](lecture/系統程式/README.md) / [程式](code/系統程式/) / [Wiki](wiki/系統程式/) | 編譯器 / 虛擬機/ 作業系統 / ...|
 | 機器學習 | [講義](lecture/機器學習/README.md) / [程式](code/機器學習/) / [Wiki](wiki/機器學習/) | 優化算法習 / 神經網路 / 強化學習 / ... |
 | 演算法 | [講義](lecture/演算法/README.md) / [程式](code/演算法/) / [Wiki](wiki/演算法/) | 複雜度 / 查表法 / 貪婪法 / 動態規劃 ... |
