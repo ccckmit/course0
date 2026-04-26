@@ -1,0 +1,14 @@
+{
+  "name": "blog-system",
+  "version": "1.0.0",
+  "description": "Simple blog system",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "node test.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "sqlite3": "^5.1.6"
+  }
+}

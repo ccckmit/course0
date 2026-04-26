@@ -1,0 +1,38 @@
+FUNCTION            _                                       _                factorial         ; function factorial
+ENTER_SCOPE         _                                       _                _               
+PARAM               _                                       _                n               
+LOAD_NAME           n                                       _                t0                ; load n
+LOAD_CONST          0                                       _                t1                ; load 0
+CMP_EQ              t0                                      t1               t2              
+LOAD_NAME           n                                       _                t3                ; load n
+LOAD_CONST          1                                       _                t4                ; load 1
+CMP_EQ              t3                                      t4               t5              
+OR                  t2                                      t5               t6              
+BRANCH_IF_FALSE     t6                                      _                L_else0           ; if not test, go to else
+LOAD_CONST          1                                       _                t7                ; load 1
+RETURN              t7                                      _                _                 ; return value
+JUMP                L_end1                                  _                _                 ; skip else
+L_else0::
+L_end1::
+LOAD_NAME           n                                       _                t8                ; load n
+LOAD_NAME           factorial                               _                t9                ; load factorial
+LOAD_NAME           n                                       _                t10               ; load n
+LOAD_CONST          1                                       _                t11               ; load 1
+SUB                 t10                                     t11              t12             
+ARG_PUSH            t12                                     0                _               
+CALL                t9                                      1                t13             
+MUL                 t8                                      t13              t14             
+RETURN              t14                                     _                _                 ; return value
+EXIT_SCOPE          _                                       _                _               
+FUNCTION_END        _                                       _                factorial       
+LOAD_NAME           factorial                               _                t15               ; load factorial
+LOAD_CONST          5                                       _                t16               ; load 5
+ARG_PUSH            t16                                     0                _               
+CALL                t15                                     1                t17             
+STORE               t17                                     _                result            ; assign result
+LOAD_NAME           print                                   _                t18               ; load print
+LOAD_CONST          "factorial(5)="                         _                t19               ; load string
+LOAD_NAME           result                                  _                t20               ; load result
+ARG_PUSH            t19                                     0                _               
+ARG_PUSH            t20                                     1                _               
+CALL                t18                                     2                t21             

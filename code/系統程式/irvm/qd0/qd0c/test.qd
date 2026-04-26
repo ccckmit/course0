@@ -1,0 +1,93 @@
+# test.qd — 基本功能測試
+# 對應的虛擬 Python：
+#
+#   x = 10
+#   y = 3
+#   z = x + y
+#   print(z)
+#
+#   msg = "hello"
+#   print(msg)
+#
+#   lst = []
+#   i = 0
+# loop:
+#   if i >= 5: goto end
+#   lst.append(i)
+#   i = i + 1
+#   goto loop
+# end:
+#   print(lst)
+#
+#   # 條件
+#   if x > 5: print("big") else print("small")
+
+# --- 基本算術 ---
+LOAD_CONST  10          _   t0
+STORE       t0          _   x
+LOAD_CONST  3           _   t1
+STORE       t1          _   y
+LOAD_FAST   x           _   t2
+LOAD_FAST   y           _   t3
+ADD         t2          t3  t4
+STORE       t4          _   z
+LOAD_NAME   print       _   t5
+LOAD_FAST   z           _   t6
+ARG_PUSH    t6          0   _
+CALL        t5          1   _
+
+# --- 字串 ---
+LOAD_CONST  "hello"     _   t7
+STORE       t7          _   msg
+LOAD_NAME   print       _   t8
+LOAD_FAST   msg         _   t9
+ARG_PUSH    t9          0   _
+CALL        t8          1   _
+
+# --- 建 list，for 迴圈（手動展開） ---
+BUILD_LIST  _           _   lst
+STORE       lst         _   lst
+LOAD_CONST  0           _   t10
+STORE       t10         _   i
+
+LABEL       L_loop
+LOAD_FAST   i           _   t11
+LOAD_CONST  5           _   t12
+CMP_GE      t11         t12 t13
+BRANCH_IF_TRUE  t13     _   L_end
+
+LOAD_FAST   lst         _   t14
+LOAD_FAST   i           _   t15
+LIST_APPEND t14         t15 _
+
+LOAD_FAST   i           _   t16
+LOAD_CONST  1           _   t17
+ADD         t16         t17 t18
+STORE       t18         _   i
+JUMP        L_loop      _   _
+
+LABEL       L_end
+LOAD_NAME   print       _   t19
+LOAD_FAST   lst         _   t20
+ARG_PUSH    t20         0   _
+CALL        t19         1   _
+
+# --- 條件判斷 ---
+LOAD_FAST   x           _   t21
+LOAD_CONST  5           _   t22
+CMP_GT      t21         t22 t23
+BRANCH_IF_FALSE  t23    _   L_else
+
+LOAD_NAME   print       _   t24
+LOAD_CONST  "big"       _   t25
+ARG_PUSH    t25         0   _
+CALL        t24         1   _
+JUMP        L_ifend     _   _
+
+LABEL       L_else
+LOAD_NAME   print       _   t26
+LOAD_CONST  "small"     _   t27
+ARG_PUSH    t27         0   _
+CALL        t26         1   _
+
+LABEL       L_ifend

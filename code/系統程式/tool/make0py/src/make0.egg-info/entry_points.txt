@@ -1,0 +1,2 @@
+[console_scripts]
+make0 = make0.main:main

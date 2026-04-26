@@ -1,0 +1,151 @@
+
+```sh
+(venv) cccuser@cccimacdeiMac verilog0c % ./test.sh
++ gcc ast.c codegen.c lexer.c parser.c verilog0c.c -o verilog0c
++ ./vrun.sh halfadder
+成功從 AST 轉換: v/halfadder.v -> v/halfadder.c
+a=0, b=0 => sum=0, cout=0
+a=0, b=1 => sum=1, cout=0
+a=1, b=0 => sum=1, cout=0
+a=1, b=1 => sum=0, cout=1
++ ./vrun.sh comparator
+成功從 AST 轉換: v/comparator.v -> v/comparator.c
+a=0, b=0 => eq=1, neq=0
+a=0, b=1 => eq=0, neq=1
+a=1, b=0 => eq=0, neq=1
+a=1, b=1 => eq=1, neq=0
++ ./vrun.sh fulladder
+成功從 AST 轉換: v/fulladder.v -> v/fulladder.c
+a=0, b=0, cin=0 => sum=0, cout=0
+a=0, b=0, cin=1 => sum=1, cout=0
+a=0, b=1, cin=0 => sum=1, cout=0
+a=0, b=1, cin=1 => sum=0, cout=1
+a=1, b=0, cin=0 => sum=1, cout=0
+a=1, b=0, cin=1 => sum=0, cout=1
+a=1, b=1, cin=0 => sum=0, cout=1
+a=1, b=1, cin=1 => sum=1, cout=1
++ ./vrun.sh mux2to1
+成功從 AST 轉換: v/mux2to1.v -> v/mux2to1.c
+d0=0, d1=1, sel=0 => y=0
+d0=0, d1=1, sel=1 => y=1
+d0=1, d1=0, sel=0 => y=1
+d0=1, d1=0, sel=1 => y=0
++ ./vrun.sh mcu0m
+成功從 AST 轉換: v/mcu0m.v -> v/mcu0m.c
+       0:       16
+       2:     401a
+       4:     5012
+       6:     1018
+       8:     3016
+       a:       14
+       c:     1016
+       e:     3014
+      10:     2000
+      12:     2012
+      14:        0
+      16:        0
+      18:        1
+      1a:        a
+      1c:        0
+      1e:        0
+  10ns PC=0000 IR=0016, SW=0000, A=0
+  30ns PC=0002 IR=401A, SW=8000, A=0
+  50ns PC=0004 IR=5012, SW=8000, A=0
+  70ns PC=0006 IR=1018, SW=8000, A=1
+  90ns PC=0008 IR=3016, SW=8000, A=1
+ 110ns PC=000A IR=0014, SW=8000, A=0
+ 130ns PC=000C IR=1016, SW=8000, A=1
+ 150ns PC=000E IR=3014, SW=8000, A=1
+ 170ns PC=0010 IR=2000, SW=8000, A=1
+ 190ns PC=0000 IR=0016, SW=8000, A=1
+ 210ns PC=0002 IR=401A, SW=8000, A=1
+ 230ns PC=0004 IR=5012, SW=8000, A=1
+ 250ns PC=0006 IR=1018, SW=8000, A=2
+ 270ns PC=0008 IR=3016, SW=8000, A=2
+ 290ns PC=000A IR=0014, SW=8000, A=1
+ 310ns PC=000C IR=1016, SW=8000, A=3
+ 330ns PC=000E IR=3014, SW=8000, A=3
+ 350ns PC=0010 IR=2000, SW=8000, A=3
+ 370ns PC=0000 IR=0016, SW=8000, A=2
+ 390ns PC=0002 IR=401A, SW=8000, A=2
+ 410ns PC=0004 IR=5012, SW=8000, A=2
+ 430ns PC=0006 IR=1018, SW=8000, A=3
+ 450ns PC=0008 IR=3016, SW=8000, A=3
+ 470ns PC=000A IR=0014, SW=8000, A=3
+ 490ns PC=000C IR=1016, SW=8000, A=6
+ 510ns PC=000E IR=3014, SW=8000, A=6
+ 530ns PC=0010 IR=2000, SW=8000, A=6
+ 550ns PC=0000 IR=0016, SW=8000, A=3
+ 570ns PC=0002 IR=401A, SW=8000, A=3
+ 590ns PC=0004 IR=5012, SW=8000, A=3
+ 610ns PC=0006 IR=1018, SW=8000, A=4
+ 630ns PC=0008 IR=3016, SW=8000, A=4
+ 650ns PC=000A IR=0014, SW=8000, A=6
+ 670ns PC=000C IR=1016, SW=8000, A=10
+ 690ns PC=000E IR=3014, SW=8000, A=10
+ 710ns PC=0010 IR=2000, SW=8000, A=10
+ 730ns PC=0000 IR=0016, SW=8000, A=4
+ 750ns PC=0002 IR=401A, SW=8000, A=4
+ 770ns PC=0004 IR=5012, SW=8000, A=4
+ 790ns PC=0006 IR=1018, SW=8000, A=5
+ 810ns PC=0008 IR=3016, SW=8000, A=5
+ 830ns PC=000A IR=0014, SW=8000, A=10
+ 850ns PC=000C IR=1016, SW=8000, A=15
+ 870ns PC=000E IR=3014, SW=8000, A=15
+ 890ns PC=0010 IR=2000, SW=8000, A=15
+ 910ns PC=0000 IR=0016, SW=8000, A=5
+ 930ns PC=0002 IR=401A, SW=8000, A=5
+ 950ns PC=0004 IR=5012, SW=8000, A=5
+ 970ns PC=0006 IR=1018, SW=8000, A=6
+ 990ns PC=0008 IR=3016, SW=8000, A=6
+1010ns PC=000A IR=0014, SW=8000, A=15
+1030ns PC=000C IR=1016, SW=8000, A=21
+1050ns PC=000E IR=3014, SW=8000, A=21
+1070ns PC=0010 IR=2000, SW=8000, A=21
+1090ns PC=0000 IR=0016, SW=8000, A=6
+1110ns PC=0002 IR=401A, SW=8000, A=6
+1130ns PC=0004 IR=5012, SW=8000, A=6
+1150ns PC=0006 IR=1018, SW=8000, A=7
+1170ns PC=0008 IR=3016, SW=8000, A=7
+1190ns PC=000A IR=0014, SW=8000, A=21
+1210ns PC=000C IR=1016, SW=8000, A=28
+1230ns PC=000E IR=3014, SW=8000, A=28
+1250ns PC=0010 IR=2000, SW=8000, A=28
+1270ns PC=0000 IR=0016, SW=8000, A=7
+1290ns PC=0002 IR=401A, SW=8000, A=7
+1310ns PC=0004 IR=5012, SW=8000, A=7
+1330ns PC=0006 IR=1018, SW=8000, A=8
+1350ns PC=0008 IR=3016, SW=8000, A=8
+1370ns PC=000A IR=0014, SW=8000, A=28
+1390ns PC=000C IR=1016, SW=8000, A=36
+1410ns PC=000E IR=3014, SW=8000, A=36
+1430ns PC=0010 IR=2000, SW=8000, A=36
+1450ns PC=0000 IR=0016, SW=8000, A=8
+1470ns PC=0002 IR=401A, SW=8000, A=8
+1490ns PC=0004 IR=5012, SW=8000, A=8
+1510ns PC=0006 IR=1018, SW=8000, A=9
+1530ns PC=0008 IR=3016, SW=8000, A=9
+1550ns PC=000A IR=0014, SW=8000, A=36
+1570ns PC=000C IR=1016, SW=8000, A=45
+1590ns PC=000E IR=3014, SW=8000, A=45
+1610ns PC=0010 IR=2000, SW=8000, A=45
+1630ns PC=0000 IR=0016, SW=8000, A=9
+1650ns PC=0002 IR=401A, SW=8000, A=9
+1670ns PC=0004 IR=5012, SW=8000, A=9
+1690ns PC=0006 IR=1018, SW=8000, A=10
+1710ns PC=0008 IR=3016, SW=8000, A=10
+1730ns PC=000A IR=0014, SW=8000, A=45
+1750ns PC=000C IR=1016, SW=8000, A=55
+1770ns PC=000E IR=3014, SW=8000, A=55
+1790ns PC=0010 IR=2000, SW=8000, A=55
+1810ns PC=0000 IR=0016, SW=8000, A=10
+1830ns PC=0002 IR=401A, SW=4000, A=10
+1850ns PC=0004 IR=5012, SW=4000, A=10
+1870ns PC=0012 IR=2012, SW=4000, A=10
+1890ns PC=0012 IR=2012, SW=4000, A=10
+1910ns PC=0012 IR=2012, SW=4000, A=10
+1930ns PC=0012 IR=2012, SW=4000, A=10
+1950ns PC=0012 IR=2012, SW=4000, A=10
+1970ns PC=0012 IR=2012, SW=4000, A=10
+1990ns PC=0012 IR=2012, SW=4000, A=10
+```

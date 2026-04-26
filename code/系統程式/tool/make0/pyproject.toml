@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+# 套件名稱 (使用者用 pip install pcmake 安裝)
+name = "make0" 
+version = "0.3.1"
+authors =[
+  { name="ccckmit", email="ccckmit@gmail.com" },
+]
+description = "A lightweight cross-platform C/C++ build system written in Python."
+readme = "README.md"
+requires-python = ">=3.7"
+classifiers =[
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+
+[project.scripts]
+# 左邊是終端機執行的指令，右邊是對應到 src/pcmake/main.py 裡的 main() 函式
+make0 = "make0.main:main"

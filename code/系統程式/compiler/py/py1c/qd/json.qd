@@ -1,0 +1,161 @@
+LOAD_CONST          "name"                                  _                t0                ; load string
+LOAD_CONST          "小明"                                    _                t1                ; load string
+DICT_INSERT         t0                                      t1               _               
+LOAD_CONST          "age"                                   _                t2                ; load string
+LOAD_CONST          20                                      _                t3                ; load 20
+DICT_INSERT         t2                                      t3               _               
+LOAD_CONST          "grades"                                _                t4                ; load string
+LOAD_CONST          85                                      _                t5                ; load 85
+LOAD_CONST          90                                      _                t6                ; load 90
+LOAD_CONST          78                                      _                t7                ; load 78
+LIST_APPEND         t5                                      0                _               
+LIST_APPEND         t6                                      1                _               
+LIST_APPEND         t7                                      2                _               
+BUILD_LIST          3                                       _                t8              
+DICT_INSERT         t4                                      t8               _               
+BUILD_DICT          3                                       _                t9              
+LOAD_CONST          "name"                                  _                t10               ; load string
+LOAD_CONST          "小華"                                    _                t11               ; load string
+DICT_INSERT         t10                                     t11              _               
+LOAD_CONST          "age"                                   _                t12               ; load string
+LOAD_CONST          22                                      _                t13               ; load 22
+DICT_INSERT         t12                                     t13              _               
+LOAD_CONST          "grades"                                _                t14               ; load string
+LOAD_CONST          92                                      _                t15               ; load 92
+LOAD_CONST          88                                      _                t16               ; load 88
+LOAD_CONST          95                                      _                t17               ; load 95
+LIST_APPEND         t15                                     0                _               
+LIST_APPEND         t16                                     1                _               
+LIST_APPEND         t17                                     2                _               
+BUILD_LIST          3                                       _                t18             
+DICT_INSERT         t14                                     t18              _               
+BUILD_DICT          3                                       _                t19             
+LOAD_CONST          "name"                                  _                t20               ; load string
+LOAD_CONST          "小美"                                    _                t21               ; load string
+DICT_INSERT         t20                                     t21              _               
+LOAD_CONST          "age"                                   _                t22               ; load string
+LOAD_CONST          21                                      _                t23               ; load 21
+DICT_INSERT         t22                                     t23              _               
+LOAD_CONST          "grades"                                _                t24               ; load string
+LOAD_CONST          70                                      _                t25               ; load 70
+LOAD_CONST          85                                      _                t26               ; load 85
+LOAD_CONST          80                                      _                t27               ; load 80
+LIST_APPEND         t25                                     0                _               
+LIST_APPEND         t26                                     1                _               
+LIST_APPEND         t27                                     2                _               
+BUILD_LIST          3                                       _                t28             
+DICT_INSERT         t24                                     t28              _               
+BUILD_DICT          3                                       _                t29             
+LIST_APPEND         t9                                      0                _               
+LIST_APPEND         t19                                     1                _               
+LIST_APPEND         t29                                     2                _               
+BUILD_LIST          3                                       _                t30             
+STORE               t30                                     _                students          ; assign students
+LOAD_CONST          "name"                                  _                t31               ; load string
+LOAD_CONST          "阿強"                                    _                t32               ; load string
+DICT_INSERT         t31                                     t32              _               
+LOAD_CONST          "age"                                   _                t33               ; load string
+LOAD_CONST          23                                      _                t34               ; load 23
+DICT_INSERT         t33                                     t34              _               
+LOAD_CONST          "grades"                                _                t35               ; load string
+LOAD_CONST          88                                      _                t36               ; load 88
+LOAD_CONST          76                                      _                t37               ; load 76
+LOAD_CONST          90                                      _                t38               ; load 90
+LIST_APPEND         t36                                     0                _               
+LIST_APPEND         t37                                     1                _               
+LIST_APPEND         t38                                     2                _               
+BUILD_LIST          3                                       _                t39             
+DICT_INSERT         t35                                     t39              _               
+BUILD_DICT          3                                       _                t40             
+STORE               t40                                     _                new_student       ; assign new_student
+LOAD_NAME           students                                _                t41               ; load students
+LOAD_ATTR           t41                                     append           t42               ; getattr append
+LOAD_NAME           new_student                             _                t43               ; load new_student
+ARG_PUSH            t43                                     0                _               
+CALL                t42                                     1                t44             
+LOAD_NAME           print                                   _                t45               ; load print
+LOAD_CONST          "--- 學生成績報表 (共有 "                       _                t46             
+LOAD_NAME           len                                     _                t47               ; load len
+LOAD_NAME           students                                _                t48               ; load students
+ARG_PUSH            t48                                     0                _               
+CALL                t47                                     1                t49             
+LOAD_NAME           str                                     _                t50             
+ARG_PUSH            t49                                     0                _               
+CALL                t50                                     1                t51             
+LOAD_CONST          " 位學生) ---"                             _                t52             
+ADD                 t46                                     t51              t53             
+ADD                 t53                                     t52              t54             
+ARG_PUSH            t54                                     0                _               
+CALL                t45                                     1                t55             
+LOAD_NAME           students                                _                t56               ; load students
+GET_ITER            t56                                     _                t57             
+L_for_start0::
+ITER_NEXT           t57                                     _                t58             
+BRANCH_IF_EXHAUST   t57                                     _                L_for_end1      
+STORE               t58                                     _                s                 ; assign s
+LOAD_NAME           s                                       _                t59               ; load s
+LOAD_CONST          "name"                                  _                t60               ; load string
+SUBSCRIPT           t59                                     t60              t61             
+STORE               t61                                     _                name              ; assign name
+LOAD_NAME           s                                       _                t62               ; load s
+LOAD_CONST          "age"                                   _                t63               ; load string
+SUBSCRIPT           t62                                     t63              t64             
+STORE               t64                                     _                age               ; assign age
+LOAD_NAME           s                                       _                t65               ; load s
+LOAD_CONST          "grades"                                _                t66               ; load string
+SUBSCRIPT           t65                                     t66              t67             
+STORE               t67                                     _                grades            ; assign grades
+LOAD_NAME           sum                                     _                t68               ; load sum
+LOAD_NAME           grades                                  _                t69               ; load grades
+ARG_PUSH            t69                                     0                _               
+CALL                t68                                     1                t70             
+LOAD_NAME           len                                     _                t71               ; load len
+LOAD_NAME           grades                                  _                t72               ; load grades
+ARG_PUSH            t72                                     0                _               
+CALL                t71                                     1                t73             
+DIV                 t70                                     t73              t74             
+STORE               t74                                     _                average_score     ; assign average_score
+LOAD_NAME           print                                   _                t75               ; load print
+LOAD_CONST          "學生："                                   _                t76             
+LOAD_NAME           name                                    _                t77               ; load name
+LOAD_NAME           str                                     _                t78             
+ARG_PUSH            t77                                     0                _               
+CALL                t78                                     1                t79             
+LOAD_CONST          " | 年齡："                                _                t80             
+LOAD_NAME           age                                     _                t81               ; load age
+LOAD_NAME           str                                     _                t82             
+ARG_PUSH            t81                                     0                _               
+CALL                t82                                     1                t83             
+LOAD_CONST          " | 平均分數："                              _                t84             
+LOAD_NAME           average_score                           _                t85               ; load average_score
+LOAD_CONST          ".2f"                                   _                t87             
+LOAD_NAME           format                                  _                t88             
+ARG_PUSH            t85                                     0                _               
+ARG_PUSH            t87                                     1                _               
+CALL                t88                                     2                t86             
+ADD                 t76                                     t79              t89             
+ADD                 t89                                     t80              t90             
+ADD                 t90                                     t83              t91             
+ADD                 t91                                     t84              t92             
+ADD                 t92                                     t86              t93             
+ARG_PUSH            t93                                     0                _               
+CALL                t75                                     1                t94             
+JUMP                L_for_start0                            _                _                 ; loop back
+L_for_end1::
+LOAD_NAME           print                                   _                t95               ; load print
+LOAD_CONST          "\n--- 特定查詢 ---"                        _                t96               ; load string
+ARG_PUSH            t96                                     0                _               
+CALL                t95                                     1                t97             
+LOAD_NAME           print                                   _                t98               ; load print
+LOAD_CONST          "第一位學生的名字是："                            _                t99             
+LOAD_NAME           students                                _                t100              ; load students
+LOAD_CONST          0                                       _                t101              ; load 0
+SUBSCRIPT           t100                                    t101             t102            
+LOAD_CONST          "name"                                  _                t103              ; load string
+SUBSCRIPT           t102                                    t103             t104            
+LOAD_NAME           str                                     _                t105            
+ARG_PUSH            t104                                    0                _               
+CALL                t105                                    1                t106            
+ADD                 t99                                     t106             t107            
+ARG_PUSH            t107                                    0                _               
+CALL                t98                                     1                t108            

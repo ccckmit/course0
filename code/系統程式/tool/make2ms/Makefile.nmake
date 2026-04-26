@@ -1,0 +1,21 @@
+CC = cl
+CFLAGS = /W3 /Zi /O2 /I.\include
+LDFLAGS = /LIBPATH:.\lib m.lib
+TARGET = myapp
+OBJS = main.obj utils.obj
+
+.PHONY: all clean
+
+all: $(TARGET)
+
+$(TARGET): $(OBJS)
+	$(CC) $(OBJS) /Fe:$@ $(LDFLAGS)
+
+main.obj: main.c
+	$(CC) $(CFLAGS) /c $< /Fe:$@
+
+utils.obj: utils.c
+	$(CC) $(CFLAGS) /c $< /Fe:$@
+
+clean:
+del $(OBJS) $(TARGET)
