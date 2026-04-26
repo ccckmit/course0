@@ -1,0 +1,1 @@
+interpreter --model ollama/hermes-3
