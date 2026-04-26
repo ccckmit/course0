@@ -2,7 +2,7 @@
 
 > 從 0 開始： 從底層到上層，從簡單到複雜，從頭建立一台完整的電腦。
 
-> 作者： [陳鍾誠](https://csie.nqu.edu.tw/p/404-1038-2377.php?Lang=zh-tw) @ccckmit
+> 作者： [陳鍾誠](https://csie.nqu.edu.tw/p/404-1038-2377.php?Lang=zh-tw) [@ccckmit](https://github.com/ccckmit)
 
 ## 課程列表
 
