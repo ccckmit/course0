@@ -3,10 +3,10 @@
 ## Structure
 ```
 course0/
-├── code/       # 程式碼範例 (按科目分目錄)
-├── wiki/       # LLM 知識庫 (NOT _wiki/ - wiki/AGENTS.md has stale refs)
-├── lecture/    # 課程講稿
-└── _more/      # 補充教材
+├── code/ # 程式碼範例 (按科目分目錄)
+├── wiki/ # LLM 知識庫 (NOT _wiki/ - wiki/AGENTS.md has stale refs)
+├── lecture/ # 課程講稿
+└── _more/ # 補充教材
 ```
 
 ## Subjects (code/)
@@ -56,3 +56,12 @@ Uses LLM Wiki schema (see wiki/AGENTS.md):
 - **Ingest**: Add source to `wiki/source/`, then ask LLM to ingest
 - **Query**: Search `wiki/` for existing knowledge
 - **Lint**: Check for stale info, broken links, gaps
+
+## lean4py Sub-project
+Located at `code/程式與數學/_ai/lean4py/` - a Python formal math library inspired by Lean/Coq.
+- **Version**: 0.2.0
+- **Install**: `pip install -e .` from lean4py directory
+- **Test**: `pytest tests/`
+- **Examples**: `python examples/01_logic.py`, etc.
+- **Modules**: logic, sets, algebra, nat, tactics
+- **Roadmap**: v0.1=core, v0.2=auto prover+more tactics, v0.3=number theory+linear algebra, v1.0=sympy integration

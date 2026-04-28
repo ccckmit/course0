@@ -13,7 +13,9 @@ from .calculus import (
     SDESolver,
     BlackScholes,
     AmericanOption,
-    StochPlot,
+    brownian_motion,
+    ito_integral_plot,
+    options_plot,
 )
 
 __all__ = [
@@ -28,5 +30,7 @@ __all__ = [
     "SDESolver",
     "BlackScholes",
     "AmericanOption",
-    "StochPlot",
+    "brownian_motion",
+    "ito_integral_plot",
+    "options_plot",
 ]

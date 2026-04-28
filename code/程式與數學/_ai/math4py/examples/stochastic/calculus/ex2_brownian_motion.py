@@ -9,7 +9,8 @@ import os
 os.makedirs("./out", exist_ok=True)
 
 from math4py.stochastic.calculus import BrownianMotion, OrnsteinUhlenbeck, BrownianBridge
-from math4py.stochastic.calculus.plot import StochPlot, _style, PALETTE, BG, TEXT, GRID
+# from math4py.stochastic.calculus.plot import StochPlot, _style, PALETTE, BG, TEXT, GRID
+from math4py.plot import StochPlot, _style, PALETTE, BG, TEXT, GRID
 
 # ─── 1. 標準布朗運動 ────────────────────────────────────────────────────────
 

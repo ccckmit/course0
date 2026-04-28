@@ -19,8 +19,8 @@ import matplotlib
 import os; os.makedirs("./out", exist_ok=True)
 matplotlib.use("Agg")
 
-from stoc4py import BlackScholes, AmericanOption
-from stoc4py.plot import StochPlot
+from math4py.stochastic import BlackScholes, AmericanOption
+from math4py.plot import StochPlot
 
 # ─── 參數設定 ────────────────────────────────────────────────────────────────
 

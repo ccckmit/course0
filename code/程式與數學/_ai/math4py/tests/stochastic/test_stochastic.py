@@ -169,5 +169,7 @@ class TestItoIntegral:
 
 class TestIntegration:
     def test_imports_work(self):
-        from math4py.stochastic.calculus import StochPlot
-        assert StochPlot is not None
+        from math4py.stochastic.calculus import brownian_motion, ito_integral_plot, options_plot
+        assert brownian_motion is not None
+        assert ito_integral_plot is not None
+        assert options_plot is not None

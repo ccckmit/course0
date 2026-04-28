@@ -32,12 +32,4 @@ for example in examples/stochastic/calculus/*.py; do
     echo ""
 done
 
-# Run lean examples
-echo "=== Running Lean Examples ==="
-for example in examples/lean/*.py; do
-    echo "--- Running $example ---"
-    $PYTHON "$example"
-    echo ""
-done
-
 echo "=== All examples completed ==="

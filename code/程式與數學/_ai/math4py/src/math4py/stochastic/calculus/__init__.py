@@ -16,7 +16,7 @@ from ..process import (
 from .ito import ItoIntegral, ito_lemma_demo
 from .sde import SDESolver
 from .options import BlackScholes, AmericanOption
-from math4py.plot import StochPlot
+from math4py.plot.rplot_stochastic import brownian_motion, ito_integral_plot, options_plot
 
 __all__ = [
     "BrownianMotion",
@@ -28,5 +28,7 @@ __all__ = [
     "SDESolver",
     "BlackScholes",
     "AmericanOption",
-    "StochPlot",
+    "brownian_motion",
+    "ito_integral_plot",
+    "options_plot",
 ]
