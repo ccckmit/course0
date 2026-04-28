@@ -185,13 +185,12 @@ def _expand_branch(branch: TableauBranch) -> List[TableauBranch]:
                 new_branches.append(TableauBranch(new_formulas))
             elif neg_type == 'negated':
                 if hasattr(inner, 'op') and inner.op in ('∧', '∨', '→'):
-new_formulas = [f for f in branch.formulas if f is not formula]
-                if inner.op == '→':
-                    new_formulas.append(inner.left)
-                    new_formulas.append(_negate_formula(inner.right))
-                    new_branches.append(TableauBranch(new_formulas))
-                    return new_branches
-                elif inner.op == '∨':
+                    new_formulas = [f for f in branch.formulas if f is not formula]
+                    if inner.op == '→':
+                        new_formulas.append(inner.left)
+                        new_formulas.append(_negate_formula(inner.right))
+                        new_branches.append(TableauBranch(new_formulas))
+                    elif inner.op == '∨':
                         new_formulas.append(_negate_formula(inner.left))
                         new_formulas.append(_negate_formula(inner.right))
                         new_branches.append(TableauBranch(new_formulas))
@@ -208,7 +207,6 @@ new_formulas = [f for f in branch.formulas if f is not formula]
         return [branch]
 
     return new_branches
-
 
 def _is_complementary(prop1, prop2) -> bool:
     if hasattr(prop1, 'op') and prop1.op == '¬' and prop1.operand == prop2:
