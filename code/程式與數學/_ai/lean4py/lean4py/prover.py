@@ -185,16 +185,13 @@ def _expand_branch(branch: TableauBranch) -> List[TableauBranch]:
                 new_branches.append(TableauBranch(new_formulas))
             elif neg_type == 'negated':
                 if hasattr(inner, 'op') and inner.op in ('∧', '∨', '→'):
-                    new_formulas = [f for f in branch.formulas if f is not formula]
-                    if inner.op == '→':
-                        branch1 = TableauBranch([f for f in branch.formulas if f is not formula])
-                        branch2 = TableauBranch([f for f in branch.formulas if f is not formula])
-                        branch1.add(inner.left)
-                        branch2.add(_negate_formula(inner.right))
-                        new_branches.append(branch1)
-                        new_branches.append(branch2)
-                        return new_branches
-                    elif inner.op == '∨':
+new_formulas = [f for f in branch.formulas if f is not formula]
+                if inner.op == '→':
+                    new_formulas.append(inner.left)
+                    new_formulas.append(_negate_formula(inner.right))
+                    new_branches.append(TableauBranch(new_formulas))
+                    return new_branches
+                elif inner.op == '∨':
                         new_formulas.append(_negate_formula(inner.left))
                         new_formulas.append(_negate_formula(inner.right))
                         new_branches.append(TableauBranch(new_formulas))
@@ -205,9 +202,7 @@ def _expand_branch(branch: TableauBranch) -> List[TableauBranch]:
                         new_branches.append(TableauBranch(new_formulas))
                         new_branches.append(branch2)
                 else:
-                    new_formulas = [f for f in branch.formulas if f is not formula]
-                    new_formulas.append(inner)
-                    new_branches.append(TableauBranch(new_formulas))
+                    pass
 
     if not new_branches:
         return [branch]
@@ -216,9 +211,9 @@ def _expand_branch(branch: TableauBranch) -> List[TableauBranch]:
 
 
 def _is_complementary(prop1, prop2) -> bool:
-    if hasattr(prop1, 'op') and prop1.op == '¬' and prop1.operand is prop2:
+    if hasattr(prop1, 'op') and prop1.op == '¬' and prop1.operand == prop2:
         return True
-    if hasattr(prop2, 'op') and prop2.op == '¬' and prop2.operand is prop1:
+    if hasattr(prop2, 'op') and prop2.op == '¬' and prop2.operand == prop1:
         return True
     return False
 
