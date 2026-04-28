@@ -42,3 +42,5 @@ pytest tests/
 - `lean4py.nat` - Natural numbers
 - `lean4py.tactics` - Proof tactics (intros, cases, split, etc.)
 - `lean4py.prover` - tableau_prove, truth_table_prove, is_valid, is_satisfiable
+- `lean4py.number_theory` - Integer, gcd, lcm, is_prime, phi, mod_exp, etc. (v0.3)
+- `lean4py.linear_algebra` - Vector, Matrix, dot_product, det, rank, etc. (v0.3)
