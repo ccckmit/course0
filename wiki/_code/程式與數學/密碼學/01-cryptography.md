@@ -1,12 +1,12 @@
 # 密碼學範例測試文件
 
 ## 檔案位置
-- 程式碼: `_code/程式與數學/密碼學/01-cryptography.py`
-- 測試文件: `_code/程式與數學/密碼學/01-cryptography.md`
+- 程式碼: `_code/數學/密碼學/01-cryptography.py`
+- 測試文件: `_code/數學/密碼學/01-cryptography.md`
 
 ## 執行方式
 ```bash
-cd _code/程式與數學/密碼學
+cd _code/數學/密碼學
 python 01-cryptography.py
 ```
 
@@ -72,4 +72,4 @@ gcd(17, 13) = 1
 ```
 
 ## 相關頁面
-- [密碼學概念](../程式與數學/密碼學.md)
+- [密碼學概念](../數學/密碼學.md)

@@ -9,7 +9,7 @@
 - [機器學習](機器學習/index.md) - ML、DL、LLM、強化學習 | tags: 深度學習, AI, Transformer
 - [網頁設計](網頁設計/index.md) - 前端 + 後端開發 | tags: HTML, CSS, React, API
 - [軟體工程](軟體工程/index.md) - 開發流程、DevOps | tags: Git, Docker, CI/CD
-- [程式與數學](程式與數學/index.md) - 代數、幾何、微積分、機率統計、線性代數 | tags: 數學, 機率, 統計
+- [程式與數學](數學/index.md) - 代數、幾何、微積分、機率統計、線性代數 | tags: 數學, 機率, 統計
 
 ## Tags
 

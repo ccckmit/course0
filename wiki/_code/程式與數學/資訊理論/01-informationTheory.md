@@ -1,12 +1,12 @@
 # 資訊理論範例測試文件
 
 ## 檔案位置
-- 程式碼: `_code/程式與數學/資訊理論/01-informationTheory.py`
-- 測試文件: `_code/程式與數學/資訊理論/01-informationTheory.md`
+- 程式碼: `_code/數學/資訊理論/01-informationTheory.py`
+- 測試文件: `_code/數學/資訊理論/01-informationTheory.md`
 
 ## 執行方式
 ```bash
-cd _code/程式與數學/資訊理論
+cd _code/數學/資訊理論
 python 01-informationTheory.py
 ```
 
@@ -53,4 +53,4 @@ python 01-informationTheory.py
 ```
 
 ## 相關頁面
-- [資訊理論概念](../程式與數學/資訊理論.md)
+- [資訊理論概念](../數學/資訊理論.md)

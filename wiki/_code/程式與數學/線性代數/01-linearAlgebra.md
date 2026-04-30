@@ -1,12 +1,12 @@
 # 線性代數範例測試文件
 
 ## 檔案位置
-- 程式碼: `_code/程式與數學/線性代數/01-linearAlgebra.py`
-- 測試文件: `_code/程式與數學/線性代數/01-linearAlgebra.md`
+- 程式碼: `_code/數學/線性代數/01-linearAlgebra.py`
+- 測試文件: `_code/數學/線性代數/01-linearAlgebra.md`
 
 ## 執行方式
 ```bash
-cd _code/程式與數學/線性代數
+cd _code/數學/線性代數
 python 01-linearAlgebra.py
 ```
 
@@ -69,4 +69,4 @@ A = [[1. 2.]
 ```
 
 ## 相關頁面
-- [線性代數概念](../程式與數學/線性代數.md)
+- [線性代數概念](../數學/線性代數.md)
