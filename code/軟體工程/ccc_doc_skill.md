@@ -6,7 +6,7 @@
 * 對於程式專案，每個程式都要寫一份背景理論說明
     * 例如 folder/xxx.py (或 folder/xxx.rs) ，寫一份 folder/xxx.md 說明之。
     * .md 的重點是理論背景，而不是為程式加上註解，或者是列出程式本身
-    * 對於程式本身加註解，請用繁體中文，要很詳細，但是程式碼本身已有的，不需要重複。
+    * 對於程式本身加註解，請用英文（這樣發佈時，自動產生的文件才會是英文），要很詳細，但是程式碼本身已有的，不需要重複。
     * 加完註解要重新測試，看看有沒有因為註解造成的錯誤
 * 每個容納程式的子資料夾，都寫一份 README.md 
     * 重點式的說明每一份程式的用途。
@@ -22,7 +22,27 @@
     * 書籍的每一章，盡量寫詳細， 300 行以上。
 * 文章預設使用繁體中文（台灣用語）。
     * 專有名詞第一次出現時，要加註英文，例如： 資料庫 (database)
-
-
+* 請使用符合 Github Falvored Markdown (GFM) https://github.github.com/gfm/
+    * 畫圖請用 Mermaid 語法 https://docs.github.com/en/get-started/writing-on-github/working-with-advanced-formatting/creating-diagrams
+    * 數學式請用 tex ，例如： $\sqrt{3x-1}+(1+x)^2$ , $$\left( \sum_{k=1}^n a_k b_k \right)^2 \leq \left( \sum_{k=1}^n a_k^2 \right) \left( \sum_{k=1}^n b_k^2 \right)$$
 * 特別提醒：對於思考型的 AI 模型，請不要用思考推理，直接快速的寫出文件就好。
     * 這不是寫程式，或者法律文件，不需要一直考慮所謂的正確
+
+
+數學式範例： 
+
+inline : $\sqrt{3x-1}+(1+x)^2$ 
+
+block: 
+
+$$\left( \sum_{k=1}^n a_k b_k \right)^2 \leq \left( \sum_{k=1}^n a_k^2 \right) \left( \sum_{k=1}^n b_k^2 \right)$$
+
+畫圖：
+
+```mermaid
+graph TD;
+    A-->B;
+    A-->C;
+    B-->D;
+    C-->D;
+```

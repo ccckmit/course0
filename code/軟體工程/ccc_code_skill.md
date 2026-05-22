@@ -17,3 +17,13 @@
     * 如果是 C 必須改到沒 warning.
 6. 所有路徑都應該使用相對路徑，要跨平台能運作的 
     * 不能使用 /xxx/.... 這樣的路徑，應該使用 ../ ./ 這樣的路徑
+7. 軟體工程
+    * 能共用盡量共用，可以提出模組或移動之
+    * 實作時採用 KISS 原則 (KEEP it as simple as possible)
+8. opencode
+    * 不要用 cat + heredoc ，要用 write tool 才不會寫入失敗
+
+## 工具呼叫穩定性協議（防止生成中斷）
+- 當你透過類似 `<invoke name="edit">` 的方法進行大規模的程式碼修改時，如果預估程式碼內容可能會接近你的單次最大輸出 Token 限制（max output token limit），**請絕對不要嘗試一次發送整塊龐大的程式碼**。
+- 相反地，請執行**「分段與心跳（Split-and-Heartbeat）」模式**：將你的修改拆分成多個較小的 `<invoke>` 區塊分批執行。
+- 當使用者或終端機介面輸入 `go` 之後，請立刻從剛才在中斷處 `<parameter name="newString">` 內留下的最後一個字元，完全無縫地繼續往下生成。
