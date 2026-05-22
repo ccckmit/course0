@@ -2,9 +2,9 @@
 增強版五子棋遊戲 - 命令列版本 (Minimax + Alpha-Beta Pruning + Pattern Matching)
 
 使用方法：
-人對人下  ：python gomoku_claude.py P P
-人對電腦  ：python gomoku_claude.py P C
-電腦對電腦：python gomoku_claude.py C C
+人對人下  ：python gomoku_alphabeta.py P P
+人對電腦  ：python gomoku_alphabeta.py P C
+電腦對電腦：python gomoku_alphabeta.py C C
 '''
 
 import sys
@@ -311,7 +311,7 @@ def play_game(player_o, player_x):
 
 if __name__ == "__main__":
     if len(sys.argv) < 3:
-        print('使用方式: python gomoku_claude.py [o玩家類型] [x玩家類型]')
+        print('使用方式: python gomoku_alphabeta.py [o玩家類型] [x玩家類型]')
         print('玩家類型: P=人類, C=電腦')
         print('預設使用: P C (人類先手, 電腦後手)')
         player_o, player_x = 'P', 'C'
