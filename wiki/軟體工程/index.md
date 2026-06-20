@@ -7,7 +7,10 @@
 - [軟體工程的歷史](軟體工程的歷史.md) - 從瀑布模型到 AI 輔助開發 | tags: 開發方法論, DevOps
 - [軟體生命週期](軟體生命週期.md) - 軟體開發的階段模型 | tags: 瀑布, 敏捷
 - [版本控制](版本控制.md) - 追蹤程式碼變更 | tags: Git, 分支, merge
-- [測試](測試.md) - 驗證軟體正確性 | tags: 單元測試, 整合測試
+- [測試](測試.md) - 驗證軟體正確性 | tags: 單元測試, 整合測試, E2E
+- [E2E測試](E2E測試.md) - Playwright 端到端測試 | tags: E2E, Playwright, 瀏覽器測試
+- [Rust測試](Rust測試.md) - cargo test 與 Rust 測試模式 | tags: Rust, cargo, 整合測試
+- [Rust軟體工程](Rust軟體工程.md) - Rust 在後端服務的應用 | tags: Rust, Axum, 效能, 型別安全
 - [DevOps](DevOps.md) - 開發與運維一體化 | tags: CI/CD, 自動化
 - [軟體度量](軟體度量.md) - 量化軟體品質 | tags: LOC, COCOMO
 - [程式碼品質](程式碼品質.md) - 程式碼可維護性指標 | tags: 圈複雜度, 覆蓋率
@@ -42,9 +45,11 @@
 - [Agentic工程](Agentic工程.md) - 自主 AI 智慧體的設計與建構 | tags: Agent, 自主, 工具
 - [KarpathySkill](KarpathySkill.md) - Karpathy 四原則的編碼指南 | tags: 四原則, 編碼
 - [karpathy](karpathy.md) - Andrej Karpathy 的 AI 編碼原則與專案 | tags: nanoGPT, LLM Wiki, 四原則
-- [金流整合](金流整合.md) - 第三方支付、信用卡收款、訂閱制金流與對帳 | tags: 金流, 支付, 收款, 對帳
-- [公司登記與開業](公司登記與開業.md) - 台灣軟體公司設立流程、稅務與法規 | tags: 公司登記, 創業, 稅務, 法規
-- [上線營運](上線營運.md) - 上線前檢查、營運週期、常見問題處理 | tags: 上線, 營運, 監控, 維運
+- [金流整合](金流整合.md) - 第三方支付、信用卡收款、訂閱制金流與對帳、Stripe 國際收款 | tags: 金流, 支付, 收款, 對帳, Stripe
+- [金流整合範例](金流整合範例.md) - Stripe、綠界 ECPay、Pay4 三種閘道的 Python 整合範例 | tags: Stripe, 綠界, Pay4, 閘道
+- [Pay4自建金流系統](Pay4自建金流系統.md) - 從頭實作金流引擎：商家管理、付款狀態機、雙式記帳、清算撥款、Webhook | tags: Pay4, 金流引擎, 雙式記帳
+- [公司登記與開業](公司登記與開業.md) - 台灣與美國公司設立流程、Delaware C-Corp、Stripe Atlas | tags: 公司登記, 創業, 稅務, 法規, Delaware, Stripe
+- [上線營運](上線營運.md) - 上線前檢查、營運週期、常見問題處理、國際市場 | tags: 上線, 營運, 監控, 維運, 跨境
 
 ## 工具
 

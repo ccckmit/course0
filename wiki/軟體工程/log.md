@@ -1,5 +1,21 @@
 # 日誌
 
+## [2026-06-20] add | Rust 軟體工程 + Rust 測試 + E2E 測試 wiki
+
+- 新增 Rust軟體工程.md — Rust 在軟體工程的應用、Axum/rusqlite/sled、效能對比
+- 新增 Rust測試.md — cargo test、整合測試、CLI 子行程測試模式
+- 新增 E2E測試.md — Playwright 端到端測試詳細說明、Todo 專案 E2E 流程
+- 更新 docs/html/softwareEngineering/index.html: 三處加入 wiki 鏈接
+- 更新 測試.md: 導航列指向 E2E測試.md + Rust測試.md
+- 更新 index.md: 新增 4 條條目
+
+## [2026-06-20] add | 金流整合範例 + Pay4 自建金流系統 wiki
+
+- 新增 金流整合範例.md — payment/ 目錄的三閘道整合 (Stripe/ECPay/Pay4)
+- 新增 Pay4自建金流系統.md — pay4/ 引擎完整說明
+- 更新 index.md: 新增 2 條條目
+- 更新 docs/html/softwareEngineering/index.html: 新增「金流整合範例」章節，含三欄閘道比較 + Pay4 核心模組 + 雙式記帳範例
+
 ## [2026-06-20] add | 營運與商業主題（金流/公司登記/上線）
 
 - 新增 金流整合.md — 第三方支付、信用卡、訂閱制金流與對帳
@@ -7,6 +23,14 @@
 - 新增 上線營運.md — 上線前檢查清單、營運週期、常見問題
 - 更新 index.md: 新增 3 條條目
 - 更新 docs/html/softwareEngineering/index.html: 新增「營運與商業」章節，含金流整合/公司登記與開業/上線營運三卡片
+
+## [2026-06-20] expand | 國際軟體公司營運（Stripe + 美國公司登記）
+
+- 擴充 金流整合.md: 新增 Stripe 國際收款章節 + Stripe Atlas + 多貨幣注意事項
+- 擴充 公司登記與開業.md: 新增美國 Delaware C-Corp 章節、Stripe Atlas、銀行帳戶、台美比較表
+- 擴充 上線營運.md: 新增國際市場營運章節（跨境稅務/GDPR/多語言）
+- 更新 docs/html/softwareEngineering/index.html: 三卡片加入國際面向內容
+- 更新 index.md: 3 條條目摘要與標籤擴充
 
 ## [2026-06-20] restructure | todo/ 目錄重組
 
