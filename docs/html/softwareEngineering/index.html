@@ -82,6 +82,8 @@
   <div class="toc-h2">協作模式</div>
   <a href="#solo-ai">單人 + AI</a>
   <a href="#team">團隊合作</a>
+  <div class="toc-h2">營運與商業</div>
+  <a href="#business">營運與商業</a>
 </nav>
 
 <main>
@@ -923,6 +925,118 @@ jobs:
 <span class="cm"># • 程式碼品質 — 可讀性、命名、架構</span>
 <span class="cm"># • 安全性 — 有洩漏敏感資訊嗎？</span>
 <span class="cm"># • Lint/Format — 是否符合規範</span></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- ==================== 營運與商業 ==================== -->
+<div class="section" id="business">
+<h2>🏢 營運與商業</h2>
+<p>軟體產品從技術實作到商業營運需要跨越的多個面向：</p>
+
+<div class="sec-grid">
+<div class="topic-card open">
+<div class="topic-header" onclick="this.parentElement.classList.toggle('open')">
+<h3>金流整合</h3>
+<span class="arrow">▶</span>
+</div>
+<div class="topic-body">
+<div class="topic-body-inner">
+<div class="code-block"><span class="cm"># 金流整合常見模式</span>
+<span class="cm"># 1. 第三方支付閘道 (Third-Party Payment Gateway)</span>
+<span class="cm">#    • 藍新、綠界、LINE Pay、街口</span>
+<span class="cm">#    • 特店設定 → API 串接 → 測試 → 正式上線</span>
+<span class="cm">#    • 手續費: 2%~3% + 每筆固定費用</span>
+<span class="cm">#</span>
+<span class="cm"># 2. 信用卡收款 (Credit Card)</span>
+<span class="cm">#    • Stripe、TapPay、直接與收單行串接</span>
+<span class="cm">#    • PCI-DSS 合規要求 (每年安檢)</span>
+<span class="cm">#    • 3D 驗證 (3D Secure) 降低爭議款</span>
+<span class="cm">#</span>
+<span class="cm"># 3. 超商代收 / ATM 轉帳</span>
+<span class="cm">#    • 適合非即時付款場景 (繳費單)</span>
+<span class="cm">#    • 對帳批次: T+1 工作日</span>
+<span class="cm">#</span>
+<span class="cm"># 4. 訂閱制 / 定期定額 (Subscription)</span>
+<span class="cm">#    • 週期性扣款 (月/季/年)</span>
+<span class="cm">#    • 需處理續約失敗、信用卡換發</span>
+<span class="cm">#</span>
+<span class="cm"># 技術實作要點</span>
+<span class="cm"># • 交易記錄不可竄改 (資料庫 append-only)</span>
+<span class="cm"># • 金流 Log 需完整保留 (稽核需求)</span>
+<span class="cm"># • 失敗重試 + 補償交易 (Saga 模式)</span>
+<span class="cm"># • 定期對帳 (Reconciliation): 比對訂單 vs 銀行入帳</span></div>
+</div>
+</div>
+</div>
+
+<div class="topic-card open">
+<div class="topic-header" onclick="this.parentElement.classList.toggle('open')">
+<h3>公司登記與開業</h3>
+<span class="arrow">▶</span>
+</div>
+<div class="topic-body">
+<div class="topic-body-inner">
+<div class="code-block"><span class="cm"># 軟體公司設立流程 (台灣)</span>
+<span class="cm"># 1. 公司名稱預查 — 經濟部商業司</span>
+<span class="cm"># 2. 公司設立登記 — 股份有限公司 / 有限公司</span>
+<span class="cm">#    • 資本額: 無最低限制 (但需會計師簽證)</span>
+<span class="cm">#    • 董事、監察人、股東名冊</span>
+<span class="cm">#</span>
+<span class="cm"># 3. 營業項目登記</span>
+<span class="cm">#    • I301010 資訊軟體服務業</span>
+<span class="cm">#    • I301020 資料處理服務業</span>
+<span class="cm">#    • I301030 電子資訊供應服務業</span>
+<span class="cm">#    • F118010 資訊軟體批發業</span>
+<span class="cm">#</span>
+<span class="cm"># 4. 稅籍登記 + 統一發票</span>
+<span class="cm">#    • 營業稅: 5% (可扣抵進項)</span>
+<span class="cm">#    • 營所稅: 20%</span>
+<span class="cm">#</span>
+<span class="cm"># 5. 特店申請 (如需收款)</span>
+<span class="cm">#    • 銀行或第三方支付閘道</span>
+<span class="cm">#    • 需提供公司登記證明 + 營業計畫</span>
+<span class="cm">#</span>
+<span class="cm"># 6. 網站 / 產品上線前檢查</span>
+<span class="cm">#    • 隱私權條款 + 服務條款</span>
+<span class="cm">#    • 金流合約審閱</span>
+<span class="cm">#    • 消費者保護法: 7 天鑑賞期</span>
+<span class="cm">#    • 個人資料保護法 (個資法) 合規</span></div>
+</div>
+</div>
+</div>
+
+<div class="topic-card open">
+<div class="topic-header" onclick="this.parentElement.classList.toggle('open')">
+<h3>上線營運</h3>
+<span class="arrow">▶</span>
+</div>
+<div class="topic-body">
+<div class="topic-body-inner">
+<div class="code-block"><span class="cm"># 上線前檢查清單 (Go-Live Checklist)</span>
+<span class="cm"># □ 功能測試完成 (含邊界案例)</span>
+<span class="cm"># □ 壓力測試 / 效能驗證</span>
+<span class="cm"># □ 備份機制 (資料庫自動備份)</span>
+<span class="cm"># □ 監控建置 (Server / 資料庫 / 金流)</span>
+<span class="cm"># □ 錯誤通知 (Email / Slack / LINE 通知)</span>
+<span class="cm"># □ 日誌集中管理 (ELK / Loki + Grafana)</span>
+<span class="cm"># □ DNS 設定 + SSL 憑證</span>
+<span class="cm"># □ 業務連續性計畫 (BCP / 災難復原)</span>
+<span class="cm">#</span>
+<span class="cm"># 上線後營運</span>
+<span class="cm"># • 每日: 檢查金流對帳、Error Log、備份狀態</span>
+<span class="cm"># • 每週: 部署更新、安全性修補</span>
+<span class="cm"># • 每月: 財務報表、金流手續費分析</span>
+<span class="cm"># • 每季: 法規更新檢視 (個資法、消費者保護)</span>
+<span class="cm">#</span>
+<span class="cm"># 常見上線問題</span>
+<span class="cm"># • SSL 憑證過期 — 設定自動續約 (Let's Encrypt)</span>
+<span class="cm"># • 資料庫連線耗盡 — Connection Pool 設定</span>
+<span class="cm"># • 第三方 API 失效 — 熔斷機制 (Circuit Breaker)</span>
+<span class="cm"># • 金流交易失敗 — 補償機制 + 通知客服</span>
+<span class="cm"># • 大量請求 — Auto Scaling + Rate Limiting</span></div>
 </div>
 </div>
 </div>

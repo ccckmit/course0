@@ -42,6 +42,9 @@
 - [Agentic工程](Agentic工程.md) - 自主 AI 智慧體的設計與建構 | tags: Agent, 自主, 工具
 - [KarpathySkill](KarpathySkill.md) - Karpathy 四原則的編碼指南 | tags: 四原則, 編碼
 - [karpathy](karpathy.md) - Andrej Karpathy 的 AI 編碼原則與專案 | tags: nanoGPT, LLM Wiki, 四原則
+- [金流整合](金流整合.md) - 第三方支付、信用卡收款、訂閱制金流與對帳 | tags: 金流, 支付, 收款, 對帳
+- [公司登記與開業](公司登記與開業.md) - 台灣軟體公司設立流程、稅務與法規 | tags: 公司登記, 創業, 稅務, 法規
+- [上線營運](上線營運.md) - 上線前檢查、營運週期、常見問題處理 | tags: 上線, 營運, 監控, 維運
 
 ## 工具
 
