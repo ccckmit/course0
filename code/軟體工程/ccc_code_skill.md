@@ -22,6 +22,10 @@
     * 實作時採用 KISS 原則 (KEEP it as simple as possible)
 8. opencode
     * 不要用 cat + heredoc ，要用 write tool 才不會寫入失敗
+9. 寫網站時
+    * 先寫 git 風格的 cli ，也就是 cmd op args，然後可以用 case1.sh , case2.sh 來寫測試
+    * 接著寫 rest api
+    * 最後用 react 寫前端，接上 rest api
 
 ## 工具呼叫穩定性協議（防止生成中斷）
 - 當你透過類似 `<invoke name="edit">` 的方法進行大規模的程式碼修改時，如果預估程式碼內容可能會接近你的單次最大輸出 Token 限制（max output token limit），**請絕對不要嘗試一次發送整塊龐大的程式碼**。

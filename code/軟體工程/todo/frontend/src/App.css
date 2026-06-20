@@ -1,0 +1,17 @@
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #f5f7fa; color: #333; }
+.app { max-width: 500px; margin: 40px auto; padding: 0 16px; }
+h1 { font-size: 1.8rem; margin-bottom: 16px; color: #2c3e50; }
+.input-row { display: flex; gap: 8px; margin-bottom: 16px; }
+.input-row input { flex: 1; padding: 10px 14px; border: 1px solid #ddd; border-radius: 8px; font-size: 1rem; }
+.input-row input:focus { outline: none; border-color: #27ae60; }
+.input-row button { padding: 10px 20px; background: #27ae60; color: #fff; border: none; border-radius: 8px; cursor: pointer; font-size: 1rem; }
+.input-row button:hover { background: #219a52; }
+.todo-list { list-style: none; }
+.todo-list li { display: flex; align-items: center; justify-content: space-between; padding: 12px 14px; background: #fff; border-radius: 8px; margin-bottom: 6px; border: 1px solid #eee; }
+.todo-list li.done { opacity: .5; }
+.todo-list li.done .todo-text { text-decoration: line-through; }
+.todo-text { flex: 1; }
+.todo-actions { display: flex; gap: 4px; }
+.btn-done { background: #27ae60; color: #fff; border: none; border-radius: 6px; padding: 4px 10px; cursor: pointer; }
+.btn-del { background: #e74c3c; color: #fff; border: none; border-radius: 6px; padding: 4px 10px; cursor: pointer; }

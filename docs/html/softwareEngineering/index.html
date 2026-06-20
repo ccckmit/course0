@@ -1,0 +1,954 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>軟體工程 — AI 導向的現代軟體開發</title>
+<link rel="stylesheet" href="../main.css">
+<style>
+:root { --green: #27ae60; --dark: #2c3e50; --bg: #f5f7fa; --card: #fff; --code-bg: #1e1e2e; }
+.toc { position: sticky; top: 0; max-height: 100vh; overflow-y: auto; padding: 20px 0; }
+.toc a { display: block; padding: 4px 0; color: #666; text-decoration: none; font-size: 0.85rem; border-left: 2px solid transparent; padding-left: 12px; }
+.toc a:hover { color: var(--green); border-left-color: var(--green); }
+.toc .toc-h2 { font-weight: 700; color: var(--dark); margin-top: 10px; }
+.sec-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 12px; margin: 16px 0; }
+.topic-card { background: var(--card); border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); border: 1px solid #eee; overflow: hidden; transition: box-shadow .2s; }
+.topic-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.1); }
+.topic-header { padding: 14px 18px; cursor: pointer; display: flex; align-items: center; gap: 10px; user-select: none; }
+.topic-header h3 { margin: 0; font-size: 0.95rem; flex: 1; }
+.topic-header .arrow { transition: transform .2s; font-size: 0.8rem; color: #999; }
+.topic-card.open .arrow { transform: rotate(90deg); }
+.topic-body { max-height: 0; overflow: hidden; transition: max-height .35s ease; }
+.topic-card.open .topic-body { max-height: 3000px; }
+.topic-body-inner { padding: 0 18px 14px; border-top: 1px solid #eee; }
+.topic-body-inner p { margin: 8px 0; font-size: 0.88rem; color: #555; }
+.topic-body-inner .files { display: flex; flex-wrap: wrap; gap: 5px; margin: 8px 0; }
+.topic-body-inner .files a { font-size: 0.78rem; background: #f0f0f5; padding: 3px 10px; border-radius: 6px; color: var(--dark); text-decoration: none; }
+.topic-body-inner .files a:hover { background: #e0e0eb; }
+.code-block { background: var(--code-bg); color: #cdd6f4; padding: 12px; border-radius: 8px; margin: 8px 0; overflow-x: auto; font-family: "Consolas","Monaco","Courier New",monospace; font-size: 0.78rem; line-height: 1.45; white-space: pre; tab-size: 2; }
+.code-block .cm { color: #6c7086; } .code-block .kw { color: #cba6f7; } .code-block .fn { color: #a6e3a1; } .code-block .str { color: #f9e2af; } .code-block .num { color: #fab387; } .code-block .op { color: #89b4fa; }
+.tag { display: inline-block; font-size: 0.65rem; padding: 2px 7px; border-radius: 6px; margin: 2px; color: #fff; }
+.tag-wiki { background: #9b59b6; } .tag-code { background: #27ae60; } .tag-py { background: #3498db; } .tag-md { background: #95a5a6; } .tag-yml { background: #e74c3c; }
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+.pipeline { display: flex; align-items: center; justify-content: center; gap: 8px; margin: 16px 0; flex-wrap: wrap; }
+.pipe-step { background: var(--green); color: #fff; padding: 10px 18px; border-radius: 8px; font-size: 0.85rem; text-align: center; min-width: 80px; }
+.pipe-step.ai { background: #9b59b6; }
+.pipe-step.test { background: #3498db; }
+.pipe-step.dep { background: #e67e22; }
+.pipe-arrow { color: #ccc; font-size: 1.2rem; }
+.pyramid { display: flex; flex-direction: column; align-items: center; gap: 3px; margin: 16px 0; }
+.py-3 { width: 90%; background: #27ae60; padding: 10px; border-radius: 6px; text-align: center; color: #fff; font-size: 0.85rem; }
+.py-2 { width: 70%; background: #3498db; padding: 10px; border-radius: 6px; text-align: center; color: #fff; font-size: 0.85rem; }
+.py-1 { width: 50%; background: #e67e22; padding: 10px; border-radius: 6px; text-align: center; color: #fff; font-size: 0.85rem; }
+@media(max-width:768px){ .sec-grid { grid-template-columns: 1fr; } .container { grid-template-columns: 1fr!important; } .toc { display: none; } .two-col { grid-template-columns: 1fr; } .three-col { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="back-link"><a href="../index.html">← 回首頁</a></div>
+  <h1>📦 軟體工程</h1>
+  <p>AI 導向的現代軟體開發方法論 — 從 Prompt 到部署的完整流程</p>
+</header>
+
+<div class="container" style="display:grid;grid-template-columns:220px 1fr;gap:24px;align-items:start;">
+
+<nav class="toc">
+  <div class="toc-h2" style="margin-top:0;">導論</div>
+  <a href="#overview">課程概述</a>
+  <a href="#pipeline">開發 Pipeline</a>
+  <a href="#example">範例專案</a>
+  <a href="#perf">語言與效能</a>
+  <div class="toc-h2">AI 協作</div>
+  <a href="#prompt">Prompt 工程</a>
+  <a href="#context">Context 工程</a>
+  <a href="#harness">Harness 工程</a>
+  <a href="#skill">Skill 文檔</a>
+  <a href="#loop">Loop 工程</a>
+  <a href="#agentic">Agentic 工程</a>
+  <a href="#human-ai">人機協作模式</a>
+  <a href="#ccc-skill">ccc 開發約定</a>
+  <div class="toc-h2">品質確保</div>
+  <a href="#testing">測試策略</a>
+  <a href="#pytest">pytest 單元測試</a>
+  <a href="#playwright">Playwright E2E</a>
+  <a href="#testsh">test.sh 腳本</a>
+  <div class="toc-h2">設計與流程</div>
+  <a href="#api">API 設計</a>
+  <a href="#git">Git 工作流程</a>
+  <a href="#cicd">CI/CD</a>
+  <a href="#arch">軟體架構</a>
+  <div class="toc-h2">協作模式</div>
+  <a href="#solo-ai">單人 + AI</a>
+  <a href="#team">團隊合作</a>
+</nav>
+
+<main>
+
+<!-- Overview -->
+<div class="section" id="overview">
+<h2>📖 課程概述</h2>
+<p>本課程介紹 AI 導向的現代軟體開發方法論，重點在於如何與 AI 協作、建立完善的測試體系、設計清晰的 API、以及運用 Git 和 CI/CD 管線。課程內容對應 <a href="https://themodernsoftware.dev/">The Modern Software</a> 線上教材，以及本倉庫的 <a href="https://github.com/ccckmit/course0/tree/main/code/%E8%BB%9F%E9%AB%94%E5%B7%A5%E7%A8%8B">code/軟體工程/</a> 範例和 <a href="https://github.com/ccckmit/course0/tree/main/wiki/%E8%BB%9F%E9%AB%94%E5%B7%A5%E7%A8%8B">wiki/軟體工程/</a> 知識庫。</p>
+<div class="two-col">
+<div>
+<h3>三大支柱</h3>
+<ul>
+<li><strong>AI 協作</strong> — Prompt、Context、Harness、Skill 四大工程</li>
+<li><strong>測試先行</strong> — 測試金字塔、pytest、Playwright、test.sh</li>
+<li><strong>API 驅動</strong> — CLI → REST → React 的前後端分離</li>
+</ul>
+</div>
+<div>
+<h3>開發紀律</h3>
+<ul>
+<li><strong>Git 工作流</strong> — 分支策略、Pull Request、Code Review</li>
+<li><strong>CI/CD</strong> — 自動化建構、測試、部署</li>
+<li><strong>KISS 原則</strong> — Keep It Simple, Stupid</li>
+</ul>
+</div>
+</div>
+</div>
+
+<!-- Pipeline -->
+<div class="section" id="pipeline">
+<h2>🔁 開發 Pipeline</h2>
+<p>現代軟體開發從意圖到部署的完整流程：</p>
+<div class="pipeline">
+  <div class="pipe-step ai">Prompt<br><span style="font-size:.7rem;opacity:.8;">描述意圖</span></div>
+  <span class="pipe-arrow">→</span>
+  <div class="pipe-step ai">Context<br><span style="font-size:.7rem;opacity:.8;">提供背景</span></div>
+  <span class="pipe-arrow">→</span>
+  <div class="pipe-step ai">Harness<br><span style="font-size:.7rem;opacity:.8;">設計約束</span></div>
+  <span class="pipe-arrow">→</span>
+  <div class="pipe-step">Code Gen<br><span style="font-size:.7rem;opacity:.8;">AI 生成</span></div>
+  <span class="pipe-arrow">→</span>
+  <div class="pipe-step test">Test<br><span style="font-size:.7rem;opacity:.8;">自動驗證</span></div>
+  <span class="pipe-arrow">→</span>
+  <div class="pipe-step dep">Deploy<br><span style="font-size:.7rem;opacity:.8;">持續交付</span></div>
+</div>
+</div>
+
+<!-- ==================== AI 協作 ==================== -->
+<!-- ==================== 範例專案 ==================== -->
+<div class="section" id="example">
+<h2>🎯 範例專案：Todo 應用（多種實作）</h2>
+<p>同一份 Todo 應用以 <strong>Python (FastAPI)</strong>、<strong>Rust (Axum + SQLite)</strong>、<strong>Rust (sled + Redis + Nginx)</strong> 分別實作，展示語言與架構選擇對效能與開發體驗的影響。</p>
+<p><a href="https://github.com/ccckmit/course0/tree/main/code/%E8%BB%9F%E9%AB%94%E5%B7%A5%E7%A8%8B/todo">📖 總覽文件 (todo/README.md)</a></p>
+
+<div class="three-col">
+<div>
+<h3>🐍 Python 版</h3>
+<p><a href="https://github.com/ccckmit/course0/tree/main/code/%E8%BB%9F%E9%AB%94%E5%B7%A5%E7%A8%8B/todo/todo-py">todo-py/</a></p>
+<ul>
+  <li><strong>CLI</strong>: <code>todo add/list/done/delete</code> — <a href="https://github.com/ccckmit/course0/blob/main/code/%E8%BB%9F%E9%AB%94%E5%B7%A5%E7%A8%8B/todo/todo-py/todo/cli.py">cli.py</a></li>
+  <li><strong>API</strong>: FastAPI + SQLite — <a href="https://github.com/ccckmit/course0/blob/main/code/%E8%BB%9F%E9%AB%94%E5%B7%A5%E7%A8%8B/todo/todo-py/todo/api.py">api.py</a></li>
+  <li><strong>Frontend</strong>: React + Vite — <a href="https://github.com/ccckmit/course0/tree/main/code/%E8%BB%9F%E9%AB%94%E5%B7%A5%E7%A8%8B/todo/frontend">frontend/</a></li>
+  <li><strong>測試</strong>: <a href="https://github.com/ccckmit/course0/blob/main/code/%E8%BB%9F%E9%AB%94%E5%B7%A5%E7%A8%8B/todo/todo-py/tests/test_cli.py">test_cli.py</a> + <a href="https://github.com/ccckmit/course0/blob/main/code/%E8%BB%9F%E9%AB%94%E5%B7%A5%E7%A8%8B/todo/todo-py/tests/test_api.py">test_api.py</a> (13 tests)</li>
+  <li><strong>AI</strong>: <a href="https://github.com/ccckmit/course0/blob/main/code/%E8%BB%9F%E9%AB%94%E5%B7%A5%E7%A8%8B/todo/todo-py/AGENTS.md">AGENTS.md</a></li>
+</ul>
+</div>
+<div>
+<h3>🦀 Rust + SQLite</h3>
+<p><a href="https://github.com/ccckmit/course0/tree/main/code/%E8%BB%9F%E9%AB%94%E5%B7%A5%E7%A8%8B/todo/todo-rust">todo-rust/</a></p>
+<ul>
+  <li><strong>CLI</strong>: <code>todo add/list/done/delete</code> — <a href="https://github.com/ccckmit/course0/blob/main/code/%E8%BB%9F%E9%AB%94%E5%B7%A5%E7%A8%8B/todo/todo-rust/src/cli.rs">cli.rs</a> (clap)</li>
+  <li><strong>API</strong>: Axum + rusqlite — <a href="https://github.com/ccckmit/course0/blob/main/code/%E8%BB%9F%E9%AB%94%E5%B7%A5%E7%A8%8B/todo/todo-rust/src/api.rs">api.rs</a></li>
+  <li><strong>資料庫</strong>: rusqlite + WAL — <a href="https://github.com/ccckmit/course0/blob/main/code/%E8%BB%9F%E9%AB%94%E5%B7%A5%E7%A8%8B/todo/todo-rust/src/database.rs">database.rs</a></li>
+  <li><strong>測試</strong>: <a href="https://github.com/ccckmit/course0/blob/main/code/%E8%BB%9F%E9%AB%94%E5%B7%A5%E7%A8%8B/todo/todo-rust/tests/cli_test.rs">cli_test.rs</a> (6 tests)</li>
+  <li><strong>對比</strong>: <a href="https://github.com/ccckmit/course0/blob/main/code/%E8%BB%9F%E9%AB%94%E5%B7%A5%E7%A8%8B/todo/todo-rust/BENCHMARKS.md">BENCHMARKS.md</a></li>
+</ul>
+</div>
+<div>
+<h3>⚡ Rust + sled + Redis</h3>
+<p><a href="https://github.com/ccckmit/course0/tree/main/code/%E8%BB%9F%E9%AB%94%E5%B7%A5%E7%A8%8B/todo/todo-rust-fast">todo-rust-fast/</a></p>
+<ul>
+  <li><strong>儲存</strong>: sled (lock-free, mmap) — <a href="https://github.com/ccckmit/course0/blob/main/code/%E8%BB%9F%E9%AB%94%E5%B7%A5%E7%A8%8B/todo/todo-rust-fast/src/db.rs">db.rs</a></li>
+  <li><strong>快取</strong>: Redis (選用, 10s TTL) — <a href="https://github.com/ccckmit/course0/blob/main/code/%E8%BB%9F%E9%AB%94%E5%B7%A5%E7%A8%8B/todo/todo-rust-fast/src/cache.rs">cache.rs</a></li>
+  <li><strong>壓縮</strong>: brotli + gzip (tower-http)</li>
+  <li><strong>反向代理</strong>: <a href="https://github.com/ccckmit/course0/blob/main/code/%E8%BB%9F%E9%AB%94%E5%B7%A5%E7%A8%8B/todo/todo-rust-fast/nginx/todo.conf">nginx/todo.conf</a></li>
+  <li><strong>對比</strong>: <a href="https://github.com/ccckmit/course0/blob/main/code/%E8%BB%9F%E9%AB%94%E5%B7%A5%E7%A8%8B/todo/todo-rust-fast/BENCHMARKS.md">BENCHMARKS.md</a></li>
+</ul>
+</div>
+</div>
+</div>
+
+<!-- ==================== 語言與效能 ==================== -->
+<div class="section" id="perf">
+<h2>⚡ 語言與工具對效能的影響</h2>
+<p>同一份 Todo 應用分別用 Python (FastAPI) 和 Rust (Axum + SQLite / sled + Redis) 實作，展示語言與架構選擇對執行效能和開發體驗的差異。</p>
+<div class="sec-grid">
+<div class="topic-card open">
+<div class="topic-header" onclick="this.parentElement.classList.toggle('open')">
+<h3>核心指標對比</h3>
+<span class="arrow">▶</span>
+</div>
+<div class="topic-body">
+<div class="topic-body-inner">
+<div class="code-block"><span class="cm">#                   Python        Rust+SQLite   Rust+sled+Redis+Nginx</span>
+<span class="cm"># 啟動時間         ~500ms         ~8ms          ~10ms</span>
+<span class="cm"># 記憶體 (idle)    ~80MB          ~5MB          ~12MB</span>
+<span class="cm"># 吞吐量           ~12k req/s     ~128k req/s   ~450k req/s</span>
+<span class="cm"># 延遲 p99         ~15ms          ~1.2ms        ~0.2ms</span>
+
+<span class="cm"># 開發速度         Python 快     Rust 慢 (編譯)  Rust 慢 (編譯)</span>
+<span class="cm"># 型別安全         執行期檢查     編譯期保證      編譯期保證</span>
+<span class="cm"># 部署             需 runtime     靜態二進位      靜態二進位</span></div>
+</div>
+</div>
+</div>
+
+<div class="topic-card open">
+<div class="topic-header" onclick="this.parentElement.classList.toggle('open')">
+<h3>為什麼 Rust 更快</h3>
+<span class="arrow">▶</span>
+</div>
+<div class="topic-body">
+<div class="topic-body-inner">
+<div class="code-block"><span class="cm"># 1. 啟動時間</span>
+<span class="cm"># Python: 載入直譯器 + 匯入模組 + ASGI 初始化</span>
+<span class="cm"># Rust:   作業系統直接載入原生二進位</span>
+
+<span class="cm"># 2. 記憶體</span>
+<span class="cm"># Python 物件開銷大: int=28B, str=49B+字元, GC 追蹤</span>
+<span class="cm"># Rust 值類型: i64=8B, String=24B(stack)+heap, 無 GC</span>
+
+<span class="cm"># 3. 吞吐量</span>
+<span class="cm"># FastAPI (ASGI): 單執行緒事件循環, SQLite I/O 阻塞</span>
+<span class="cm"># Axum (tokio):   多執行緒 async, SQLite 透過 spawn_blocking</span>
+<span class="cm"># sled (mmap):    鎖自由資料結構 + memory-mapped I/O</span>
+<span class="cm"># Redis 快取:     減少 sled 查詢, read-heavy 場景 ~1.7x 增益</span>
+<span class="cm"># Nginx proxy:    keepalive + proxy_cache, 大量請求 ~1.3x 增益</span></div>
+</div>
+</div>
+</div>
+
+<div class="topic-card open">
+<div class="topic-header" onclick="this.parentElement.classList.toggle('open')">
+<h3>選擇建議</h3>
+<span class="arrow">▶</span>
+</div>
+<div class="topic-body">
+<div class="topic-body-inner">
+<div class="code-block"><span class="cm"># 選 Python (FastAPI) 當：</span>
+<span class="cm"># • 快速原型開發</span>
+<span class="cm"># • 團隊 Python 經驗豐富</span>
+<span class="cm"># • 開發速度比執行效能重要</span>
+<span class="cm"># • 部署在 Serverless 平台</span>
+
+<span class="cm"># 選 Rust (Axum + SQLite) 當：</span>
+<span class="cm"># • 高效能需求 (高吞吐、低延遲)</span>
+<span class="cm"># • 記憶體受限環境 (容器、邊緣運算)</span>
+<span class="cm"># • 需要編譯期安全保證</span>
+<span class="cm"># • 部署為靜態二進位 (無 runtime 依賴)</span>
+
+<span class="cm"># 選 Rust + sled + Redis + Nginx 當：</span>
+<span class="cm"># • 極致效能需求 (~37x Python)</span>
+<span class="cm"># • read-heavy 工作負載 (Redis 快取)</span>
+<span class="cm"># • 需要選用快取 + 反向代理架構</span></div>
+<div class="files">
+  <a href="https://github.com/ccckmit/course0/blob/main/code/%E8%BB%9F%E9%AB%94%E5%B7%A5%E7%A8%8B/todo/todo-rust/BENCHMARKS.md">Rust vs Python 對比報告</a>
+  <a href="https://github.com/ccckmit/course0/blob/main/code/%E8%BB%9F%E9%AB%94%E5%B7%A5%E7%A8%8B/todo/todo-rust-fast/BENCHMARKS.md">sled+Redis+Nginx 對比報告</a>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="section" id="ai-collab">
+<h2 style="color:#9b59b6;">🤖 AI 協作開發</h2>
+</div>
+
+<div class="sec-grid" id="prompt">
+<div class="topic-card open">
+<div class="topic-header" onclick="this.parentElement.classList.toggle('open')">
+<h3>Prompt 工程</h3>
+<span class="arrow">▶</span>
+</div>
+<div class="topic-body">
+<div class="topic-body-inner">
+<p>Prompt 工程是與 AI 溝通的核心技能。好的 Prompt 包含明確的角色定義、任務描述、輸出格式和約束條件。</p>
+<div class="code-block"><span class="cm"># Prompt 最佳實踐</span>
+<span class="cm"># 1. 角色定義：你是一位 Rust 系統程式專家</span>
+<span class="cm"># 2. 任務描述：實作一個記憶體池分配器</span>
+<span class="cm"># 3. 輸出格式：提供完整程式碼和測試</span>
+<span class="cm"># 4. 約束條件：unsafe 程式碼需附 Safety 註解</span>
+
+<span class="cm"># Few-shot 範例：提供輸入/輸出對</span>
+<span class="cm"># CoT (Chain of Thought)：要求逐步思考</span></div>
+<div class="files">
+  <a href="https://github.com/ccckmit/course0/blob/main/wiki/%E8%BB%9F%E9%AB%94%E5%B7%A5%E7%A8%8B/Prompt%E5%B7%A5%E7%A8%8B.md">wiki/Prompt工程.md</a>
+  <a href="https://www.promptingguide.ai/">Prompting Guide</a>
+</div>
+</div>
+</div>
+</div>
+
+<div class="topic-card" id="context">
+<div class="topic-header" onclick="this.parentElement.classList.toggle('open')">
+<h3>Context 工程</h3>
+<span class="arrow">▶</span>
+</div>
+<div class="topic-body">
+<div class="topic-body-inner">
+<p>Context 工程是 Prompt 工程的延伸，專注於設計和管理與 AI 智慧體互動時的上下文策略。根據 <a href="https://www.promptingguide.ai/agents/context-engineering">Prompting Guide</a>，這是構建可靠 AI 智慧體的關鍵實踐。</p>
+<div class="code-block"><span class="cm"># Context 的四層結構</span>
+<span class="cm"># System Context ─ 角色定義、能力邊界、行為約束</span>
+<span class="cm"># Task Context  ─ 任務描述、成功標準、預期輸出</span>
+<span class="cm"># Tool Context  ─ 工具描述、使用時機、錯誤處理</span>
+<span class="cm"># Memory Context ─ 對話歷史、任務狀態、學習記錄</span>
+
+<span class="cm"># 核心問題與解決方案</span>
+<span class="cm"># Issue 1: 不完整執行 → 明確要求完成所有任務</span>
+<span class="cm"># Issue 2: 工具誤用 → 分階段授予工具權限</span>
+<span class="cm"># Issue 3: 上下文遺忘 → 使用 todo.md 記錄狀態</span>
+<span class="cm"># Issue 4: 幻覺 → 強制引用來源</span></div>
+<div class="files">
+  <a href="https://github.com/ccckmit/course0/blob/main/wiki/%E8%BB%9F%E9%AB%94%E5%B7%A5%E7%A8%8B/Context%E5%B7%A5%E7%A8%8B.md">wiki/Context工程.md</a>
+</div>
+</div>
+</div>
+</div>
+
+<div class="topic-card" id="harness">
+<div class="topic-header" onclick="this.parentElement.classList.toggle('open')">
+<h3>Harness 工程</h3>
+<span class="arrow">▶</span>
+</div>
+<div class="topic-body">
+<div class="topic-body-inner">
+<p>Harness Engineering（馭繮工程）是 OpenAI 在 2026 年提出的範式：工程師不再寫代碼，而是設計環境、明確意圖、建構反饋迴圈。人類變成「掌舵者」，AI 是「執行者」。</p>
+<div class="code-block"><span class="cm"># 傳統工程 vs Harness Engineering</span>
+<span class="cm"># 傳統：人類寫代碼 → 機器執行代碼</span>
+<span class="cm"># Harness：人類設計約束 → AI 寫代碼 → 機器執行</span>
+
+<span class="cm"># 六大核心概念</span>
+<span class="cm"># 1. 倉庫即記錄系統 — 不在倉庫裡的東西對 AI 不存在</span>
+<span class="cm"># 2. AGENTS.md — 目錄而非百科，~100行，只指路</span>
+<span class="cm"># 3. 專職 linter — 知識庫是否更新、交叉連結是否完整</span>
+<span class="cm"># 4. 執行計畫為一等工件 — 提交到倉庫，版本控制</span>
+<span class="cm"># 5. 人類驗證 — AI 發 PR，人類 Review 合併</span>
+<span class="cm"># 6. 反饋迴圈 — lint → test → review → revise</span></div>
+<div class="files">
+  <a href="https://github.com/ccckmit/course0/blob/main/wiki/%E8%BB%9F%E9%AB%94%E5%B7%A5%E7%A8%8B/Harness%E5%B7%A5%E7%A8%8B.md">wiki/Harness工程.md</a>
+  <a href="https://openai.com/index/harness-engineering/">OpenAI 原文</a>
+  <a href="https://github.com/deusyu/harness-engineering">Harness 學習指南</a>
+</div>
+</div>
+</div>
+</div>
+
+<div class="topic-card" id="skill">
+<div class="topic-header" onclick="this.parentElement.classList.toggle('open')">
+<h3>Skill 文檔</h3>
+<span class="arrow">▶</span>
+</div>
+<div class="topic-body">
+<div class="topic-body-inner">
+<p>Skill 是 AI 擴展機制，將領域知識封裝成可重用的套件。AI 根據任務自動發現並載入相關 Skill。</p>
+<div class="code-block"><span class="cm"># Skill vs 其他機制</span>
+<span class="cm"># MCP Servers   → 工具調用（需知道存在）</span>
+<span class="cm"># Slash Commands → 預定義 Prompt（手動呼叫）</span>
+<span class="cm"># Skills        → 領域知識（自動發現）</span>
+<span class="cm"># AGENTS.md     → 基本規則（始終載入）</span>
+
+<span class="cm"># Skill = 專業知識 + 執行指引 + 輔助工具</span>
+
+<span class="cm"># 資料夾結構</span>
+<span class="cm"># .claude/skills/</span>
+<span class="cm"># ├── pdf/</span>
+<span class="cm"># │   ├── SKILL.md       # 必需：Skill 定義</span>
+<span class="cm"># │   ├── extract_text.ts # 可選：輔助腳本</span>
+<span class="cm"># │   └── templates/     # 可選：資源</span>
+<span class="cm"># └── ...</span></div>
+<div class="files">
+  <a href="https://github.com/ccckmit/course0/blob/main/wiki/%E8%BB%9F%E9%AB%94%E5%B7%A5%E7%A8%8B/Skill%E6%96%87%E6%AA%94.md">wiki/Skill文檔.md</a>
+  <a href="https://github.com/ccckmit/course0/tree/main/docs/skill">docs/skill/ 定義</a>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="sec-grid">
+<div class="topic-card" id="loop">
+<div class="topic-header" onclick="this.parentElement.classList.toggle('open')">
+<h3>Loop 工程</h3>
+<span class="arrow">▶</span>
+</div>
+<div class="topic-body">
+<div class="topic-body-inner">
+<p>Loop Engineering（反饋迴圈工程）是設計和管理 AI 輔助開發中多層反饋迴圈的實踐。從程式碼生成的即時檢查到跨 Sprint 的迭代改進，每一層迴圈決定開發效率和品質。</p>
+<div class="code-block"><span class="cm"># 三層迴圈模型</span>
+<span class="cm"># 外層：人類 Prompt → AI 生成 → 人類驗證 → 迭代</span>
+<span class="cm"># 中層：程式碼 → 測試 → Lint → 自動修復 → 重新測試</span>
+<span class="cm"># 內層：AI 生成 → 語法檢查 → 自行修正 → 重新生成</span>
+
+<span class="cm"># 設計原則</span>
+<span class="cm"># • 快速失敗：內層毫秒級、中層秒級、外層分鐘級</span>
+<span class="cm"># • 自動化閘門：每一層出口設置檢查</span>
+<span class="cm"># • 可見性：迴圈狀態可追蹤</span></div>
+<div class="files">
+  <a href="https://github.com/ccckmit/course0/blob/main/wiki/%E8%BB%9F%E9%AB%94%E5%B7%A5%E7%A8%8B/Loop%E5%B7%A5%E7%A8%8B.md">wiki/Loop工程.md</a>
+</div>
+</div>
+</div>
+</div>
+
+<div class="topic-card" id="agentic">
+<div class="topic-header" onclick="this.parentElement.classList.toggle('open')">
+<h3>Agentic 工程</h3>
+<span class="arrow">▶</span>
+</div>
+<div class="topic-body">
+<div class="topic-body-inner">
+<p>Agentic Engineering（智慧體工程）是設計和建構自主 AI 智慧體的實踐。智慧體能感知環境、規劃行動、使用工具、執行任務，並在過程中自主決策。是 Prompt → Context → Harness → Loop 之後的進階範式。</p>
+<div class="code-block"><span class="cm"># Agent 核心循環</span>
+<span class="cm"># 感知 (Perceive) → 規劃 (Plan) → 執行 (Act) → 觀察 (Observe)</span>
+
+<span class="cm"># Agent 架構組件</span>
+<span class="cm"># • 模型 — 推理與決策核心</span>
+<span class="cm"># • 規劃器 — 分解任務、制定步驟 (ReAct, Plan-and-Execute)</span>
+<span class="cm"># • 工具 — 與外部互動 (程式碼執行器、API)</span>
+<span class="cm"># • 記憶 — 上下文和經驗 (對話記錄、向量資料庫)</span>
+<span class="cm"># • 安全層 — 約束和驗證 (權限控制、輸出過濾)</span>
+
+<span class="cm"># 範式演進</span>
+<span class="cm"># Prompt → Context → Harness → Loop → Agentic</span></div>
+<div class="files">
+  <a href="https://github.com/ccckmit/course0/blob/main/wiki/%E8%BB%9F%E9%AB%94%E5%B7%A5%E7%A8%8B/Agentic%E5%B7%A5%E7%A8%8B.md">wiki/Agentic工程.md</a>
+  <a href="https://github.com/ccckmit/course0/blob/main/wiki/%E8%BB%9F%E9%AB%94%E5%B7%A5%E7%A8%8B/Agent%E7%99%BC%E5%B1%95%E5%8F%B2.md">wiki/Agent發展史.md</a>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- ccc_code_skill & ccc_doc_skill -->
+<div class="section" id="ccc-skill">
+<h2>📋 ccc 開發約定</h2>
+<p>本課程定義了兩份核心 skill 文件，規範所有程式碼和文件的編寫方式：</p>
+
+<div class="sec-grid">
+<div class="topic-card open">
+<div class="topic-header" onclick="this.parentElement.classList.toggle('open')">
+<h3>ccc_code_skill.md — 寫程式約定</h3>
+<span class="arrow">▶</span>
+</div>
+<div class="topic-body">
+<div class="topic-body-inner">
+<p>所有專案的編碼標準，強調測試、品質和 KISS 原則：</p>
+<div class="code-block"><span class="cm"># ccc_code_skill.md 摘要</span>
+<span class="cm"># 1. 詳細單元測試 + 系統測試</span>
+<span class="cm">#   網站：server API 測試 + Playwright E2E</span>
+<span class="cm"># 2. 測試框架</span>
+<span class="kw">python</span> pytest | <span class="kw">rust</span> cargo test | 專案 test.sh
+<span class="cm"># 3. Lint 檢查（python → ruff）</span>
+<span class="cm"># 4. 規劃寫在 _doc/vx.y.md</span>
+<span class="cm"># 5. 所有路徑使用相對路徑</span>
+<span class="cm"># 6. KISS 原則 (Keep It Simple)</span>
+<span class="cm"># 7. 寫網站順序：CLI → REST API → React 前端</span></div>
+<div class="files">
+  <a href="https://github.com/ccckmit/course0/blob/main/code/%E8%BB%9F%E9%AB%94%E5%B7%A5%E7%A8%8B/ccc_code_skill.md">code/軟體工程/ccc_code_skill.md</a>
+</div>
+</div>
+</div>
+</div>
+
+<div class="topic-card open">
+<div class="topic-header" onclick="this.parentElement.classList.toggle('open')">
+<h3>ccc_doc_skill.md — 寫文件約定</h3>
+<span class="arrow">▶</span>
+</div>
+<div class="topic-body">
+<div class="topic-body-inner">
+<p>所有文件的撰寫標準，強調 wiki 知識庫和理論背景：</p>
+<div class="code-block"><span class="cm"># ccc_doc_skill.md 摘要</span>
+<span class="cm"># 1. 每個程式寫一份 .md 說明理論背景</span>
+<span class="cm"># 2. 每個子資料夾寫 README.md 說明用途</span>
+<span class="cm"># 3. 專案目錄寫 AGENTS.md 給其他 AI 看</span>
+<span class="cm"># 4. 文件之間不重複，可引用就引用</span>
+<span class="cm"># 5. 繁體中文（台灣用語），首次出現加英文</span>
+<span class="cm"># 6. 使用 Mermaid 畫圖，TeX 寫數學式</span></div>
+<div class="files">
+  <a href="https://github.com/ccckmit/course0/blob/main/code/%E8%BB%9F%E9%AB%94%E5%B7%A5%E7%A8%8B/ccc_doc_skill.md">code/軟體工程/ccc_doc_skill.md</a>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- ==================== 品質確保 ==================== -->
+<div class="section" id="testing">
+<h2 style="color:#3498db;">🧪 測試策略</h2>
+</div>
+
+<div class="section">
+<h3>測試金字塔</h3>
+<p>測試金字塔是測試策略的核心指導原則：</p>
+<div class="pyramid">
+  <div class="py-1">E2E 測試 (Playwright) — 慢、貴、少</div>
+  <div class="py-2">整合測試 (API/DB) — 中等</div>
+  <div class="py-3">單元測試 (pytest) — 快、便宜、多</div>
+</div>
+</div>
+
+<div class="sec-grid" id="pytest">
+<div class="topic-card open">
+<div class="topic-header" onclick="this.parentElement.classList.toggle('open')">
+<h3>pytest 單元測試</h3>
+<span class="arrow">▶</span>
+</div>
+<div class="topic-body">
+<div class="topic-body-inner">
+<p>Python 專案使用 pytest 作為測試框架，測試檔案命名為 <code>test_*.py</code>：</p>
+<div class="code-block"><span class="cm"># test_calculator.py</span>
+<span class="kw">import</span> <span class="fn">pytest</span>
+<span class="kw">from</span> calculator <span class="kw">import</span> add, divide
+
+<span class="kw">def</span> <span class="fn">test_add</span>():
+    <span class="kw">assert</span> <span class="fn">add</span>(<span class="num">2</span>, <span class="num">3</span>) == <span class="num">5</span>
+    <span class="kw">assert</span> <span class="fn">add</span>(<span class="num">-1</span>, <span class="num">1</span>) == <span class="num">0</span>
+
+<span class="kw">def</span> <span class="fn">test_divide_by_zero</span>():
+    <span class="kw">with</span> <span class="fn">pytest.raises</span>(ValueError):
+        <span class="fn">divide</span>(<span class="num">1</span>, <span class="num">0</span>)
+
+<span class="cm"># 執行: python -m pytest 或 pytest</span></div>
+<div class="files">
+  <a href="https://github.com/ccckmit/course0/blob/main/wiki/%E8%BB%9F%E9%AB%94%E5%B7%A5%E7%A8%8B/%E6%B8%AC%E8%A9%A6.md">wiki/測試.md</a>
+  <a href="https://github.com/ccckmit/course0/blob/main/code/%E8%BB%9F%E9%AB%94%E5%B7%A5%E7%A8%8B/todo/tests/test_cli.py">todo/test_cli.py</a>
+  <a href="https://github.com/ccckmit/course0/blob/main/code/%E8%BB%9F%E9%AB%94%E5%B7%A5%E7%A8%8B/todo/tests/test_api.py">todo/test_api.py</a>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="topic-card" id="playwright">
+<div class="topic-header" onclick="this.parentElement.classList.toggle('open')">
+<h3>Playwright E2E 測試</h3>
+<span class="arrow">▶</span>
+</div>
+<div class="topic-body">
+<div class="topic-body-inner">
+<p>網站專案使用 Playwright 進行端到端測試，模擬真實用戶操作：</p>
+<div class="code-block"><span class="cm"># test_e2e.py — Playwright E2E 範例</span>
+<span class="kw">from</span> playwright.sync_api <span class="kw">import</span> <span class="fn">sync_playwright</span>
+
+<span class="kw">def</span> <span class="fn">test_blog_homepage</span>():
+    <span class="kw">with</span> <span class="fn">sync_playwright</span>() <span class="kw">as</span> p:
+        browser = p.chromium.launch()
+        page = browser.new_page()
+        page.<span class="fn">goto</span>(<span class="str">"http://localhost:3000"</span>)
+        <span class="kw">assert</span> page.<span class="fn">title</span>() == <span class="str">"部落格"</span>
+        <span class="kw">assert</span> page.<span class="fn">text_content</span>(<span class="str">"h1"</span>) == <span class="str">"最新文章"</span>
+        browser.close()</div>
+</div>
+</div>
+</div>
+
+<div class="topic-card" id="testsh">
+<div class="topic-header" onclick="this.parentElement.classList.toggle('open')">
+<h3>test.sh 腳本</h3>
+<span class="arrow">▶</span>
+</div>
+<div class="topic-body">
+<div class="topic-body-inner">
+<p>每個專案必須有 <code>test.sh</code> 作為統一測試入口，使用 <code>set -x</code> 顯示執行的命令：</p>
+<div class="code-block"><span class="kw">#!/bin/bash</span>
+<span class="fn">set</span> -x  <span class="cm"># 顯示每條命令</span>
+pytest -v  <span class="cm"># Python 測試</span>
+ruff check .  <span class="cm"># Lint 檢查</span>
+python -c <span class="str">"import main; print('OK')"</span>  <span class="cm"># 基本匯入測試</span></div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- ==================== API 設計 ==================== -->
+<div class="section" id="api">
+<h2 style="color:#e67e22;">🔌 API 設計</h2>
+<p>根據 ccc_code_skill.md，寫網站的正確順序是：<strong>CLI → REST API → React 前端</strong>，確保每個層級可獨立測試和驗證。</p>
+<div class="files"><a href="https://github.com/ccckmit/course0/blob/main/wiki/%E8%BB%9F%E9%AB%94%E5%B7%A5%E7%A8%8B/API%E8%A8%AD%E8%A8%88.md">wiki/API設計.md</a></div>
+
+<div class="sec-grid">
+<div class="topic-card open">
+<div class="topic-header" onclick="this.parentElement.classList.toggle('open')">
+<h3>Git 風格 CLI</h3>
+<span class="arrow">▶</span>
+</div>
+<div class="topic-body">
+<div class="topic-body-inner">
+<p>使用 <code>cmd op args</code> 模式，類似 Git 的命令列介面。可透過 shell script (<code>case1.sh</code>, <code>case2.sh</code>) 測試：</p>
+<div class="files"><a href="https://github.com/ccckmit/course0/blob/main/code/%E8%BB%9F%E9%AB%94%E5%B7%A5%E7%A8%8B/todo/todo/cli.py">todo/cli.py</a></div>
+<div class="code-block"><span class="cm"># CLI 介面設計範例</span>
+<span class="kw">def</span> <span class="fn">main</span>():
+    cmd = sys.argv[<span class="num">1</span>]
+    <span class="kw">if</span> cmd == <span class="str">"add"</span>:
+        <span class="fn">add_item</span>(sys.argv[<span class="num">2</span>])
+    <span class="kw">elif</span> cmd == <span class="str">"list"</span>:
+        <span class="fn">list_items</span>()
+    <span class="kw">elif</span> cmd == <span class="str">"remove"</span>:
+        <span class="fn">remove_item</span>(sys.argv[<span class="num">2</span>])
+
+<span class="cm"># case1.sh — CLI 測試</span>
+$ python cli.py add hello
+$ python cli.py list
+$ python cli.py remove hello</div>
+</div>
+</div>
+</div>
+
+<div class="topic-card open">
+<div class="topic-header" onclick="this.parentElement.classList.toggle('open')">
+<h3>REST API</h3>
+<span class="arrow">▶</span>
+</div>
+<div class="topic-body">
+<div class="topic-body-inner">
+<p>在 CLI 基礎上封裝 REST API，支援 JSON 格式的請求和回應：</p>
+<div class="files"><a href="https://github.com/ccckmit/course0/blob/main/code/%E8%BB%9F%E9%AB%94%E5%B7%A5%E7%A8%8B/todo/todo/api.py">todo/api.py</a></div>
+<div class="code-block"><span class="cm"># FastAPI 範例</span>
+<span class="kw">from</span> fastapi <span class="kw">import</span> FastAPI
+<span class="kw">from</span> pydantic <span class="kw">import</span> BaseModel
+
+app = FastAPI()
+
+<span class="kw">class</span> <span class="fn">Item</span>(BaseModel):
+    name: str
+
+<span class="fn">@app.post</span>(<span class="str">"/items"</span>)
+<span class="kw">def</span> <span class="fn">create_item</span>(item: Item):
+    <span class="fn">add_item</span>(item.name)
+    <span class="kw">return</span> {<span class="str">"status"</span>: <span class="str">"ok"</span>}</div>
+</div>
+</div>
+</div>
+
+<div class="topic-card open">
+<div class="topic-header" onclick="this.parentElement.classList.toggle('open')">
+<h3>React 前端</h3>
+<span class="arrow">▶</span>
+</div>
+<div class="topic-body">
+<div class="topic-body-inner">
+<p>最後使用 React 開發前端，通過 REST API 與後端溝通：</p>
+<div class="files"><a href="https://github.com/ccckmit/course0/tree/main/code/%E8%BB%9F%E9%AB%94%E5%B7%A5%E7%A8%8B/todo/frontend/src">todo/frontend/src</a></div>
+<div class="code-block"><span class="cm">// React 元件範例</span>
+<span class="kw">function</span> <span class="fn">App</span>() {
+  const [items, setItems] = <span class="fn">useState</span>([]);
+
+  <span class="fn">useEffect</span>(() => {
+    <span class="fn">fetch</span>(<span class="str">'/api/items'</span>)
+      .then(r => r.json())
+      .then(<span class="fn">setItems</span>);
+  }, []);
+
+  <span class="kw">return</span> (
+    &lt;ul&gt;{items.<span class="fn">map</span>(i =&gt; &lt;li&gt;{i.name}&lt;/li&gt;)}&lt;/ul&gt;
+  );
+}</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- ==================== Git ==================== -->
+<div class="section" id="git">
+<h2>🌿 Git 工作流程</h2>
+<p>分散式版本控制是現代軟體開發的基石。Git 不僅是工具，更是一種協作協議。</p>
+
+<div class="sec-grid">
+<div class="topic-card open">
+<div class="topic-header" onclick="this.parentElement.classList.toggle('open')">
+<h3>分支策略</h3>
+<span class="arrow">▶</span>
+</div>
+<div class="topic-body">
+<div class="topic-body-inner">
+<p>常見的 Git 分支策略：</p>
+<div class="code-block"><span class="cm"># 主流分支策略</span>
+<span class="cm"># main ─ 穩定版本，僅從 PR 合併</span>
+<span class="cm"># develop ─ 開發主線，功能分支從此分出</span>
+<span class="cm"># feature/xxx ─ 功能開發分支</span>
+<span class="cm"># fix/xxx ─ 修補分支</span>
+<span class="cm"># release/x.y ─ 發布準備分支</span>
+
+<span class="cm"># Git Flow 工作流程</span>
+$ git checkout -b feature/login
+  <span class="cm"># ... 開發、提交 ...</span>
+$ git push origin feature/login
+  <span class="cm"># 發起 Pull Request → Code Review → 合併</span></div>
+<div class="files">
+  <a href="https://github.com/ccckmit/course0/blob/main/wiki/%E8%BB%9F%E9%AB%94%E5%B7%A5%E7%A8%8B/Git.md">wiki/Git.md</a>
+  <a href="https://github.com/ccckmit/course0/blob/main/wiki/%E8%BB%9F%E9%AB%94%E5%B7%A5%E7%A8%8B/%E4%BA%BA%E6%A9%9F%E5%8D%94%E4%BD%9C%E6%A8%A1%E5%BC%8F.md">wiki/人機協作模式.md</a>
+  <a href="https://github.com/ccckmit/course0/blob/main/code/%E7%B3%BB%E7%B5%B1%E7%A8%8B%E5%BC%8F/textdata/git0/">code/git0/ — Git 實作</a>
+</div>
+</div>
+</div>
+</div>
+
+<div class="topic-card open">
+<div class="topic-header" onclick="this.parentElement.classList.toggle('open')">
+<h3>Harness + Git 協作模式</h3>
+<span class="arrow">▶</span>
+</div>
+<div class="topic-body">
+<div class="topic-body-inner">
+<p>AI 時代的 Git 協作流程 — AI 發 PR，人類 Review 合併：</p>
+<div class="code-block"><span class="cm"># AI + Git 工作流程</span>
+<span class="cm"># 1. 人類開 issue / 寫需求</span>
+<span class="cm"># 2. AI 在 feature branch 開發 + 測試</span>
+<span class="cm"># 3. AI 提交 PR（含測試結果）</span>
+<span class="cm"># 4. 人類 Code Review + 合併到 main</span>
+<span class="cm"># 5. CI/CD 自動部署</span>
+
+<span class="cm"># 關鍵原則</span>
+<span class="cm"># • 不在倉庫裡的東西對 AI 不存在</span>
+<span class="cm"># • AGENTS.md 是目錄，只指路</span>
+<span class="cm"># • 專職 linter + CI 驗證</span></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- ==================== CI/CD ==================== -->
+<div class="section" id="cicd">
+<h2>🔄 CI/CD 持續整合與部署</h2>
+<p>每次推送程式碼自動觸發建構、測試和部署。本課程使用 GitHub Actions 來自動化流程。</p>
+
+<div class="sec-grid">
+<div class="topic-card open">
+<div class="topic-header" onclick="this.parentElement.classList.toggle('open')">
+<h3>CI Pipeline</h3>
+<span class="arrow">▶</span>
+</div>
+<div class="topic-body">
+<div class="topic-body-inner">
+<p>GitHub Actions 工作流程範例：</p>
+<div class="code-block"><span class="cm"># .github/workflows/test.yml</span>
+name: CI
+on: [push, pull_request]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run tests
+        run: |
+          pip install -r requirements.txt
+          pytest
+          ruff check .</div>
+<div class="files">
+  <a href="https://github.com/ccckmit/course0/blob/main/wiki/%E8%BB%9F%E9%AB%94%E5%B7%A5%E7%A8%8B/%E6%8C%81%E7%BA%8C%E6%95%B4%E5%90%88.md">wiki/持續整合.md</a>
+  <a href="https://github.com/ccckmit/course0/blob/main/.github/workflows/static_ccc.yml">static_ccc.yml</a>
+</div>
+</div>
+</div>
+</div>
+
+<div class="topic-card open">
+<div class="topic-header" onclick="this.parentElement.classList.toggle('open')">
+<h3>GitHub Pages 部署</h3>
+<span class="arrow">▶</span>
+</div>
+<div class="topic-body">
+<div class="topic-body-inner">
+<p>本課程教材透過 GitHub Pages 自動部署，純靜態、無建置步驟：</p>
+<div class="code-block"><span class="cm"># static_ccc.yml — 靜態部署</span>
+<span class="cm"># 來源：docs/html/ → GitHub Pages</span>
+<span class="cm"># 觸發：push 到 main 分支</span>
+<span class="cm"># 無建置：直接上傳靜態檔案</span>
+<span class="cm"># 無測試：純文件，非軟體專案</span>
+
+<span class="cm"># 部署連結：</span>
+<span class="cm"># https://ccckmit.github.io/course0/</span></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- ==================== 軟體架構 ==================== -->
+<div class="section" id="arch">
+<h2>🏗️ 軟體架構與設計模式</h2>
+
+<div class="sec-grid">
+<div class="topic-card open">
+<div class="topic-header" onclick="this.parentElement.classList.toggle('open')">
+<h3>架構模式</h3>
+<span class="arrow">▶</span>
+</div>
+<div class="topic-body">
+<div class="topic-body-inner">
+<p>常見的軟體架構風格，從簡單到複雜：</p>
+<div class="code-block"><span class="cm"># 架構演進路徑</span>
+<span class="cm"># 1. 單體架構 (Monolith)</span>
+<span class="cm">#    所有邏輯在單一程式中</span>
+<span class="cm"># 2. 分層架構 (Layered)</span>
+<span class="cm">#    表示層 → 業務層 → 資料層</span>
+<span class="cm"># 3. 微服務架構 (Microservices)</span>
+<span class="cm">#    獨立部署的服務，透過 API 溝通</span>
+<span class="cm"># 4. 事件驅動架構 (Event-Driven)</span>
+<span class="cm">#    服務透過事件非同步溝通</span></div>
+<div class="files">
+  <a href="https://github.com/ccckmit/course0/blob/main/wiki/%E8%BB%9F%E9%AB%94%E5%B7%A5%E7%A8%8B/%E8%BB%9F%E9%AB%94%E6%9E%B6%E6%A7%8B.md">wiki/軟體架構.md</a>
+  <a href="https://github.com/ccckmit/course0/blob/main/wiki/%E8%BB%9F%E9%AB%94%E5%B7%A5%E7%A8%8B/%E8%A8%AD%E8%A8%88%E6%A8%A1%E5%BC%8F.md">wiki/設計模式.md</a>
+</div>
+</div>
+</div>
+</div>
+
+<div class="topic-card open">
+<div class="topic-header" onclick="this.parentElement.classList.toggle('open')">
+<h3>KISS 原則</h3>
+<span class="arrow">▶</span>
+</div>
+<div class="topic-body">
+<div class="topic-body-inner">
+<p>本課程的核心設計哲學 — 保持簡單：</p>
+<div class="code-block"><span class="cm"># KISS 原則應用</span>
+<span class="cm"># 1. 不引入不必要的抽象</span>
+<span class="cm"># 2. 能共用盡量共用，提出模組或移動之</span>
+<span class="cm"># 3. 程式超過 1000 行才拆檔案</span>
+<span class="cm"># 4. 先做 CLI，再做 API，最後才做前端</span>
+<span class="cm"># 5. 測試先行，確保重構安全</span>
+
+<span class="cm"># "Perfection is achieved not when there is</span>
+<span class="cm">#  nothing more to add, but when there is</span>
+<span class="cm">#  nothing more to take away." — Saint-Exupéry</span></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- ==================== 協作模式 ==================== -->
+<div class="section" id="solo-ai">
+<h2>👤 單人 + AI 協作模式</h2>
+<p>本課程的核心開發模式：一位開發者搭配 AI 助理，完成從需求到部署的完整流程。</p>
+<div class="files"><a href="https://github.com/ccckmit/course0/blob/main/wiki/%E8%BB%9F%E9%AB%94%E5%B7%A5%E7%A8%8B/%E4%BA%BA%E6%A9%9F%E5%8D%94%E4%BD%9C%E6%A8%A1%E5%BC%8F.md">wiki/人機協作模式.md</a></div>
+
+<div class="sec-grid">
+<div class="topic-card open">
+<div class="topic-header" onclick="this.parentElement.classList.toggle('open')">
+<h3>開發循環</h3>
+<span class="arrow">▶</span>
+</div>
+<div class="topic-body">
+<div class="topic-body-inner">
+<div class="code-block"><span class="cm"># 單人 + AI 開發循環</span>
+<span class="cm"># 1. 人類描述任務（Prompt 工程）</span>
+<span class="cm"># 2. AI 產生程式碼 + 測試</span>
+<span class="cm"># 3. 人類驗證結果（Review + 手動測試）</span>
+<span class="cm"># 4. 反饋修正（迭代）</span>
+<span class="cm"># 5. 提交到 Git（AI 發 PR，人類合併）</span>
+<span class="cm"># 6. CI/CD 自動部署</span>
+
+<span class="cm"># 關鍵成功因素</span>
+<span class="cm"># • 清晰的 AGENTS.md — AI 的「操作手冊」</span>
+<span class="cm"># • 完整的測試覆蓋 — AI 修改後回歸保障</span>
+<span class="cm"># • 版本控制 — 所有工件都在倉庫中</span></div>
+</div>
+</div>
+</div>
+
+<div class="topic-card open">
+<div class="topic-header" onclick="this.parentElement.classList.toggle('open')">
+<h3>角色分工</h3>
+<span class="arrow">▶</span>
+</div>
+<div class="topic-body">
+<div class="topic-body-inner">
+<div class="code-block"><span class="cm"># 人類（掌舵者）</span>
+<span class="cm"># • 描述任務和意圖</span>
+<span class="cm"># • 提供領域知識和背景</span>
+<span class="cm"># • 驗證輸出品質</span>
+<span class="cm"># • 做出設計決策</span>
+<span class="cm"># • 管理專案方向</span>
+
+<span class="cm"># AI（執行者）</span>
+<span class="cm"># • 產生程式碼</span>
+<span class="cm"># • 撰寫測試</span>
+<span class="cm"># • 執行 lint 和格式化</span>
+<span class="cm"># • 維護文件</span>
+<span class="cm"># • 回應人類反饋</span></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="section" id="team">
+<h2>👥 團隊合作模式</h2>
+<p>當開發規模擴大時，需要更正式的合作流程：</p>
+<div class="files"><a href="https://github.com/ccckmit/course0/blob/main/wiki/%E8%BB%9F%E9%AB%94%E5%B7%A5%E7%A8%8B/%E4%BA%BA%E6%A9%9F%E5%8D%94%E4%BD%9C%E6%A8%A1%E5%BC%8F.md">wiki/人機協作模式.md</a></div>
+
+<div class="sec-grid">
+<div class="topic-card">
+<div class="topic-header" onclick="this.parentElement.classList.toggle('open')">
+<h3>Pull Request 流程</h3>
+<span class="arrow">▶</span>
+</div>
+<div class="topic-body">
+<div class="topic-body-inner">
+<div class="code-block"><span class="cm"># PR 流程</span>
+<span class="cm"># 1. 開 feature branch</span>
+<span class="cm"># 2. 開發 + 本地測試</span>
+<span class="cm"># 3. Push + 開 PR</span>
+<span class="cm"># 4. CI 自動執行測試</span>
+<span class="cm"># 5. Code Review</span>
+<span class="cm"># 6. Merge to main</span>
+<span class="cm"># 7. 自動部署</span></div>
+</div>
+</div>
+</div>
+
+<div class="topic-card">
+<div class="topic-header" onclick="this.parentElement.classList.toggle('open')">
+<h3>Code Review 要點</h3>
+<span class="arrow">▶</span>
+</div>
+<div class="topic-body">
+<div class="topic-body-inner">
+<div class="code-block"><span class="cm"># Review 檢查清單</span>
+<span class="cm"># • 功能正確性 — 是否滿足需求</span>
+<span class="cm"># • 測試覆蓋 — 有測試嗎？測試合理嗎？</span>
+<span class="cm"># • 程式碼品質 — 可讀性、命名、架構</span>
+<span class="cm"># • 安全性 — 有洩漏敏感資訊嗎？</span>
+<span class="cm"># • Lint/Format — 是否符合規範</span></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- ==================== 延伸資源 ==================== -->
+<div class="section">
+<h2>🔗 延伸資源</h2>
+<ul>
+  <li><a href="https://themodernsoftware.dev/">The Modern Software</a> — 課程參考教材</li>
+  <li><a href="https://github.com/ccckmit/course0/tree/main/code/%E8%BB%9F%E9%AB%94%E5%B7%A5%E7%A8%8B">課程程式碼範例 (GitHub)</a> — ccc_code_skill.md, ccc_doc_skill.md</li>
+  <li><a href="https://github.com/ccckmit/course0/tree/main/wiki/%E8%BB%9F%E9%AB%94%E5%B7%A5%E7%A8%8B">課程 Wiki (GitHub)</a> — 完整知識庫</li>
+  <li><a href="https://github.com/ccckmit/course0/tree/main/lecture/%E8%BB%9F%E9%AB%94%E5%B7%A5%E7%A8%8B">課程講稿</a> — 課程大綱與結構</li>
+  <li><a href="https://www.promptingguide.ai/agents/context-engineering">Context Engineering Guide</a> — Prompting Guide 上下文工程</li>
+  <li><a href="https://openai.com/index/harness-engineering/">Harness Engineering (OpenAI)</a> — 馭繮工程原文</li>
+  <li><a href="https://github.com/deusyu/harness-engineering">Harness Engineering 學習指南</a> — 實戰資源</li>
+</ul>
+</div>
+
+</main>
+</div>
+
+<footer>
+  <p>軟體工程課程 · <a href="https://github.com/ccckmit/course0">GitHub 原始碼</a> · <a href="https://themodernsoftware.dev/">The Modern Software</a></p>
+</footer>
+
+</body>
+</html>

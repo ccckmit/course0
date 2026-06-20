@@ -1,6 +1,21 @@
 # 日誌
 
-<<<<<<< HEAD
+## [2026-06-20] restructure | todo/ 目錄重組
+
+- 將三個後端實作集中到 `todo/` 下：`todo-py/`, `todo-rust/`, `todo-rust-fast/`
+- `frontend/` 保持原位
+- 更新 README.md、AGENTS.md、BENCHMARKS.md、CI、wiki 等跨參照
+- 新增 `todo/README.md` — 總覽所有四子專案
+
+## [2026-06-20] add | Loop工程、Agentic工程、API設計、人機協作模式
+
+- 新增 Loop工程.md — 多層反饋迴圈的設計與管理
+- 新增 Agentic工程.md — 自主 AI 智慧體的設計與建構
+- 新增 API設計.md — CLI → REST → React 設計模式
+- 新增 人機協作模式.md — 人類與 AI 的分工協作
+- 新增 todo/ 範例專案 — FastAPI + SQLite + React 完整展示
+- index.md: 新增 4 條條目
+
 ## [2026-04-15] add | 軟體工程進階主題
 
 - 新增 需求工程.md - 需求獲取、用戶故事、接受標準

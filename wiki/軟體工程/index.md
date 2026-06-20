@@ -36,6 +36,10 @@
 - [Harness工程](Harness工程.md) - AI 智慧體的約束與驗證系統 | tags: 馭繮, 代理, AGENTS.md
 - [Agent發展史](Agent發展史.md) - AI Agent 的發展演進 | tags: 歷史, 演進, Prompt, Context
 - [Skill文檔](Skill文檔.md) - Claude Code 的 Skill 擴展機制 | tags: Skills, 領域知識
+- [API設計](API設計.md) - 從 CLI 到 REST 到 React 的 API 設計模式 | tags: CLI, REST, API設計
+- [人機協作模式](人機協作模式.md) - 人類與 AI 智慧體的分工協作模式 | tags: 協作, AI, Harness
+- [Loop工程](Loop工程.md) - 多層反饋迴圈的設計與管理 | tags: 迴圈, 反饋, Harness
+- [Agentic工程](Agentic工程.md) - 自主 AI 智慧體的設計與建構 | tags: Agent, 自主, 工具
 - [KarpathySkill](KarpathySkill.md) - Karpathy 四原則的編碼指南 | tags: 四原則, 編碼
 - [karpathy](karpathy.md) - Andrej Karpathy 的 AI 編碼原則與專案 | tags: nanoGPT, LLM Wiki, 四原則
 

@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nand2Tetris — 從 NAND 到 Tetris 的完整電腦系統</title>
+<link rel="stylesheet" href="../main.css">
+<style>
+:root { --red: #e74c3c; --dark: #2c3e50; --bg: #f5f7fa; --card: #fff; --code-bg: #1e1e2e; }
+.stack { display: flex; flex-direction: column; align-items: center; gap: 2px; margin: 20px 0; }
+.stack-layer { width: 100%; padding: 14px 18px; border-radius: 8px; text-align: center; font-size: 0.95rem; color: #fff; cursor: pointer; transition: transform .15s, opacity .15s; }
+.stack-layer:hover { transform: translateX(4px); opacity: .92; }
+.stack-layer.hw { background: #3498db; }
+.stack-layer.sw { background: #2ecc71; }
+.stack-layer.sys { background: #9b59b6; }
+.stack-layer span { font-size: 0.75rem; opacity: .8; display: block; margin-top: 2px; }
+.proj-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 12px; margin: 16px 0; }
+.proj-card { background: var(--card); border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); border: 1px solid #eee; overflow: hidden; transition: box-shadow .2s; }
+.proj-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.1); }
+.proj-header { padding: 16px 20px; cursor: pointer; display: flex; align-items: center; gap: 10px; user-select: none; }
+.proj-header h3 { margin: 0; font-size: 1rem; flex: 1; }
+.proj-header .part { font-size: 0.7rem; padding: 2px 8px; border-radius: 10px; color: #fff; }
+.part-hardware { background: #3498db; }
+.part-software { background: #2ecc71; }
+.proj-header .arrow { transition: transform .2s; font-size: 0.8rem; color: #999; }
+.proj-card.open .arrow { transform: rotate(90deg); }
+.proj-body { max-height: 0; overflow: hidden; transition: max-height .3s ease; }
+.proj-card.open .proj-body { max-height: 2000px; }
+.proj-body-inner { padding: 0 20px 16px; border-top: 1px solid #eee; }
+.proj-body p { margin: 10px 0; font-size: 0.9rem; color: #555; }
+.proj-body .files { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0; }
+.proj-body .files a { font-size: 0.8rem; background: #f0f0f5; padding: 3px 10px; border-radius: 6px; color: var(--dark); text-decoration: none; }
+.proj-body .files a:hover { background: #e0e0eb; }
+.code-block { background: var(--code-bg); color: #cdd6f4; padding: 14px; border-radius: 8px; margin: 10px 0; overflow-x: auto; font-family: "Consolas","Monaco","Courier New",monospace; font-size: 0.8rem; line-height: 1.5; white-space: pre; tab-size: 2; }
+.code-block .cm { color: #6c7086; } .code-block .kw { color: #cba6f7; } .code-block .ty { color: #89b4fa; } .code-block .fn { color: #a6e3a1; } .code-block .str { color: #f9e2af; } .code-block .num { color: #fab387; }
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+@media(max-width:768px){ .two-col { grid-template-columns: 1fr; } .proj-grid { grid-template-columns: 1fr; } }
+.tag { display: inline-block; font-size: 0.7rem; padding: 2px 8px; border-radius: 8px; margin: 2px; color: #fff; }
+.tag-hdl { background: #3498db; } .tag-asm { background: #e67e22; } .tag-c { background: #27ae60; } .tag-py { background: #9b59b6; } .tag-jack { background: #e74c3c; }
+.toc { position: sticky; top: 0; max-height: 100vh; overflow-y: auto; padding: 20px 0; }
+.toc a { display: block; padding: 4px 0; color: #666; text-decoration: none; font-size: 0.85rem; border-left: 2px solid transparent; padding-left: 12px; }
+.toc a:hover { color: var(--red); border-left-color: var(--red); }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="back-link"><a href="../計算機結構/main.html">← 回計算機結構</a></div>
+  <h1>🖥️ Nand2Tetris</h1>
+  <p>從 NAND 閘開始，一步步建構出能執行 Tetris 的完整電腦系統</p>
+</header>
+
+<div class="container" style="display:grid;grid-template-columns:220px 1fr;gap:24px;align-items:start;">
+
+<!-- Sidebar TOC -->
+<nav class="toc">
+  <div style="font-size:.8rem;font-weight:700;color:var(--dark);margin-bottom:8px;">目錄</div>
+  <a href="#overview">課程概述</a>
+  <a href="#stack">完整堆疊</a>
+  <a href="#hardware">Part I: 硬體</a>
+  <a href="#p1">　專案 1: 布林邏輯</a>
+  <a href="#p2">　專案 2: 布林運算</a>
+  <a href="#p3">　專案 3: 記憶體</a>
+  <a href="#p4">　專案 4: 機器語言</a>
+  <a href="#p5">　專案 5: 電腦架構</a>
+  <a href="#p6">　專案 6: 組譯器</a>
+  <a href="#software">Part II: 軟體</a>
+  <a href="#p7">　專案 7: VM I</a>
+  <a href="#p8">　專案 8: VM II</a>
+  <a href="#p9">　專案 9: 高階語言</a>
+  <a href="#p10">　專案 10: 編譯器 I</a>
+  <a href="#p11">　專案 11: 編譯器 II</a>
+  <a href="#p12">　專案 12: 作業系統</a>
+</nav>
+
+<main>
+
+<!-- Overview -->
+<div class="section" id="overview">
+<h2>📖 課程概述</h2>
+<p><strong>Nand2Tetris</strong>（全稱 <em>The Elements of Computing Systems</em>）由 Noam Nisan 和 Shimon Schocken 開發，是電腦科學領域最具影響力的專案式課程之一。從最基礎的 NAND 閘開始，逐步建構出完整電腦系統，涵蓋硬體平台、虛擬機器、編譯器和作業系統。</p>
+<p>本頁收錄 <a href="https://github.com/ccckmit/course0/tree/main/code/%E8%A8%88%E7%AE%97%E6%A9%9F%E7%B5%90%E6%A7%8B/nand2tetris">課程程式碼解答</a>，包含每個專案的完整實作。</p>
+<div class="two-col">
+<div>
+<h3>Part I: 硬體 (專案 1–6)</h3>
+<ul>
+<li>布林邏輯與算術運算</li>
+<li>循序邏輯與記憶體</li>
+<li>機器語言與電腦架構</li>
+<li>組譯器</li>
+</ul>
+</div>
+<div>
+<h3>Part II: 軟體 (專案 7–12)</h3>
+<ul>
+<li>虛擬機器 (堆疊與控制流)</li>
+<li>Jack 高階語言</li>
+<li>編譯器 (語法分析與程式碼生成)</li>
+<li>作業系統 (Math, Memory, Screen, Keyboard...)</li>
+</ul>
+</div>
+</div>
+</div>
+
+<!-- Stack Diagram -->
+<div class="section" id="stack">
+<h2>🏗️ 完整堆疊</h2>
+<p>點擊各層查看對應專案的解決方案：</p>
+<div class="stack">
+  <div class="stack-layer hw" onclick="document.getElementById('p12').scrollIntoView({behavior:'smooth'});setTimeout(()=>document.getElementById('p12').classList.add('open'),300)">
+    🎮 高階應用 <span>Tetris / Pong / 任何 Jack 程式</span>
+  </div>
+  <div class="stack-layer sw" onclick="document.getElementById('p12').scrollIntoView({behavior:'smooth'});setTimeout(()=>document.getElementById('p12').classList.add('open'),300)">
+    📚 作業系統 <span>Math, Memory, Screen, Keyboard, Output, String, Sys</span>
+  </div>
+  <div class="stack-layer sw" onclick="document.getElementById('p11').scrollIntoView({behavior:'smooth'});setTimeout(()=>document.getElementById('p11').classList.add('open'),300)">
+    🔄 編譯器 <span>Jack → VM 指令 (詞法/語法分析 + 程式碼生成)</span>
+  </div>
+  <div class="stack-layer sw" onclick="document.getElementById('p9').scrollIntoView({behavior:'smooth'});setTimeout(()=>document.getElementById('p9').classList.add('open'),300)">
+    📝 高階語言 <span>Jack 程式語言</span>
+  </div>
+  <div class="stack-layer sw" onclick="document.getElementById('p8').scrollIntoView({behavior:'smooth'});setTimeout(()=>document.getElementById('p8').classList.add('open'),300)">
+    ⚙️ 虛擬機器 <span>VM → Hack 組合語言 (控制流 + 函數呼叫)</span>
+  </div>
+  <div class="stack-layer sw" onclick="document.getElementById('p7').scrollIntoView({behavior:'smooth'});setTimeout(()=>document.getElementById('p7').classList.add('open'),300)">
+    📦 虛擬機器 <span>VM → Hack 組合語言 (堆疊算術)</span>
+  </div>
+  <div class="stack-layer hw" onclick="document.getElementById('p6').scrollIntoView({behavior:'smooth'});setTimeout(()=>document.getElementById('p6').classList.add('open'),300)">
+    🔧 組譯器 <span>Hack 組合語言 → 機器碼</span>
+  </div>
+  <div class="stack-layer hw" onclick="document.getElementById('p5').scrollIntoView({behavior:'smooth'});setTimeout(()=>document.getElementById('p5').classList.add('open'),300)">
+    💻 電腦架構 <span>CPU + Memory + 整台 Hack 電腦</span>
+  </div>
+  <div class="stack-layer hw" onclick="document.getElementById('p4').scrollIntoView({behavior:'smooth'});setTimeout(()=>document.getElementById('p4').classList.add('open'),300)">
+    🔤 機器語言 <span>Hack 組合語言程式設計</span>
+  </div>
+  <div class="stack-layer hw" onclick="document.getElementById('p3').scrollIntoView({behavior:'smooth'});setTimeout(()=>document.getElementById('p3').classList.add('open'),300)">
+    🧠 記憶體 <span>暫存器 → RAM → 程式計數器</span>
+  </div>
+  <div class="stack-layer hw" onclick="document.getElementById('p2').scrollIntoView({behavior:'smooth'});setTimeout(()=>document.getElementById('p2').classList.add('open'),300)">
+    ➕ 布林運算 <span>半加器 → 全加器 → ALU</span>
+  </div>
+  <div class="stack-layer hw" onclick="document.getElementById('p1').scrollIntoView({behavior:'smooth'});setTimeout(()=>document.getElementById('p1').classList.add('open'),300)">
+    🔲 布林邏輯 <span>NAND → 基本邏輯閘</span>
+  </div>
+  <div class="stack-layer hw" style="background:#1a1a2e;cursor:default;">
+    ⊼ NAND <span>唯一原始閘 — 一切從這裡開始</span>
+  </div>
+</div>
+</div>
+
+<!-- Projects -->
+<div class="section" id="hardware">
+<h2 style="color:#3498db;">⚡ Part I: 硬體</h2>
+</div>
+
+<div class="proj-grid" id="p1">
+<div class="proj-card open">
+<div class="proj-header" onclick="this.parentElement.classList.toggle('open')">
+<span class="part part-hardware">P1</span>
+<h3>布林邏輯</h3>
+<span class="arrow">▶</span>
+</div>
+<div class="proj-body">
+<div class="proj-body-inner">
+<p>從 NAND 閘開始，建構所有基本邏輯閘：Not, And, Or, Xor, Mux, DMux，以及它們的 16 位元和多重變體。</p>
+<div class="code-block"><span class="cm">// Nand2Tetris 的起點 — NAND 閘</span>
+<span class="kw">CHIP</span> <span class="ty">Nand</span> {
+    <span class="kw">IN</span> a, b;
+    <span class="kw">OUT</span> out;
+    <span class="kw">PARTS:</span>
+    <span class="cm">// 內建 — NAND 是唯一原始閘</span>
+}</div>
+<div class="code-block"><span class="cm">// 從 NAND 建構 Not</span>
+<span class="kw">CHIP</span> <span class="ty">Not</span> {
+    <span class="kw">IN</span> in;
+    <span class="kw">OUT</span> out;
+    <span class="kw">PARTS:</span>
+    Nand(a=in, b=in, out=out);
+}</div>
+<div class="code-block"><span class="cm">// 從 NAND 建構 And</span>
+<span class="kw">CHIP</span> <span class="ty">And</span> {
+    <span class="kw">IN</span> a, b;
+    <span class="kw">OUT</span> out;
+    <span class="kw">PARTS:</span>
+    Nand(a=a, b=b, out=AnandB);
+    Nand(a=AnandB, b=AnandB, out=out);
+}</div>
+<div class="code-block"><span class="cm">// Xor 閘</span>
+<span class="kw">CHIP</span> <span class="ty">Xor</span> {
+    <span class="kw">IN</span> a, b;
+    <span class="kw">OUT</span> out;
+    <span class="kw">PARTS:</span>
+    Nand(a=a, b=b, out=AnandB);
+    Or(a=a, b=b, out=AorB);
+    And(a=AnandB, b=AorB, out=out);
+}</div>
+<div class="files">
+  <a href="https://github.com/ccckmit/course0/tree/main/code/%E8%A8%88%E7%AE%97%E6%A9%9F%E7%B5%90%E6%A7%8B/nand2tetris/01"><span class="tag tag-hdl">HDL</span> 所有晶片解答</a>
+  <a href="https://github.com/ccckmit/course0/tree/main/code/%E8%A8%88%E7%AE%97%E6%A9%9F%E7%B5%90%E6%A7%8B/nand2tetris/00"><span class="tag tag-hdl">HDL</span> Xor (專案 00)</a>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="proj-grid" id="p2">
+<div class="proj-card">
+<div class="proj-header" onclick="this.parentElement.classList.toggle('open')">
+<span class="part part-hardware">P2</span>
+<h3>布林運算</h3>
+<span class="arrow">▶</span>
+</div>
+<div class="proj-body">
+<div class="proj-body-inner">
+<p>建構算術運算單元：半加器、全加器、16 位元加法器、增量器，最後是完整的 ALU。</p>
+<div class="code-block"><span class="cm">// 半加器</span>
+<span class="kw">CHIP</span> <span class="ty">HalfAdder</span> {
+    <span class="kw">IN</span> a, b;
+    <span class="kw">OUT</span> sum, carry;
+    <span class="kw">PARTS:</span>
+    Xor(a=a, b=b, out=sum);
+    And(a=a, b=b, out=carry);
+}</div>
+<div class="code-block"><span class="cm">// 全加器</span>
+<span class="kw">CHIP</span> <span class="ty">FullAdder</span> {
+    <span class="kw">IN</span> a, b, c;
+    <span class="kw">OUT</span> sum, carry;
+    <span class="kw">PARTS:</span>
+    Xor(a=a, b=b, out=s1);
+    Xor(a=s1, b=c, out=sum);
+    And(a=a, b=b, out=ab);
+    And(a=b, b=c, out=bc);
+    And(a=a, b=c, out=ac);
+    Or(a=ab, b=bc, out=abORbc);
+    Or(a=abORbc, b=ac, out=carry);
+}</div>
+<div class="files">
+  <a href="https://github.com/ccckmit/course0/tree/main/code/%E8%A8%88%E7%AE%97%E6%A9%9F%E7%B5%90%E6%A7%8B/nand2tetris/02"><span class="tag tag-hdl">HDL</span> 所有晶片解答</a>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="proj-grid" id="p3">
+<div class="proj-card">
+<div class="proj-header" onclick="this.parentElement.classList.toggle('open')">
+<span class="part part-hardware">P3</span>
+<h3>記憶體</h3>
+<span class="arrow">▶</span>
+</div>
+<div class="proj-body">
+<div class="proj-body-inner">
+<p>從 D 型正反器出發，建構 1 位元暫存器、16 位元暫存器，逐步擴展為 RAM8 → RAM64 → RAM512 → RAM4K → RAM16K，最後是程式計數器 (PC)。</p>
+<div class="code-block"><span class="cm">// 1-bit 暫存器</span>
+<span class="kw">CHIP</span> <span class="ty">Bit</span> {
+    <span class="kw">IN</span> in, load;
+    <span class="kw">OUT</span> out;
+    <span class="kw">PARTS:</span>
+    Mux(a=do, b=in, sel=load, out=mo);
+    DFF(in=mo, out=do, out=out);
+}</div>
+<div class="code-block"><span class="cm">// 16-bit 暫存器</span>
+<span class="kw">CHIP</span> <span class="ty">Register</span> {
+    <span class="kw">IN</span> in[16], load;
+    <span class="kw">OUT</span> out[16];
+    <span class="kw">PARTS:</span>
+    Bit(in=in[0],  load=load, out=out[0]);
+    Bit(in=in[1],  load=load, out=out[1]);
+    <span class="cm">// ... 共 16 個 Bit</span>
+}</div>
+<div class="code-block"><span class="cm">// 程式計數器 (PC)</span>
+<span class="kw">CHIP</span> <span class="ty">PC</span> {
+    <span class="kw">IN</span> in[16], load, inc, reset;
+    <span class="kw">OUT</span> out[16];
+    <span class="kw">PARTS:</span>
+    <span class="cm">// 支援 load/inc/reset 三種操作</span>
+    Register(in=inMux, load=loadFlag, out=out, out=regOut);
+    Inc16(in=regOut, out=incOut);
+    <span class="cm">// ... Mux 鏈選擇正確的輸入</span>
+}</div>
+<div class="files">
+  <a href="https://github.com/ccckmit/course0/tree/main/code/%E8%A8%88%E7%AE%97%E6%A9%9F%E7%B5%90%E6%A7%8B/nand2tetris/03/a"><span class="tag tag-hdl">HDL</span> Bit, Register, RAM8, RAM64, PC</a>
+  <a href="https://github.com/ccckmit/course0/tree/main/code/%E8%A8%88%E7%AE%97%E6%A9%9F%E7%B5%90%E6%A7%8B/nand2tetris/03/b"><span class="tag tag-hdl">HDL</span> RAM512, RAM4K, RAM16K</a>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="proj-grid" id="p4">
+<div class="proj-card">
+<div class="proj-header" onclick="this.parentElement.classList.toggle('open')">
+<span class="part part-hardware">P4</span>
+<h3>機器語言</h3>
+<span class="arrow">▶</span>
+</div>
+<div class="proj-body">
+<div class="proj-body-inner">
+<p>學習 Hack 組合語言，撰寫乘法 (Mult) 和螢幕控制 (Fill) 程式。Hack 有兩種指令：<strong>A 指令</strong> (位址設定: <code>@value</code>) 和 <strong>C 指令</strong> (計算+跳躍: <code>dest=comp;jump</code>)。</p>
+<div class="code-block"><span class="cm">// 乘法: RAM[2] = RAM[0] * RAM[1]</span>
+<span class="cm">// 使用反覆加法實作</span>
+   @R1
+   D=M
+   @END
+   D;JEQ       <span class="cm">// 如果 R1=0 則結束</span>
+
+   @R0
+   D=M
+   @END
+   D;JEQ       <span class="cm">// 如果 R0=0 則結束</span>
+
+   @sum
+   M=0          <span class="cm">// sum = 0</span>
+(LOOP)
+   @R0
+   D=M
+   @sum
+   M=D+M        <span class="cm">// sum += R0</span>
+   @R1
+   MD=M-1
+   @LOOP
+   D;JGT        <span class="cm">// R1--; if R1>0 goto LOOP</span>
+(END)
+   @sum
+   D=M
+   @R2
+   M=D          <span class="cm">// R2 = sum</span>
+   @END
+   0;JMP        <span class="cm">// 無窮迴圈</span></div>
+<div class="files">
+  <a href="https://github.com/ccckmit/course0/tree/main/code/%E8%A8%88%E7%AE%97%E6%A9%9F%E7%B5%90%E6%A7%8B/nand2tetris/04"><span class="tag tag-asm">ASM</span> Mult / Fill 解答</a>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="proj-grid" id="p5">
+<div class="proj-card">
+<div class="proj-header" onclick="this.parentElement.classList.toggle('open')">
+<span class="part part-hardware">P5</span>
+<h3>電腦架構</h3>
+<span class="arrow">▶</span>
+</div>
+<div class="proj-body">
+<div class="proj-body-inner">
+<p>組合 CPU、Memory、以及週邊晶片 (Screen, Keyboard)，建構完整的 Hack 電腦。CPU 包含 ALU、A 暫存器、D 暫存器、程式計數器 (PC)，執行 A 和 C 兩種指令。</p>
+<div class="two-col">
+<div>
+<h4>CPU 核心</h4>
+<div class="code-block"><span class="cm">// CPU: ALU + A/D 暫存器 + PC</span>
+<span class="kw">CHIP</span> <span class="ty">CPU</span> {
+    <span class="kw">IN</span>  inM[16], instruction[16], reset;
+    <span class="kw">OUT</span> outM[16], writeM, addressM[15], pc[15];
+    <span class="kw">PARTS:</span>
+    <span class="cm">// 指令解碼</span>
+    Or16(a=false, b=instruction, out[15]=isC,
+         out[12]=a, out[11..6]=compBits,
+         out[5..3]=destBits, out[2..0]=jumpBits);
+    <span class="cm">// A 暫存器</span>
+    ARegister(in=Ain, load=Aload, out=Aout);
+    <span class="cm">// D 暫存器</span>
+    DRegister(in=ALUout, load=Dload, out=Dout);
+    <span class="cm">// ALU</span>
+    ALU(x=Dout, y=AorM, ..., out=ALUout);
+    <span class="cm">// PC (程式計數器)</span>
+    PC(in=Aout, load=PCload, inc=true, reset=reset, out=pc);
+}</div>
+</div>
+<div>
+<h4>Memory 映射</h4>
+<div class="code-block"><span class="kw">CHIP</span> <span class="ty">Memory</span> {
+    <span class="kw">IN</span> in[16], load, address[15];
+    <span class="kw">OUT</span> out[16];
+    <span class="kw">PARTS:</span>
+    <span class="cm">// 0x0000-0x3FFF: RAM 16K</span>
+    RAM16K(in=in, load=Mload, address=address[0..13], out=outM);
+    <span class="cm">// 0x4000-0x5FFF: Screen (8K)</span>
+    Screen(in=in, load=Sload, address=address[0..12], out=outS);
+    <span class="cm">// 0x6000: Keyboard</span>
+    Keyboard(out=outK);
+}</div>
+</div>
+</div>
+<div class="files">
+  <a href="https://github.com/ccckmit/course0/tree/main/code/%E8%A8%88%E7%AE%97%E6%A9%9F%E7%B5%90%E6%A7%8B/nand2tetris/05"><span class="tag tag-hdl">HDL</span> CPU.hdl, Memory.hdl, Computer.hdl</a>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="proj-grid" id="p6">
+<div class="proj-card">
+<div class="proj-header" onclick="this.parentElement.classList.toggle('open')">
+<span class="part part-hardware">P6</span>
+<h3>組譯器</h3>
+<span class="arrow">▶</span>
+</div>
+<div class="proj-body">
+<div class="proj-body-inner">
+<p>將 Hack 組合語言轉換為機器碼。支援 A 指令 (<code>@symbol</code>) 和 C 指令 (<code>dest=comp;jump</code>) 的編碼，以及標籤和變數解析。</p>
+<p>本課程提供 <strong>C++</strong>、<strong>C</strong> 和 <strong>Python</strong> 三種實作。</p>
+<div class="code-block"><span class="cm">// C++ 組譯器核心 — 指令編碼</span>
+<span class="kw">void</span> code2binary(<span class="kw">char</span> *code, <span class="kw">char</span> *binary) {
+  <span class="kw">if</span> (code[0]==<span class="str">'@'</span>) { <span class="cm">// A 指令</span>
+    <span class="kw">int</span> address;
+    <span class="kw">if</span> (sscanf(code, <span class="str">"@%d"</span>, &address) == 1)
+      int2bin(address, binary, 16);
+    <span class="kw">else</span> { <span class="cm">// 符號解析</span>
+      <span class="cm">// 查 symMap: 預設符號 + 標籤 + 變數</span>
+    }
+  } <span class="kw">else</span> { <span class="cm">// C 指令</span>
+    <span class="cm">// dest=comp 或 comp;jump</span>
+    <span class="cm">// 編碼為 111 a c1 c2 c3 c4 c5 c6 d1 d2 d3 j1 j2 j3</span>
+    sprintf(binary, <span class="str">"111%s%s%s"</span>,
+            ccode.c_str(), dcode.c_str(), jcode.c_str());
+  }
+}</div>
+<div class="files">
+  <a href="https://github.com/ccckmit/course0/tree/main/code/%E8%A8%88%E7%AE%97%E6%A9%9F%E7%B5%90%E6%A7%8B/nand2tetris/06"><span class="tag tag-c">C++</span> asm.cpp</a>
+  <a href="https://github.com/ccckmit/course0/tree/main/code/%E8%A8%88%E7%AE%97%E6%A9%9F%E7%B5%90%E6%A7%8B/nand2tetris/06"><span class="tag tag-c">C</span> vm.c, dasm.c</a>
+  <a href="https://github.com/ccckmit/course0/tree/main/code/%E8%A8%88%E7%AE%97%E6%A9%9F%E7%B5%90%E6%A7%8B/nand2tetris/06/py"><span class="tag tag-py">Python</span> asm.py 實作</a>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="section" id="software">
+<h2 style="color:#2ecc71;">🛠️ Part II: 軟體</h2>
+</div>
+
+<div class="proj-grid" id="p7">
+<div class="proj-card">
+<div class="proj-header" onclick="this.parentElement.classList.toggle('open')">
+<span class="part part-software">P7</span>
+<h3>虛擬機器 I — 堆疊算術</h3>
+<span class="arrow">▶</span>
+</div>
+<div class="proj-body">
+<div class="proj-body-inner">
+<p>實作 VM 轉譯器，將中間層級的 VM 指令轉換為 Hack 組合語言。本章涵蓋堆疊算術指令 (add, sub, neg, eq, gt, lt, and, or, not) 和記憶體存取 (push/pop)。</p>
+<div class="code-block"><span class="cm">// VM 轉譯器 (C) — 算術指令範例</span>
+<span class="kw">void</span> write_arithmetic(FILE* out, <span class="kw">const char</span>* command) {
+    <span class="kw">if</span> (strcmp(command, <span class="str">"add"</span>) == 0)
+        fprintf(out, <span class="str">"@SP\nAM=M-1\nD=M\nA=A-1\nM=D+M\n"</span>);
+    <span class="kw">else if</span> (strcmp(command, <span class="str">"eq"</span>) == 0) {
+        fprintf(out, <span class="str">"@SP\nAM=M-1\nD=M\nA=A-1\nD=M-D\n"</span>);
+        fprintf(out, <span class="str">"@TRUE_%d\nD;JEQ\n"</span>, label_count);
+        <span class="cm">// ... false 分支: D=0; true 分支: D=-1</span>
+    }
+    <span class="cm">// 其他指令: sub, neg, and, or, not, gt, lt</span>
+}</div>
+<div class="files">
+  <a href="https://github.com/ccckmit/course0/tree/main/code/%E8%A8%88%E7%AE%97%E6%A9%9F%E7%B5%90%E6%A7%8B/nand2tetris/07"><span class="tag tag-c">C</span> vm2asm.c</a>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="proj-grid" id="p8">
+<div class="proj-card">
+<div class="proj-header" onclick="this.parentElement.classList.toggle('open')">
+<span class="part part-software">P8</span>
+<h3>虛擬機器 II — 程式控制</h3>
+<span class="arrow">▶</span>
+</div>
+<div class="proj-body">
+<div class="proj-body-inner">
+<p>擴充 VM 轉譯器以支援分支指令 (label, goto, if-goto) 和函數呼叫 (function, call, return)。實作虛擬記憶體區段 (local, argument, this, that, pointer, temp, static)。</p>
+<div class="code-block"><span class="cm">// VM 函數呼叫轉譯</span>
+<span class="cm">// call f nArgs: 推入 returnAddr, LCL, ARG, THIS, THAT</span>
+<span class="cm">//               設定 ARG=SP-5-nArgs, LCL=SP, goto f</span>
+<span class="kw">void</span> write_call(FILE* out, <span class="kw">const char</span>* funcName, <span class="kw">int</span> nArgs) {
+    fprintf(out, <span class="str">"@RETURN_%d\nD=A\n@SP\nAM=M+1\nA=A-1\nM=D\n"</span>,
+            return_count);
+    <span class="cm">// push LCL, ARG, THIS, THAT 到堆疊</span>
+    fprintf(out, <span class="str">"@LCL\nD=M\n@SP\nAM=M+1\nA=A-1\nM=D\n"</span>);
+    <span class="cm">// ... 同理 for ARG, THIS, THAT</span>
+    <span class="cm">// ARG = SP-5-nArgs, LCL = SP</span>
+    fprintf(out, <span class="str">"@%d\nD=A\n@SP\nD=M-D\n@ARG\nM=D\n"</span>, 5 + nArgs);
+    fprintf(out, <span class="str">"@SP\nD=M\n@LCL\nM=D\n"</span>);
+    fprintf(out, <span class="str">"@%s\n0;JMP\n(RETURN_%d)\n"</span>,
+            funcName, return_count++);
+}</div>
+<div class="files">
+  <a href="https://github.com/ccckmit/course0/tree/main/code/%E8%A8%88%E7%AE%97%E6%A9%9F%E7%B5%90%E6%A7%8B/nand2tetris/08"><span class="tag tag-c">C</span> vm2asm.c (完整版)</a>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="proj-grid" id="p9">
+<div class="proj-card">
+<div class="proj-header" onclick="this.parentElement.classList.toggle('open')">
+<span class="part part-software">P9</span>
+<h3>高階語言 — Jack</h3>
+<span class="arrow">▶</span>
+</div>
+<div class="proj-body">
+<div class="proj-body-inner">
+<p>使用 Jack 高階語言撰寫程式。Jack 語法類似 Java/C，支援類別、方法、陣列、字串。習題包含 aⁿbⁿ、運算式解析、流程控制、函數呼叫等。</p>
+<div class="code-block"><span class="cm">// Jack 程式範例: aⁿbⁿ (檢查 a^n b^n 字串)</span>
+<span class="kw">class</span> Main {
+    <span class="kw">function void</span> main() {
+        <span class="kw">var</span> <span class="kw">char</span> c;
+        <span class="kw">var</span> <span class="kw">int</span> an, bn;
+        <span class="kw">let</span> an = Keyboard.readInt(<span class="str">"a 的個數? "</span>);
+        <span class="kw">let</span> bn = Keyboard.readInt(<span class="str">"b 的個數? "</span>);
+        <span class="cm">// 印出 an 個 'a' 和 bn 個 'b'</span>
+        <span class="kw">while</span> (~(an = 0)) { Output.printChar(<span class="num">97</span>); <span class="kw">let</span> an = an - <span class="num">1</span>; }
+        <span class="kw">while</span> (~(bn = 0)) { Output.printChar(<span class="num">98</span>); <span class="kw">let</span> bn = bn - <span class="num">1</span>; }
+        <span class="kw">return</span>;
+    }
+}</div>
+<div class="files">
+  <a href="https://github.com/ccckmit/course0/tree/main/code/%E8%A8%88%E7%AE%97%E6%A9%9F%E7%B5%90%E6%A7%8B/nand2tetris/09"><span class="tag tag-jack">Jack</span> 所有範例</a>
+  <a href="https://github.com/ccckmit/course0/tree/main/code/%E8%A8%88%E7%AE%97%E6%A9%9F%E7%B5%90%E6%A7%8B/nand2tetris/09/05-p0func"><span class="tag tag-py">Python</span> 編譯器雛形</a>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="proj-grid" id="p10">
+<div class="proj-card">
+<div class="proj-header" onclick="this.parentElement.classList.toggle('open')">
+<span class="part part-software">P10</span>
+<h3>編譯器 I — 語法分析</h3>
+<span class="arrow">▶</span>
+</div>
+<div class="proj-body">
+<div class="proj-body-inner">
+<p>實作 Jack 編譯器的詞法分析器和語法分析器，將 Jack 程式解析為 XML 語法樹。本課程以 Python 實作完整的 Jack 編譯器。</p>
+<div class="code-block"><span class="cm">// 詞法分析器 (Lex.py) — 將 Jack 原始碼轉為 Token 串流</span>
+<span class="kw">class</span> <span class="ty">JackTokenizer</span>:
+    <span class="kw">def</span> <span class="fn">__init__</span>(<span class="kw">self</span>, input_file):
+        <span class="kw">self</span>.tokens = []
+        <span class="kw">self</span>.pos = 0
+        <span class="kw">with</span> open(input_file, <span class="str">'r'</span>) <span class="kw">as</span> f:
+            text = self.remove_comments(f.read())
+            <span class="cm"># 逐一辨識: keyword, symbol, integerConstant, stringConstant, identifier</span>
+    
+    <span class="kw">def</span> <span class="fn">advance</span>(<span class="kw">self</span>):
+        <span class="kw">self</span>.pos += 1
+        <span class="kw">return</span> <span class="kw">self</span>.tokens[<span class="kw">self</span>.pos]</div>
+<div class="code-block"><span class="cm">// 語法分析器 (Parser.py) — 遞迴下降解析</span>
+<span class="kw">class</span> <span class="ty">CompilationEngine</span>:
+    <span class="kw">def</span> <span class="fn">compileClass</span>(<span class="kw">self</span>):
+        <span class="kw">self</span>.eat(<span class="str">'class'</span>)
+        className = <span class="kw">self</span>.eatIdentifier()
+        <span class="kw">self</span>.eat(<span class="str">'{'</span>)
+        <span class="kw">while</span> <span class="kw">self</span>.tokenType() == <span class="str">'STATIC'</span> <span class="kw">or</span> <span class="kw">self</span>.tokenType() == <span class="str">'FIELD'</span>:
+            <span class="kw">self</span>.compileClassVarDec()
+        <span class="kw">while</span> <span class="kw">self</span>.tokenType() <span class="kw">in</span> [<span class="str">'CONSTRUCTOR'</span>, <span class="str">'FUNCTION'</span>, <span class="str">'METHOD'</span>]:
+            <span class="kw">self</span>.compileSubroutine()
+        <span class="kw">self</span>.eat(<span class="str">'}'</span>)</div>
+<div class="files">
+  <a href="https://github.com/ccckmit/course0/tree/main/code/%E8%A8%88%E7%AE%97%E6%A9%9F%E7%B5%90%E6%A7%8B/nand2tetris/11/py"><span class="tag tag-py">Python</span> 編譯器原始碼</a>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="proj-grid" id="p11">
+<div class="proj-card">
+<div class="proj-header" onclick="this.parentElement.classList.toggle('open')">
+<span class="part part-software">P11</span>
+<h3>編譯器 II — 程式碼生成</h3>
+<span class="arrow">▶</span>
+</div>
+<div class="proj-body">
+<div class="proj-body-inner">
+<p>擴充編譯器以產生 VM 指令。包含符號表管理 (class-level 和 subroutine-level 作用域)、變數解析 (static, field, local, argument)、運算式編譯、控制流生成。</p>
+<div class="code-block"><span class="cm">// 符號表 (SymbolTable.py)</span>
+<span class="kw">class</span> <span class="ty">SymbolTable</span>:
+    <span class="kw">def</span> <span class="fn">__init__</span>(<span class="kw">self</span>):
+        <span class="kw">self</span>.classTable = {}    <span class="cm"># static, field</span>
+        <span class="kw">self</span>.subroutineTable = {} <span class="cm"># arg, local</span>
+        <span class="kw">self</span>.fieldIndex = 0
+        <span class="kw">self</span>.staticIndex = 0
+    
+    <span class="kw">def</span> <span class="fn">varCount</span>(<span class="kw">self</span>, kind):
+        <span class="kw">return</span> len([v <span class="kw">for</span> v <span class="kw">in</span> (<span class="kw">self</span>.classTable <span class="kw">if</span> kind <span class="kw">in</span> (<span class="str">'static'</span>, <span class="str">'field'</span>) 
+                     <span class="kw">else</span> <span class="kw">self</span>.subroutineTable) 
+                     <span class="kw">if</span> v.kind == kind])
+
+<span class="cm">// VM 寫入器 (VMWriter.py)</span>
+<span class="kw">class</span> <span class="ty">VMWriter</span>:
+    <span class="kw">def</span> <span class="fn">writePush</span>(<span class="kw">self</span>, segment, index):
+        <span class="kw">self</span>.output.append(<span class="str">f"push {segment} {index}"</span>)
+    <span class="kw">def</span> <span class="fn">writeArithmetic</span>(<span class="kw">self</span>, command):
+        <span class="kw">self</span>.output.append(<span class="str">f"{command}"</span>)
+    <span class="kw">def</span> <span class="fn">writeCall</span>(<span class="kw">self</span>, name, nArgs):
+        <span class="kw">self</span>.output.append(<span class="str">f"call {name} {nArgs}"</span>)</div>
+<div class="files">
+  <a href="https://github.com/ccckmit/course0/tree/main/code/%E8%A8%88%E7%AE%97%E6%A9%9F%E7%B5%90%E6%A7%8B/nand2tetris/11/py"><span class="tag tag-py">Python</span> Compiler.py, SymbolTable.py, VMWriter.py</a>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="proj-grid" id="p12">
+<div class="proj-card">
+<div class="proj-header" onclick="this.parentElement.classList.toggle('open')">
+<span class="part part-software">P12</span>
+<h3>作業系統</h3>
+<span class="arrow">▶</span>
+</div>
+<div class="proj-body">
+<div class="proj-body-inner">
+<p>用 Jack 語言實作 Hack 電腦的作業系統函式庫，包含以下類別：</p>
+<table>
+<tr><th>類別</th><th>功能</th></tr>
+<tr><td>Math</td><td>乘法、除法、平方根、絕對值、最大值、最小值</td></tr>
+<tr><td>Memory</td><td>記憶體配置 (alloc/dealloc)、記憶體區塊操作 (peek/poke)</td></tr>
+<tr><td>Screen</td><td>像素繪圖、矩形/圓/線條繪製</td></tr>
+<tr><td>Output</td><td>字元/字串輸出到螢幕</td></tr>
+<tr><td>Keyboard</td><td>鍵盤輸入 (readChar, readInt, readLine)</td></tr>
+<tr><td>String</td><td>動態字串 (concat, substring, parseInt, setCharAt...)</td></tr>
+<tr><td>Sys</td><td>系統初始化、程式終止、等待</td></tr>
+<tr><td>Array</td><td>動態陣列配置</td></tr>
+</table>
+<div class="code-block"><span class="cm">// Math.jack — 乘法 (反覆加法演算法)</span>
+<span class="kw">function int</span> multiply(<span class="kw">int</span> x, <span class="kw">int</span> y) {
+    <span class="kw">var int</span> sum, shiftedX, i;
+    <span class="kw">let</span> shiftedX = x;
+    <span class="kw">let</span> sum = 0;
+    <span class="kw">let</span> i = 0;
+    <span class="kw">while</span> (i &lt; <span class="num">16</span>) {
+        <span class="kw">if</span> (~((y & powers_of_two[i]) = <span class="num">0</span>)) {
+            <span class="kw">let</span> sum = sum + shiftedX;
+        }
+        <span class="kw">let</span> shiftedX = shiftedX + shiftedX;
+        <span class="kw">let</span> i = i + <span class="num">1</span>;
+    }
+    <span class="kw">return</span> sum;
+}</div>
+<div class="files">
+  <a href="https://github.com/ccckmit/course0/tree/main/code/%E8%A8%88%E7%AE%97%E6%A9%9F%E7%B5%90%E6%A7%8B/nand2tetris/12"><span class="tag tag-jack">Jack</span> 完整 OS 原始碼</a>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="section">
+<h2>🔗 延伸資源</h2>
+<ul>
+  <li><a href="https://www.nand2tetris.org/">Nand2Tetris 官方網站</a> — 課程大綱、軟體工具、教材下載</li>
+  <li><a href="https://github.com/ccckmit/course0/tree/main/code/%E8%A8%88%E7%AE%97%E6%A9%9F%E7%B5%90%E6%A7%8B/nand2tetris">課程解答原始碼 (GitHub)</a> — 完整實作</li>
+  <li><a href="../計算機結構/nand2tetris.html">Nand2Tetris 簡介頁</a> — 課程基本介紹</li>
+</ul>
+</div>
+
+</main>
+</div>
+
+<footer>
+  <p>Nand2Tetris 由 Noam Nisan 和 Shimon Schocken 開發 · <a href="https://github.com/ccckmit/course0">課程原始碼</a></p>
+</footer>
+
+</body>
+</html>

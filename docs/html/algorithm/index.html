@@ -1,0 +1,1054 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>演算法 — 從方法到實作</title>
+<link rel="stylesheet" href="../main.css">
+<style>
+:root { --orange: #e67e22; --dark: #2c3e50; --bg: #f5f7fa; --card: #fff; --code-bg: #1e1e2e; }
+.chart { display: flex; flex-direction: column; gap: 4px; margin: 16px 0; }
+.chart-row { display: flex; gap: 4px; flex-wrap: wrap; }
+.chart-box { flex: 1; min-width: 80px; padding: 10px; border-radius: 8px; text-align: center; color: #fff; font-size: 0.85rem; cursor: pointer; transition: transform .15s; min-height: 60px; display: flex; flex-direction: column; justify-content: center; }
+.chart-box:hover { transform: translateY(-2px); }
+.chart-box span { font-size: 0.65rem; opacity: .85; display: block; margin-top: 3px; }
+.cat-basic { background: #3498db; } .cat-graph { background: #2ecc71; } .cat-opt { background: #e67e22; } .cat-search { background: #9b59b6; } .cat-dp { background: #e74c3c; } .cat-prob { background: #1abc9c; } .cat-theory { background: #95a5a6; }
+.toc { position: sticky; top: 0; max-height: 100vh; overflow-y: auto; padding: 20px 0; }
+.toc a { display: block; padding: 4px 0; color: #666; text-decoration: none; font-size: 0.85rem; border-left: 2px solid transparent; padding-left: 12px; }
+.toc a:hover { color: var(--orange); border-left-color: var(--orange); }
+.toc .toc-h2 { font-weight: 700; color: var(--dark); margin-top: 10px; }
+.sec-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 12px; margin: 16px 0; }
+.algo-card { background: var(--card); border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); border: 1px solid #eee; overflow: hidden; transition: box-shadow .2s; }
+.algo-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.1); }
+.algo-header { padding: 14px 18px; cursor: pointer; display: flex; align-items: center; gap: 10px; user-select: none; }
+.algo-header h3 { margin: 0; font-size: 0.95rem; flex: 1; }
+.algo-header .arrow { transition: transform .2s; font-size: 0.8rem; color: #999; }
+.algo-card.open .arrow { transform: rotate(90deg); }
+.algo-body { max-height: 0; overflow: hidden; transition: max-height .35s ease; }
+.algo-card.open .algo-body { max-height: 2500px; }
+.algo-body-inner { padding: 0 18px 14px; border-top: 1px solid #eee; }
+.algo-body-inner p { margin: 8px 0; font-size: 0.88rem; color: #555; }
+.algo-body-inner .files { display: flex; flex-wrap: wrap; gap: 5px; margin: 8px 0; }
+.algo-body-inner .files a { font-size: 0.78rem; background: #f0f0f5; padding: 3px 10px; border-radius: 6px; color: var(--dark); text-decoration: none; }
+.algo-body-inner .files a:hover { background: #e0e0eb; }
+.code-block { background: var(--code-bg); color: #cdd6f4; padding: 12px; border-radius: 8px; margin: 8px 0; overflow-x: auto; font-family: "Consolas","Monaco","Courier New",monospace; font-size: 0.78rem; line-height: 1.45; white-space: pre; tab-size: 2; }
+.code-block .cm { color: #6c7086; } .code-block .kw { color: #cba6f7; } .code-block .fn { color: #a6e3a1; } .code-block .str { color: #f9e2af; } .code-block .num { color: #fab387; } .code-block .op { color: #89b4fa; }
+.tag { display: inline-block; font-size: 0.65rem; padding: 2px 7px; border-radius: 6px; margin: 2px; color: #fff; }
+.tag-py { background: #9b59b6; } .tag-md { background: #95a5a6; }
+@media(max-width:768px){ .sec-grid { grid-template-columns: 1fr; } .container { grid-template-columns: 1fr!important; } .toc { display: none; } }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="back-link"><a href="../main.html">← 回首頁</a></div>
+  <h1>📊 演算法</h1>
+  <p>從設計方法到程式實作 — 系統性學習 30+ 種經典演算法</p>
+</header>
+
+<div class="container" style="display:grid;grid-template-columns:220px 1fr;gap:24px;align-items:start;">
+
+<nav class="toc">
+  <div class="toc-h2" style="margin-top:0;">導論</div>
+  <a href="#complexity">複雜度分析</a>
+  <a href="#lookup">查表法</a>
+  <a href="#enumeration">列舉法</a>
+  <a href="#hashing">雜湊法</a>
+  <a href="#brute">暴力法</a>
+  <a href="#iteration">迭代法</a>
+  <a href="#recursion">遞迴法</a>
+  <a href="#fp">函數式編程</a>
+  <a href="#lambda">λ 演算</a>
+  <div class="toc-h2">最佳化</div>
+  <a href="#scoring">評分與改良</a>
+  <a href="#hill">爬山演算法</a>
+  <a href="#anneal">模擬退火</a>
+  <a href="#gradient">梯度下降</a>
+  <a href="#greedy">貪婪法</a>
+  <div class="toc-h2">搜尋</div>
+  <a href="#search">圖形搜尋</a>
+  <a href="#dc">分割擊破</a>
+  <a href="#dp">動態規劃</a>
+  <div class="toc-h2">機率</div>
+  <a href="#random">隨機法</a>
+  <a href="#monte">蒙地卡羅</a>
+  <a href="#genetic">遺傳演算法</a>
+  <a href="#info">資訊理論</a>
+  <div class="toc-h2">理論</div>
+  <a href="#theory">計算理論</a>
+</nav>
+
+<main>
+
+<div class="section" id="overview">
+<h2>📖 課程概述</h2>
+<p>本教材以<strong>「演算法設計方法」</strong>為經緯，有系統地介紹超過 30 種經典演算法。不同於一般以應用領域分類的作法，這裡強調每種方法的核心思想與適用場景，幫助學習者建立「方法論」的思維 — 遇到問題時知道該用哪種方法。</p>
+<p>所有程式碼範例均來自 <a href="https://github.com/ccckmit/course0/tree/main/code/%E6%BC%94%E7%AE%97%E6%B3%95">code/演算法/</a>，以 Python 實作，可直接執行。</p>
+
+<h3>學習路徑</h3>
+<div class="chart">
+  <div class="chart-row">
+    <div class="chart-box cat-basic" onclick="document.getElementById('complexity').scrollIntoView({behavior:'smooth'})">複雜度分析<span>Big O</span></div>
+    <div class="chart-box cat-basic" onclick="document.getElementById('lookup').scrollIntoView({behavior:'smooth'})">查表法<span>空間換時間</span></div>
+    <div class="chart-box cat-basic" onclick="document.getElementById('recursion').scrollIntoView({behavior:'smooth'})">遞迴法<span>自我呼叫</span></div>
+    <div class="chart-box cat-basic" onclick="document.getElementById('iteration').scrollIntoView({behavior:'smooth'})">迭代法<span>逐步逼近</span></div>
+  </div>
+  <div class="chart-row">
+    <div class="chart-box cat-search" onclick="document.getElementById('search').scrollIntoView({behavior:'smooth'})">搜尋法<span>DFS / BFS / A*</span></div>
+    <div class="chart-box cat-dp" onclick="document.getElementById('dp').scrollIntoView({behavior:'smooth'})">動態規劃<span>最優子結構</span></div>
+    <div class="chart-box cat-dp" onclick="document.getElementById('dc').scrollIntoView({behavior:'smooth'})">分割擊破<span>分而治之</span></div>
+    <div class="chart-box cat-graph" onclick="document.getElementById('greedy').scrollIntoView({behavior:'smooth'})">貪婪法<span>局部最優</span></div>
+  </div>
+  <div class="chart-row">
+    <div class="chart-box cat-opt" onclick="document.getElementById('hill').scrollIntoView({behavior:'smooth'})">爬山演算法<span>逐步改善</span></div>
+    <div class="chart-box cat-opt" onclick="document.getElementById('gradient').scrollIntoView({behavior:'smooth'})">梯度下降<span>反向傳遞</span></div>
+    <div class="chart-box cat-prob" onclick="document.getElementById('monte').scrollIntoView({behavior:'smooth'})">蒙地卡羅<span>隨機模擬</span></div>
+    <div class="chart-box cat-prob" onclick="document.getElementById('genetic').scrollIntoView({behavior:'smooth'})">遺傳演算法<span>演化計算</span></div>
+  </div>
+  <div class="chart-row">
+    <div class="chart-box cat-theory" onclick="document.getElementById('theory').scrollIntoView({behavior:'smooth'})">計算理論<span>FSM / λ / 圖靈機</span></div>
+  </div>
+</div>
+</div>
+
+<!-- ========== 方法一：複雜度分析 ========== -->
+<div class="section" id="complexity">
+<h2>1. 複雜度分析</h2>
+<p>演算法的效率用 <strong>Big O</strong> 表示，描述執行時間或記憶體用量如何隨輸入規模成長。</p>
+<div class="sec-grid">
+<div class="algo-card open">
+<div class="algo-header" onclick="this.parentElement.classList.toggle('open')">
+<h3>常見複雜度等級</h3>
+<span class="arrow">▶</span>
+</div>
+<div class="algo-body">
+<div class="algo-body-inner">
+<div class="code-block"><span class="cm"># O(1) — 常數時間</span>
+<span class="kw">def</span> <span class="fn">getFirst</span>(arr): <span class="kw">return</span> arr[<span class="num">0</span>]
+
+<span class="cm"># O(log n) — 對數時間 (二分搜尋)</span>
+<span class="kw">def</span> <span class="fn">binarySearch</span>(arr, target): ...
+
+<span class="cm"># O(n) — 線性時間</span>
+<span class="kw">def</span> <span class="fn">linearSearch</span>(arr, target):
+    <span class="kw">for</span> i <span class="kw">in</span> range(len(arr)):
+        <span class="kw">if</span> arr[i] == target: <span class="kw">return</span> i
+    <span class="kw">return</span> -<span class="num">1</span>
+
+<span class="cm"># O(n²) — 平方時間 (泡沫排序)</span>
+<span class="kw">def</span> <span class="fn">bubbleSort</span>(a):
+    <span class="kw">for</span> i <span class="kw">in</span> range(len(a)):
+        <span class="kw">for</span> j <span class="kw">in</span> range(i):
+            <span class="kw">if</span> a[j] &gt; a[i]:
+                a[i], a[j] = a[j], a[i]
+    <span class="kw">return</span> a
+
+<span class="cm"># O(2ⁿ) — 指數時間 (費氏數列遞迴)</span>
+<span class="kw">def</span> <span class="fn">fib</span>(n):
+    <span class="kw">if</span> n &lt;= <span class="num">1</span>: <span class="kw">return</span> n
+    <span class="kw">return</span> fib(n-<span class="num">1</span>) + fib(n-<span class="num">2</span>)</div>
+<div class="files">
+  <a href="https://github.com/ccckmit/course0/tree/main/code/%E6%BC%94%E7%AE%97%E6%B3%95/method/00-bigO"><span class="tag tag-py">bubbleSort.py</span></a>
+  <a href="https://github.com/ccckmit/course0/tree/main/code/%E6%BC%94%E7%AE%97%E6%B3%95/method/00-bigO"><span class="tag tag-py">lsearch.py</span></a>
+  <a href="https://github.com/ccckmit/course0/tree/main/code/%E6%BC%94%E7%AE%97%E6%B3%95/method/00-bigO"><span class="tag tag-py">matrixMul.py</span></a>
+  <a href="https://github.com/ccckmit/course0/tree/main/code/%E6%BC%94%E7%AE%97%E6%B3%95/method/00-bigO"><span class="tag tag-md">bigO複雜度.md</span></a>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- ========== 方法二：查表法 ========== -->
+<div class="section" id="lookup">
+<h2>2. 查表法</h2>
+<p>將計算結果預先存好，用<strong>空間換取時間</strong>。典型例子：費氏數列、2ⁿ 計算。</p>
+<div class="sec-grid">
+<div class="algo-card open">
+<div class="algo-header" onclick="this.parentElement.classList.toggle('open')">
+<h3>費氏數列 vs 2ⁿ — 遞迴 vs 查表</h3>
+<span class="arrow">▶</span>
+</div>
+<div class="algo-body">
+<div class="algo-body-inner">
+<div class="code-block"><span class="cm"># 費氏數列：遞迴 (O(2ⁿ))</span>
+fib(n) = fib(n-<span class="num">1</span>) + fib(n-<span class="num">2</span>)
+
+<span class="cm"># 費氏數列：查表 (O(n))</span>
+F = [<span class="num">0</span>, <span class="num">1</span>] + [<span class="num">0</span>]*(n-<span class="num">1</span>)
+<span class="kw">for</span> i <span class="kw">in</span> range(<span class="num">2</span>, n+<span class="num">1</span>):
+    F[i] = F[i-<span class="num">1</span>] + F[i-<span class="num">2</span>]
+
+<span class="cm"># 2ⁿ：三種方法對比</span>
+<span class="cm"># 方法 1: 直接計算   O(1)</span>
+<span class="kw">def</span> <span class="fn">power2n</span>(n): <span class="kw">return</span> <span class="num">2</span>**n
+
+<span class="cm"># 方法 2: 遞迴       O(n)</span>
+<span class="kw">def</span> <span class="fn">power2n</span>(n):
+    <span class="kw">return</span> <span class="num">2</span>*power2n(n-<span class="num">1</span>)
+
+<span class="cm"># 方法 3: 遞迴+查表  O(n)</span>
+<span class="kw">def</span> <span class="fn">power2n</span>(n, table={}):
+    <span class="kw">if</span> n <span class="kw">not in</span> table:
+        table[n] = <span class="num">2</span>*power2n(n-<span class="num">1</span>, table)
+    <span class="kw">return</span> table[n]</div>
+<div class="files">
+  <a href="https://github.com/ccckmit/course0/tree/main/code/%E6%BC%94%E7%AE%97%E6%B3%95/method/01-查表法/fiboanacci"><span class="tag tag-py">fibonacci_lookup.py</span></a>
+  <a href="https://github.com/ccckmit/course0/tree/main/code/%E6%BC%94%E7%AE%97%E6%B3%95/method/01-查表法/power2n"><span class="tag tag-py">power2n.py</span></a>
+  <a href="https://github.com/ccckmit/course0/tree/main/code/%E6%BC%94%E7%AE%97%E6%B3%95/method/01-查表法/mt"><span class="tag tag-py">排列組合查表</span></a>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- ========== 方法三：列舉法 ========== -->
+<div class="section" id="enumeration">
+<h2>3. 列舉法</h2>
+<p>系統性地列舉所有可能情況。核心是排列與組合的生成。</p>
+<div class="sec-grid">
+<div class="algo-card open">
+<div class="algo-header" onclick="this.parentElement.classList.toggle('open')">
+<h3>排列與組合枚舉</h3>
+<span class="arrow">▶</span>
+</div>
+<div class="algo-body">
+<div class="algo-body-inner">
+<div class="code-block"><span class="cm"># 排列：n! 種可能</span>
+<span class="kw">def</span> <span class="fn">perm</span>(a, start, end):
+    <span class="kw">if</span> start == end:
+        print(a)
+    <span class="kw">else</span>:
+        <span class="kw">for</span> i <span class="kw">in</span> range(start, end):
+            a[start], a[i] = a[i], a[start]  <span class="cm"># 交換</span>
+            perm(a, start+<span class="num">1</span>, end)
+            a[start], a[i] = a[i], a[start]  <span class="cm"># 還原</span>
+
+<span class="cm"># 組合：C(n,m) 種可能</span>
+<span class="kw">def</span> <span class="fn">comb</span>(a, m, start, chosen):
+    <span class="kw">if</span> len(chosen) == m:
+        print(chosen); <span class="kw">return</span>
+    <span class="kw">if</span> start &gt;= len(a): <span class="kw">return</span>
+    chosen.append(a[start])
+    comb(a, m, start+<span class="num">1</span>, chosen)  <span class="cm"># 選 a[start]</span>
+    chosen.pop()
+    comb(a, m, start+<span class="num">1</span>, chosen)  <span class="cm"># 不選 a[start]</span></div>
+<div class="files">
+  <a href="https://github.com/ccckmit/course0/tree/main/code/%E6%BC%94%E7%AE%97%E6%B3%95/method/02a-列舉法/03-permutation"><span class="tag tag-py">排列</span></a>
+  <a href="https://github.com/ccckmit/course0/tree/main/code/%E6%BC%94%E7%AE%97%E6%B3%95/method/02a-列舉法/04-combination"><span class="tag tag-py">組合</span></a>
+  <a href="https://github.com/ccckmit/course0/tree/main/code/%E6%BC%94%E7%AE%97%E6%B3%95/method/02a-列舉法/01-truthTable"><span class="tag tag-py">真值表</span></a>
+  <a href="https://github.com/ccckmit/course0/tree/main/code/%E6%BC%94%E7%AE%97%E6%B3%95/method/02a-列舉法/02-randomBinary"><span class="tag tag-py">隨機二元字串</span></a>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- ========== 方法四：雜湊法 ========== -->
+<div class="section" id="hashing">
+<h2>4. 雜湊法</h2>
+<p>透過雜湊函數將資料映射到固定範圍，實現接近 O(1) 的查找。包含雜湊表、布隆過濾器、SHA256 等。</p>
+<div class="sec-grid">
+<div class="algo-card open">
+<div class="algo-header" onclick="this.parentElement.classList.toggle('open')">
+<h3>雜湊表與布隆過濾器</h3>
+<span class="arrow">▶</span>
+</div>
+<div class="algo-body">
+<div class="algo-body-inner">
+<div class="code-block"><span class="cm"># 簡單雜湊表 (鏈結法)</span>
+<span class="kw">class</span> <span class="fn">HashTable</span>:
+    <span class="kw">def</span> <span class="fn">__init__</span>(self, size=<span class="num">100</span>):
+        self.table = [[] <span class="kw">for</span> _ <span class="kw">in</span> range(size)]
+    <span class="kw">def</span> <span class="fn">hash</span>(self, key):
+        <span class="kw">return</span> hash(key) % len(self.table)
+    <span class="kw">def</span> <span class="fn">put</span>(self, key, val):
+        self.table[self.hash(key)].append((key, val))
+    <span class="kw">def</span> <span class="fn">get</span>(self, key):
+        <span class="kw">for</span> k, v <span class="kw">in</span> self.table[self.hash(key)]:
+            <span class="kw">if</span> k == key: <span class="kw">return</span> v
+        <span class="kw">return</span> <span class="kw">None</span>
+
+<span class="cm"># 布隆過濾器 (Bloom Filter)</span>
+<span class="cm"># 用多個雜湊函數判斷元素「可能存在」或「一定不存在」</span></div>
+<div class="files">
+  <a href="https://github.com/ccckmit/course0/tree/main/code/%E6%BC%94%E7%AE%97%E6%B3%95/method/02b-雜湊法/hashtable"><span class="tag tag-py">hashtable</span></a>
+  <a href="https://github.com/ccckmit/course0/tree/main/code/%E6%BC%94%E7%AE%97%E6%B3%95/method/02b-雜湊法/bloomFilter"><span class="tag tag-py">bloomFilter</span></a>
+  <a href="https://github.com/ccckmit/course0/tree/main/code/%E6%BC%94%E7%AE%97%E6%B3%95/method/02b-雜湊法/sha256"><span class="tag tag-py">sha256</span></a>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- ========== 方法五：暴力法 ========== -->
+<div class="section" id="brute">
+<h2>5. 暴力法</h2>
+<p>窮舉所有可能性，沒有捷徑。當問題規模小時可行，也是比特幣挖礦（SHA256 反算）的基礎。</p>
+<div class="sec-grid">
+<div class="algo-card open">
+<div class="algo-header" onclick="this.parentElement.classList.toggle('open')">
+<h3>暴力搜尋範例</h3>
+<span class="arrow">▶</span>
+</div>
+<div class="algo-body">
+<div class="algo-body-inner">
+<div class="code-block"><span class="cm"># 比特幣挖礦：暴力尋找符合條件的 nonce</span>
+<span class="kw">def</span> <span class="fn">mine</span>(block, difficulty):
+    prefix = <span class="str">'0'</span> * difficulty
+    nonce = <span class="num">0</span>
+    <span class="kw">while</span> <span class="kw">True</span>:
+        h = sha256(block + str(nonce))
+        <span class="kw">if</span> h.startswith(prefix):
+            <span class="kw">return</span> nonce
+        nonce += <span class="num">1</span></div>
+<div class="files">
+  <a href="https://github.com/ccckmit/course0/tree/main/code/%E6%BC%94%E7%AE%97%E6%B3%95/method/02c-暴力法/bitcoin"><span class="tag tag-py">比特幣挖礦</span></a>
+  <a href="https://github.com/ccckmit/course0/tree/main/code/%E6%BC%94%E7%AE%97%E6%B3%95/method/02c-暴力法/solve"><span class="tag tag-py">暴力解題</span></a>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- ========== 方法六：迭代法 ========== -->
+<div class="section" id="iteration">
+<h2>6. 迭代法</h2>
+<p>從初始猜測開始，反覆套用同一個規則逐步逼近解答。包含 Newton 法、Jacobi 迭代、PageRank、Lorenz 系統、Mandelbrot 集合等。</p>
+<div class="sec-grid">
+<div class="algo-card open">
+<div class="algo-header" onclick="this.parentElement.classList.toggle('open')">
+<h3>迭代法的經典應用</h3>
+<span class="arrow">▶</span>
+</div>
+<div class="algo-body">
+<div class="algo-body-inner">
+<div class="code-block"><span class="cm"># Newton 法求根：x = x - f(x)/f'(x)</span>
+<span class="kw">def</span> <span class="fn">newton</span>(f, df, x0, eps=<span class="num">1e-7</span>, max_it=<span class="num">100</span>):
+    x = x0
+    <span class="kw">for</span> _ <span class="kw">in</span> range(max_it):
+        x_next = x - f(x)/df(x)
+        <span class="kw">if</span> abs(x_next - x) &lt; eps: <span class="kw">return</span> x_next
+        x = x_next
+    <span class="kw">return</span> x
+
+<span class="cm"># PageRank：反覆傳遞權重</span>
+<span class="cm"># PR(A) = (1-d) + d * Σ PR(T)/C(T)</span>
+<span class="cm"># d = 阻尼係數，C(T) = T 的對外連結數</span>
+
+<span class="cm"># Jacobi 迭代：解線性方程組</span>
+<span class="cm"># x^(k+1) = (b - Σ a[i][j]*x[j]^k) / a[i][i]</span></div>
+<div class="files">
+  <a href="https://github.com/ccckmit/course0/tree/main/code/%E6%BC%94%E7%AE%97%E6%B3%95/method/03-迭代法/01a-equation"><span class="tag tag-py">方程求解</span></a>
+  <a href="https://github.com/ccckmit/course0/tree/main/code/%E6%BC%94%E7%AE%97%E6%B3%95/method/03-迭代法/01b-newton"><span class="tag tag-py">Newton 法</span></a>
+  <a href="https://github.com/ccckmit/course0/tree/main/code/%E6%BC%94%E7%AE%97%E6%B3%95/method/03-迭代法/01c-jacobi"><span class="tag tag-py">Jacobi 迭代</span></a>
+  <a href="https://github.com/ccckmit/course0/tree/main/code/%E6%BC%94%E7%AE%97%E6%B3%95/method/03-迭代法/03-pageRank"><span class="tag tag-py">PageRank</span></a>
+  <a href="https://github.com/ccckmit/course0/tree/main/code/%E6%BC%94%E7%AE%97%E6%B3%95/method/03-迭代法/02a-lorenz"><span class="tag tag-py">Lorenz 系統</span></a>
+  <a href="https://github.com/ccckmit/course0/tree/main/code/%E6%BC%94%E7%AE%97%E6%B3%95/method/03-迭代法/02b-mandelbrot"><span class="tag tag-py">Mandelbrot</span></a>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- ========== 方法七：遞迴法 ========== -->
+<div class="section" id="recursion">
+<h2>7. 遞迴法</h2>
+<p>函數呼叫自身解決子問題，是許多高階演算法的基礎。從基本遞迴到 BNF 語法解析、符號微分。</p>
+<div class="sec-grid">
+<div class="algo-card open">
+<div class="algo-header" onclick="this.parentElement.classList.toggle('open')">
+<h3>遞迴的經典模式</h3>
+<span class="arrow">▶</span>
+</div>
+<div class="algo-body">
+<div class="algo-body-inner">
+<div class="code-block"><span class="cm"># 階乘</span>
+<span class="kw">def</span> <span class="fn">fact</span>(n):
+    <span class="kw">return</span> <span class="num">1</span> <span class="kw">if</span> n &lt;= <span class="num">1</span> <span class="kw">else</span> n * fact(n-<span class="num">1</span>)
+
+<span class="cm"># BNF 語法遞迴解析 (範例: 運算式)</span>
+<span class="cm"># E → T | T + E</span>
+<span class="cm"># T → F | F * T</span>
+<span class="cm"># F → (E) | num</span>
+<span class="kw">def</span> <span class="fn">parseE</span>(tokens):
+    left = parseT(tokens)
+    <span class="kw">if</span> peek(tokens) == <span class="str">'+'</span>:
+        consume(tokens); <span class="kw">return</span> left + parseE(tokens)
+    <span class="kw">return</span> left
+
+<span class="cm"># 符號微分：d/dx 的遞迴規則</span>
+<span class="kw">def</span> <span class="fn">diff</span>(expr, var):
+    <span class="kw">if</span> isConst(expr): <span class="kw">return</span> <span class="num">0</span>
+    <span class="kw">if</span> isVar(expr): <span class="kw">return</span> <span class="num">1</span> <span class="kw">if</span> expr == var <span class="kw">else</span> <span class="num">0</span>
+    <span class="kw">if</span> isAdd(expr): <span class="kw">return</span> diff(expr.left, var) + diff(expr.right, var)
+    <span class="kw">if</span> isMul(expr): <span class="kw">return</span> diff(expr.left, var)*expr.right + expr.left*diff(expr.right, var)</div>
+<div class="files">
+  <a href="https://github.com/ccckmit/course0/tree/main/code/%E6%BC%94%E7%AE%97%E6%B3%95/method/04a-遞迴法/01-basic"><span class="tag tag-py">基本遞迴</span></a>
+  <a href="https://github.com/ccckmit/course0/tree/main/code/%E6%BC%94%E7%AE%97%E6%B3%95/method/04a-遞迴法/02a-bnf"><span class="tag tag-py">BNF 語法</span></a>
+  <a href="https://github.com/ccckmit/course0/tree/main/code/%E6%BC%94%E7%AE%97%E6%B3%95/method/04a-遞迴法/02b-symDiff"><span class="tag tag-py">符號微分</span></a>
+  <a href="https://github.com/ccckmit/course0/tree/main/code/%E6%BC%94%E7%AE%97%E6%B3%95/method/04a-遞迴法/04-leetcode"><span class="tag tag-py">LeetCode 遞迴</span></a>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- ========== 方法八：函數式編程 ========== -->
+<div class="section" id="fp">
+<h2>8. 函數式編程</h2>
+<p>以函數為核心，強調純函數、不可變性、高階函數。用 map/filter/reduce 取代迴圈。</p>
+<div class="sec-grid">
+<div class="algo-card open">
+<div class="algo-header" onclick="this.parentElement.classList.toggle('open')">
+<h3>函數式程式設計模式</h3>
+<span class="arrow">▶</span>
+</div>
+<div class="algo-body">
+<div class="algo-body-inner">
+<div class="code-block"><span class="cm"># 高階函數: map, filter, reduce</span>
+map(lambda x: x*<span class="num">2</span>, [<span class="num">1</span>,<span class="num">2</span>,<span class="num">3</span>])  <span class="cm"># → [2,4,6]</span>
+filter(lambda x: x &gt; <span class="num">0</span>, [-<span class="num">1</span>,<span class="num">0</span>,<span class="num">3</span>])  <span class="cm"># → [3]</span>
+reduce(lambda a,b: a+b, [<span class="num">1</span>,<span class="num">2</span>,<span class="num">3</span>])  <span class="cm"># → 6</span>
+
+<span class="cm"># Closure: 函數捕獲外部變數</span>
+<span class="kw">def</span> <span class="fn">adder</span>(n):
+    <span class="kw">return</span> <span class="kw">lambda</span> x: x + n
+
+add5 = adder(<span class="num">5</span>)
+add5(<span class="num">3</span>)  <span class="cm"># → 8</span>
+
+<span class="cm"># Combinator: Y Combinator (遞迴的函數式實現)</span>
+Y = <span class="kw">lambda</span> f: (<span class="kw">lambda</span> x: f(<span class="kw">lambda</span> y: x(x)(y))) \
+               (<span class="kw">lambda</span> x: f(<span class="kw">lambda</span> y: x(x)(y)))</div>
+<div class="files">
+  <a href="https://github.com/ccckmit/course0/tree/main/code/%E6%BC%94%E7%AE%97%E6%B3%95/method/04b-函數式編程"><span class="tag tag-py">完整範例</span></a>
+  <a href="https://github.com/ccckmit/course0/tree/main/code/%E6%BC%94%E7%AE%97%E6%B3%95/method/04c-LambdaCalculus"><span class="tag tag-py">λ 演算</span></a>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- ========== λ 演算 ========== -->
+<div class="section" id="lambda">
+<h2>9. λ 演算</h2>
+<p>用純函數定義布林值、數字、串列、遞迴—證明計算是函數的應用。Church 編碼的完整實作。</p>
+<div class="sec-grid">
+<div class="algo-card open">
+<div class="algo-header" onclick="this.parentElement.classList.toggle('open')">
+<h3>Church 編碼 — 全部都是函數</h3>
+<span class="arrow">▶</span>
+</div>
+<div class="algo-body">
+<div class="algo-body-inner">
+<div class="code-block"><span class="cm"># Church Booleans</span>
+TRUE  = <span class="kw">lambda</span> x: <span class="kw">lambda</span> y: x
+FALSE = <span class="kw">lambda</span> x: <span class="kw">lambda</span> y: y
+AND   = <span class="kw">lambda</span> p: <span class="kw">lambda</span> q: p(q)(p)
+NOT   = <span class="kw">lambda</span> c: c(FALSE)(TRUE)
+
+<span class="cm"># Church Numerals</span>
+_zero  = <span class="kw">lambda</span> f: <span class="kw">lambda</span> x: x
+SUCCESSOR = <span class="kw">lambda</span> n: <span class="kw">lambda</span> f: <span class="kw">lambda</span> x: f(n(f)(x))
+_one   = SUCCESSOR(_zero)
+ADDITION = <span class="kw">lambda</span> m: <span class="kw">lambda</span> n: n(SUCCESSOR)(m)
+MULTIPLICATION = <span class="kw">lambda</span> m: <span class="kw">lambda</span> n: <span class="kw">lambda</span> f: m(n(f))
+
+<span class="cm"># Y Combinator: 匿名函數的遞迴</span>
+Y = <span class="kw">lambda</span> f: (<span class="kw">lambda</span> x: f(<span class="kw">lambda</span> y: x(x)(y))) \
+               (<span class="kw">lambda</span> x: f(<span class="kw">lambda</span> y: x(x)(y)))
+
+<span class="cm"># 用 Y 定義階乘</span>
+FACTORIAL = Y(<span class="kw">lambda</span> f: <span class="kw">lambda</span> n:
+    IS_ZERO(n)(<span class="kw">lambda</span> _: SUCCESSOR(n))
+              (<span class="kw">lambda</span> _: MULTIPLICATION(n)(f(PREDECESSOR(n))))(NIL))</div>
+<div class="files">
+  <a href="https://github.com/ccckmit/course0/tree/main/code/%E6%BC%94%E7%AE%97%E6%B3%95/method/04c-LambdaCalculus"><span class="tag tag-py">lambdaCalculus.py</span></a>
+  <a href="https://github.com/ccckmit/course0/tree/main/code/%E6%BC%94%E7%AE%97%E6%B3%95/method/04c-LambdaCalculus/01-bool"><span class="tag tag-py">Church Boolean</span></a>
+  <a href="https://github.com/ccckmit/course0/tree/main/code/%E6%BC%94%E7%AE%97%E6%B3%95/method/04c-LambdaCalculus/04-numerial"><span class="tag tag-py">Church Numerals</span></a>
+  <a href="https://github.com/ccckmit/course0/tree/main/code/%E6%BC%94%E7%AE%97%E6%B3%95/method/04c-LambdaCalculus/06-ycombinator"><span class="tag tag-py">Y Combinator</span></a>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- ========== 評分與改良法 ========== -->
+<div class="section" id="scoring">
+<h2>10. 評分與改良法</h2>
+<p>對解答評分，然後逐步改良。核心思想：<strong>評估 → 改進 → 再評估</strong>。</p>
+<div class="sec-grid">
+<div class="algo-card open">
+<div class="algo-header" onclick="this.parentElement.classList.toggle('open')">
+<h3>隨機改良排序</h3>
+<span class="arrow">▶</span>
+</div>
+<div class="algo-body">
+<div class="algo-body-inner">
+<div class="code-block"><span class="cm"># 隨機改良排序：亂換 → 評分 → 保留好的</span>
+<span class="kw">def</span> <span class="fn">randomImproveSort</span>(a):
+    best = a[:]
+    <span class="kw">while</span> <span class="kw">True</span>:
+        <span class="cm"># 隨機交換兩個元素</span>
+        i, j = random.sample(range(len(a)), <span class="num">2</span>)
+        a[i], a[j] = a[j], a[i]
+        <span class="kw">if</span> score(a) &gt; score(best):
+            best = a[:]
+        <span class="kw">elif</span> score(a) &lt; score(best):
+            a[i], a[j] = a[j], a[i]  <span class="cm"># 還原</span></div>
+<div class="files">
+  <a href="https://github.com/ccckmit/course0/tree/main/code/%E6%BC%94%E7%AE%97%E6%B3%95/method/05b-改良法"><span class="tag tag-py">randomImproveSort.py</span></a>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- ========== 爬山演算法 ========== -->
+<div class="section" id="hill">
+<h2>11. 爬山演算法</h2>
+<p>從隨機起點出發，每一步往鄰域中最佳方向移動，直到抵達區域頂點。簡單但可能陷入區域最佳解。</p>
+<div class="sec-grid">
+<div class="algo-card open">
+<div class="algo-header" onclick="this.parentElement.classList.toggle('open')">
+<h3>爬山演算法實作</h3>
+<span class="arrow">▶</span>
+</div>
+<div class="algo-body">
+<div class="algo-body-inner">
+<div class="code-block"><span class="cm"># 單變數爬山</span>
+<span class="kw">def</span> <span class="fn">hillClimbing</span>(f, x, dx=<span class="num">0.01</span>):
+    <span class="kw">while</span> <span class="kw">True</span>:
+        <span class="kw">if</span> f(x+dx) &gt; f(x):        <span class="cm"># 右邊更高</span>
+            x += dx
+        <span class="kw">elif</span> f(x-dx) &gt; f(x):       <span class="cm"># 左邊更高</span>
+            x -= dx
+        <span class="kw">else</span>: <span class="kw">return</span> x            <span class="cm"># 區域最高點</span>
+
+<span class="cm"># 多變數爬山：對每個維度逐一調整</span>
+<span class="kw">def</span> <span class="fn">hillClimbingN</span>(f, p, step=<span class="num">0.01</span>):
+    <span class="kw">while</span> <span class="kw">True</span>:
+        improved = <span class="kw">False</span>
+        <span class="kw">for</span> i <span class="kw">in</span> range(len(p)):
+            p[i] += step
+            <span class="kw">if</span> f(p) &gt; f(p): ...     <span class="cm"># 測試各方向</span>
+            p[i] -= step
+        <span class="kw">if not</span> improved: <span class="kw">return</span> p</div>
+<div class="files">
+  <a href="https://github.com/ccckmit/course0/tree/main/code/%E6%BC%94%E7%AE%97%E6%B3%95/method/05c-爬山演算法/hillClimbing1"><span class="tag tag-py">hillClimbing1.py</span></a>
+  <a href="https://github.com/ccckmit/course0/tree/main/code/%E6%BC%94%E7%AE%97%E6%B3%95/method/05c-爬山演算法/hillClimbing2"><span class="tag tag-py">hillClimbing2.py</span></a>
+  <a href="https://github.com/ccckmit/course0/tree/main/code/%E6%BC%94%E7%AE%97%E6%B3%95/method/05c-爬山演算法/hillClimbingN"><span class="tag tag-py">hillClimbingN.py</span></a>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- ========== 模擬退火法 ========== -->
+<div class="section" id="anneal">
+<h2>12. 模擬退火法</h2>
+<p>爬山演算法的改良版，以一定機率接受較差的解，避免陷入區域最佳。隨著時間降低接受機率（降溫）。</p>
+<div class="sec-grid">
+<div class="algo-card open">
+<div class="algo-header" onclick="this.parentElement.classList.toggle('open')">
+<h3>模擬退火法</h3>
+<span class="arrow">▶</span>
+</div>
+<div class="algo-body">
+<div class="algo-body-inner">
+<div class="code-block"><span class="cm"># 模擬退火法框架</span>
+<span class="kw">def</span> <span class="fn">simulatedAnnealing</span>(f, initState, schedule):
+    current = initState
+    <span class="kw">for</span> t <span class="kw">in</span> range(maxIter):
+        T = schedule(t)               <span class="cm"># 當前溫度</span>
+        neighbor = randomNeighbor(current)
+        delta = f(neighbor) - f(current)
+        <span class="kw">if</span> delta &gt; <span class="num">0</span>:                  <span class="cm"># 更好 → 接受</span>
+            current = neighbor
+        <span class="kw">elif</span> random() &lt; exp(delta/T): <span class="cm"># 較差 → 機率性接受</span>
+            current = neighbor
+    <span class="kw">return</span> current</div>
+<div class="files">
+  <a href="https://github.com/ccckmit/course0/tree/main/code/%E6%BC%94%E7%AE%97%E6%B3%95/method/05d-模擬退火法"><span class="tag tag-py">模擬退火法</span></a>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- ========== 梯度下降法 ========== -->
+<div class="section" id="gradient">
+<h2>13. 梯度下降法</h2>
+<p>沿梯度反方向調整參數，是機器學習的核心優化方法。包含微分、偏微分、梯度計算、隨機梯度下降 (SGD)。</p>
+<div class="sec-grid">
+<div class="algo-card open">
+<div class="algo-header" onclick="this.parentElement.classList.toggle('open')">
+<h3>梯度下降實作</h3>
+<span class="arrow">▶</span>
+</div>
+<div class="algo-body">
+<div class="algo-body-inner">
+<div class="code-block"><span class="cm"># 計算梯度</span>
+<span class="kw">def</span> <span class="fn">grad</span>(f, p, step=<span class="num">0.01</span>):
+    gp = p.copy()
+    <span class="kw">for</span> k <span class="kw">in</span> range(len(p)):
+        p1 = p.copy(); p1[k] += step
+        gp[k] = (f(p1) - f(p)) / step  <span class="cm"># 偏微分</span>
+    <span class="kw">return</span> gp
+
+<span class="cm"># 梯度下降：p = p - η * ∇f(p)</span>
+<span class="kw">def</span> <span class="fn">gradientDescendent</span>(f, p0, step=<span class="num">0.01</span>, max_loops=<span class="num">100000</span>):
+    p = p0.copy()
+    <span class="kw">for</span> i <span class="kw">in</span> range(max_loops):
+        gp = grad(f, p)                <span class="cm"># 計算梯度</span>
+        <span class="kw">if</span> norm(gp) &lt; <span class="num">1e-5</span>: <span class="kw">break</span>    <span class="cm"># 收斂</span>
+        p -= gp * step                 <span class="cm"># 反梯度方向更新</span>
+    <span class="kw">return</span> p
+
+<span class="cm"># 隨機梯度下降 (SGD)：每次只用一個樣本更新</span>
+<span class="cm"># 適合大規模資料，有隨機性可逃脫區域最佳</span></div>
+<div class="files">
+  <a href="https://github.com/ccckmit/course0/tree/main/code/%E6%BC%94%E7%AE%97%E6%B3%95/method/05e-梯度下降法/03-梯度下降法"><span class="tag tag-py">gd.py</span></a>
+  <a href="https://github.com/ccckmit/course0/tree/main/code/%E6%BC%94%E7%AE%97%E6%B3%95/method/05e-梯度下降法/04-反傳遞算法"><span class="tag tag-py">反傳遞算法</span></a>
+  <a href="https://github.com/ccckmit/course0/tree/main/code/%E6%BC%94%E7%AE%97%E6%B3%95/method/05e-梯度下降法/02-梯度"><span class="tag tag-py">梯度計算</span></a>
+  <a href="https://github.com/ccckmit/course0/tree/main/code/%E6%BC%94%E7%AE%97%E6%B3%95/method/05e-梯度下降法/01-微分"><span class="tag tag-py">微分</span></a>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- ========== 貪婪法 ========== -->
+<div class="section" id="greedy">
+<h2>14. 貪婪法</h2>
+<p>每一步都選擇當前最優選項，期望達到全域最優。常用於 Huffman 編碼、最小生成樹 (Kruskal/Prim)。</p>
+<div class="sec-grid">
+<div class="algo-card open">
+<div class="algo-header" onclick="this.parentElement.classList.toggle('open')">
+<h3>Huffman 編碼與 Kruskal 演算法</h3>
+<span class="arrow">▶</span>
+</div>
+<div class="algo-body">
+<div class="algo-body-inner">
+<div class="code-block"><span class="cm"># Huffman 編碼：合併最小頻率的兩個節點</span>
+<span class="cm"># 1. 統計每個字元頻率</span>
+<span class="cm"># 2. 建立優先佇列 (min-heap)</span>
+<span class="cm"># 3. 重複取出最小兩個節點，合併後放回</span>
+<span class="cm"># 4. 直到只剩一個節點 (root)</span>
+
+<span class="cm"># Kruskal 最小生成樹：</span>
+<span class="kw">def</span> <span class="fn">kruskal</span>(num_nodes, edges):
+    edges = sorted(edges, key=<span class="kw">lambda</span> e: e[<span class="num">2</span>])  <span class="cm"># 按權重排序</span>
+    parent = list(range(num_nodes))
+    <span class="kw">def</span> <span class="fn">find</span>(i):
+        <span class="kw">if</span> i != parent[i]: parent[i] = find(parent[i])
+        <span class="kw">return</span> parent[i]
+    mst = []
+    <span class="kw">for</span> u, v, w <span class="kw">in</span> edges:
+        <span class="kw">if</span> find(u) != find(v):      <span class="cm"># 不會形成環</span>
+            parent[find(u)] = find(v)
+            mst.append((u, v, w))
+    <span class="kw">return</span> mst</div>
+<div class="files">
+  <a href="https://github.com/ccckmit/course0/tree/main/code/%E6%BC%94%E7%AE%97%E6%B3%95/method/05f-貪婪法/01-huffmanCode"><span class="tag tag-py">Huffman 編碼</span></a>
+  <a href="https://github.com/ccckmit/course0/tree/main/code/%E6%BC%94%E7%AE%97%E6%B3%95/method/05f-貪婪法/03-minimumSpanningTree"><span class="tag tag-py">Kruskal / Prim</span></a>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- ========== 搜尋法 ========== -->
+<div class="section" id="search">
+<h2>15. 搜尋法</h2>
+<p>在圖形或狀態空間中尋找目標節點。三種核心策略：深度優先 (DFS)、廣度優先 (BFS)、最佳優先 (A*)。</p>
+<div class="sec-grid">
+<div class="algo-card open">
+<div class="algo-header" onclick="this.parentElement.classList.toggle('open')">
+<h3>圖形搜尋的三大策略</h3>
+<span class="arrow">▶</span>
+</div>
+<div class="algo-body">
+<div class="algo-body-inner">
+<div class="code-block"><span class="cm"># 圖形表示</span>
+g = {
+    <span class="str">'1'</span>: {<span class="str">'n'</span>:[<span class="str">'2'</span>,<span class="str">'5'</span>], <span class="str">'v'</span>:<span class="num">0</span>},
+    <span class="str">'2'</span>: {<span class="str">'n'</span>:[<span class="str">'3'</span>,<span class="str">'4'</span>], <span class="str">'v'</span>:<span class="num">0</span>},
+    ...
+}
+
+<span class="cm"># DFS：遞迴深入 (堆疊)</span>
+<span class="kw">def</span> <span class="fn">dfs</span>(g, node):
+    <span class="kw">if</span> g[node][<span class="str">'v'</span>] != <span class="num">0</span>: <span class="kw">return</span>
+    g[node][<span class="str">'v'</span>] = <span class="num">1</span>
+    <span class="kw">for</span> n <span class="kw">in</span> g[node][<span class="str">'n'</span>]: dfs(g, n)
+
+<span class="cm"># BFS：逐層擴散 (佇列)</span>
+<span class="kw">def</span> <span class="fn">bfs</span>(g, queue):
+    <span class="kw">if</span> len(queue)==<span class="num">0</span>: <span class="kw">return</span>
+    node = queue.pop()
+    <span class="kw">if</span> g[node][<span class="str">'v'</span>] == <span class="num">0</span>:
+        g[node][<span class="str">'v'</span>] = <span class="num">1</span>
+        <span class="kw">for</span> n <span class="kw">in</span> g[node][<span class="str">'n'</span>]:
+            <span class="kw">if not</span> g[n][<span class="str">'v'</span>]: queue.insert(<span class="num">0</span>, n)
+    bfs(g, queue)
+
+<span class="cm"># A* 搜尋：f(n) = g(n) + h(n)</span>
+<span class="cm"># g(n) = 起點到 n 的實際成本</span>
+<span class="cm"># h(n) = n 到終點的估計成本 (啟發式函數)</span></div>
+<div class="files">
+  <a href="https://github.com/ccckmit/course0/tree/main/code/%E6%BC%94%E7%AE%97%E6%B3%95/method/06-搜尋法"><span class="tag tag-py">graph_search.py</span></a>
+  <a href="https://github.com/ccckmit/course0/tree/main/code/%E6%BC%94%E7%AE%97%E6%B3%95/method/06-搜尋法/05a-Astar"><span class="tag tag-py">A* 演算法</span></a>
+  <a href="https://github.com/ccckmit/course0/tree/main/code/%E6%BC%94%E7%AE%97%E6%B3%95/method/06-搜尋法/03-puzzle"><span class="tag tag-py">拼圖問題</span></a>
+  <a href="https://github.com/ccckmit/course0/tree/main/code/%E6%BC%94%E7%AE%97%E6%B3%95/method/06-搜尋法/Q1-mouse"><span class="tag tag-py">走迷宮</span></a>
+  <a href="https://github.com/ccckmit/course0/tree/main/code/%E6%BC%94%E7%AE%97%E6%B3%95/method/06-搜尋法/Q3-queen"><span class="tag tag-py">八皇后</span></a>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- ========== 分割擊破法 ========== -->
+<div class="section" id="dc">
+<h2>16. 分割擊破法</h2>
+<p>將大問題分割為獨立子問題，分別解決後合併。核心在於「分割」與「合併」的設計。</p>
+<div class="sec-grid">
+<div class="algo-card open">
+<div class="algo-header" onclick="this.parentElement.classList.toggle('open')">
+<h3>合併排序與二元搜尋</h3>
+<span class="arrow">▶</span>
+</div>
+<div class="algo-body">
+<div class="algo-body-inner">
+<div class="code-block"><span class="cm"># 合併排序 (Merge Sort): O(n log n)</span>
+<span class="kw">def</span> <span class="fn">mergeSort</span>(arr):
+    <span class="kw">if</span> len(arr) &lt;= <span class="num">1</span>: <span class="kw">return</span> arr
+    mid = len(arr)//<span class="num">2</span>
+    left  = mergeSort(arr[:mid])   <span class="cm"># 分割</span>
+    right = mergeSort(arr[mid:])   <span class="cm"># 分割</span>
+    <span class="kw">return</span> merge(left, right)     <span class="cm"># 合併</span>
+
+<span class="kw">def</span> <span class="fn">merge</span>(a, b):
+    result = []
+    <span class="kw">while</span> a <span class="kw">and</span> b:
+        result.append(a.pop(<span class="num">0</span>) <span class="kw">if</span> a[<span class="num">0</span>]&lt;b[<span class="num">0</span>] <span class="kw">else</span> b.pop(<span class="num">0</span>))
+    <span class="kw">return</span> result + a + b
+
+<span class="cm"># 二元搜尋 (Binary Search): O(log n)</span>
+<span class="kw">def</span> <span class="fn">binSearch</span>(arr, target, lo, hi):
+    <span class="kw">if</span> lo &gt; hi: <span class="kw">return</span> -<span class="num">1</span>
+    mid = (lo+hi)//<span class="num">2</span>
+    <span class="kw">if</span> arr[mid] == target: <span class="kw">return</span> mid
+    <span class="kw">if</span> arr[mid] &lt; target: <span class="kw">return</span> binSearch(arr, target, mid+<span class="num">1</span>, hi)
+    <span class="kw">return</span> binSearch(arr, target, lo, mid-<span class="num">1</span>)</div>
+<div class="files">
+  <a href="https://github.com/ccckmit/course0/tree/main/code/%E6%BC%94%E7%AE%97%E6%B3%95/method/07-分割擊破法/mergeSort"><span class="tag tag-py">mergeSort.py</span></a>
+  <a href="https://github.com/ccckmit/course0/tree/main/code/%E6%BC%94%E7%AE%97%E6%B3%95/method/07-分割擊破法/binSearch"><span class="tag tag-py">binSearch.py</span></a>
+  <a href="https://github.com/ccckmit/course0/tree/main/code/%E6%BC%94%E7%AE%97%E6%B3%95/method/07-分割擊破法/binArraySearch"><span class="tag tag-py">binArraySearch.py</span></a>
+  <a href="https://github.com/ccckmit/course0/tree/main/code/%E6%BC%94%E7%AE%97%E6%B3%95/method/07-分割擊破法/matrixMul"><span class="tag tag-py">矩陣乘法</span></a>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- ========== 動態規劃法 ========== -->
+<div class="section" id="dp">
+<h2>17. 動態規劃</h2>
+<p>將問題分解為重疊的子問題，用表格記錄子問題答案避免重複計算。兩個關鍵：<strong>最優子結構</strong>與<strong>重疊子問題</strong>。</p>
+<div class="sec-grid">
+<div class="algo-card open">
+<div class="algo-header" onclick="this.parentElement.classList.toggle('open')">
+<h3>編輯距離 (Edit Distance)</h3>
+<span class="arrow">▶</span>
+</div>
+<div class="algo-body">
+<div class="algo-body-inner">
+<div class="code-block"><span class="cm"># 編輯距離：DP[i][j] = a[0..i] 到 b[0..j] 的最少編輯次數</span>
+<span class="kw">def</span> <span class="fn">editDistance</span>(a, b):
+    m, n = len(a), len(b)
+    DP = [[<span class="num">0</span>]*(n+<span class="num">1</span>) <span class="kw">for</span> _ <span class="kw">in</span> range(m+<span class="num">1</span>)]
+    <span class="kw">for</span> i <span class="kw">in</span> range(m+<span class="num">1</span>): DP[i][<span class="num">0</span>] = i
+    <span class="kw">for</span> j <span class="kw">in</span> range(n+<span class="num">1</span>): DP[<span class="num">0</span>][j] = j
+    <span class="kw">for</span> i <span class="kw">in</span> range(<span class="num">1</span>, m+<span class="num">1</span>):
+        <span class="kw">for</span> j <span class="kw">in</span> range(<span class="num">1</span>, n+<span class="num">1</span>):
+            <span class="kw">if</span> a[i-<span class="num">1</span>] == b[j-<span class="num">1</span>]:
+                DP[i][j] = DP[i-<span class="num">1</span>][j-<span class="num">1</span>]  <span class="cm"># 相同</span>
+            <span class="kw">else</span>:
+                DP[i][j] = <span class="num">1</span> + min(
+                    DP[i-<span class="num">1</span>][j-<span class="num">1</span>],  <span class="cm"># 取代</span>
+                    DP[i][j-<span class="num">1</span>],       <span class="cm"># 插入</span>
+                    DP[i-<span class="num">1</span>][j]        <span class="cm"># 刪除</span>
+                )
+    <span class="kw">return</span> DP[m][n]</div>
+<div class="files">
+  <a href="https://github.com/ccckmit/course0/tree/main/code/%E6%BC%94%E7%AE%97%E6%B3%95/method/08-動態規劃法/editDistance"><span class="tag tag-py">editDistance.py</span></a>
+  <a href="https://github.com/ccckmit/course0/tree/main/code/%E6%BC%94%E7%AE%97%E6%B3%95/method/08-動態規劃法/combinatorial"><span class="tag tag-py">組合數 DP</span></a>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- ========== 隨機法 ========== -->
+<div class="section" id="random">
+<h2>18. 隨機法</h2>
+<p>利用隨機性解決問題。從亂數產生器到拉斯維加斯演算法（保證正確、隨機時間）。</p>
+<div class="sec-grid">
+<div class="algo-card open">
+<div class="algo-header" onclick="this.parentElement.classList.toggle('open')">
+<h3>亂數產生器與隨機演算法</h3>
+<span class="arrow">▶</span>
+</div>
+<div class="algo-body">
+<div class="algo-body-inner">
+<div class="code-block"><span class="cm"># 線性同餘產生器 (LCG)</span>
+<span class="kw">def</span> <span class="fn">lcg</span>(seed, a=<span class="num">1664525</span>, c=<span class="num">1013904223</span>, m=<span class="num">2</span>**<span class="num">32</span>):
+    seed = (a * seed + c) % m
+    <span class="kw">return</span> seed / m
+
+<span class="cm"># 隨機快速排序 (隨機選 pivot 避免最壞情況)</span>
+<span class="kw">def</span> <span class="fn">randomizedQuickSort</span>(arr):
+    <span class="kw">if</span> len(arr) &lt;= <span class="num">1</span>: <span class="kw">return</span> arr
+    pivot = random.choice(arr)        <span class="cm"># 隨機 pivot</span>
+    lt = [x <span class="kw">for</span> x <span class="kw">in</span> arr <span class="kw">if</span> x &lt; pivot]
+    eq = [x <span class="kw">for</span> x <span class="kw">in</span> arr <span class="kw">if</span> x == pivot]
+    gt = [x <span class="kw">for</span> x <span class="kw">in</span> arr <span class="kw">if</span> x &gt; pivot]
+    <span class="kw">return</span> randomizedQuickSort(lt) + eq + randomizedQuickSort(gt)</div>
+<div class="files">
+  <a href="https://github.com/ccckmit/course0/tree/main/code/%E6%BC%94%E7%AE%97%E6%B3%95/method/09a-隨機法"><span class="tag tag-py">亂數產生器</span></a>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- ========== 蒙地卡羅法 ========== -->
+<div class="section" id="monte">
+<h2>19. 蒙地卡羅法</h2>
+<p>用大量隨機樣本模擬來估計數值。包含 π 估計、排隊理論、Markov 鏈、貝氏推論、EM 演算法。</p>
+<div class="sec-grid">
+<div class="algo-card open">
+<div class="algo-header" onclick="this.parentElement.classList.toggle('open')">
+<h3>蒙地卡羅模擬</h3>
+<span class="arrow">▶</span>
+</div>
+<div class="algo-body">
+<div class="algo-body-inner">
+<div class="code-block"><span class="cm"># 蒙地卡羅估計 π</span>
+<span class="kw">def</span> <span class="fn">estimatePi</span>(n=<span class="num">100000</span>):
+    inside = <span class="num">0</span>
+    <span class="kw">for</span> _ <span class="kw">in</span> range(n):
+        x, y = random.random(), random.random()
+        <span class="kw">if</span> x*x + y*y &lt;= <span class="num">1</span>: inside += <span class="num">1</span>
+    <span class="kw">return</span> <span class="num">4</span> * inside / n
+
+<span class="cm"># Markov Chain Monte Carlo (MCMC)</span>
+<span class="cm"># 透過 Markov 鏈抽樣近似複雜的機率分佈</span>
+
+<span class="cm"># EM 演算法：含隱變數的最大似然估計</span>
+<span class="cm"># E 步：估計隱變數的後驗機率</span>
+<span class="cm"># M 步：最大化似然函數更新參數</span></div>
+<div class="files">
+  <a href="https://github.com/ccckmit/course0/tree/main/code/%E6%BC%94%E7%AE%97%E6%B3%95/method/09b-蒙地卡羅法/01-pi"><span class="tag tag-py">估計 π</span></a>
+  <a href="https://github.com/ccckmit/course0/tree/main/code/%E6%BC%94%E7%AE%97%E6%B3%95/method/09b-蒙地卡羅法/05-markov"><span class="tag tag-py">Markov 鏈</span></a>
+  <a href="https://github.com/ccckmit/course0/tree/main/code/%E6%BC%94%E7%AE%97%E6%B3%95/method/09b-蒙地卡羅法/06-bayes"><span class="tag tag-py">貝氏推論</span></a>
+  <a href="https://github.com/ccckmit/course0/tree/main/code/%E6%BC%94%E7%AE%97%E6%B3%95/method/09b-蒙地卡羅法/07-hmm"><span class="tag tag-py">HMM</span></a>
+  <a href="https://github.com/ccckmit/course0/tree/main/code/%E6%BC%94%E7%AE%97%E6%B3%95/method/09b-蒙地卡羅法/08-em"><span class="tag tag-py">EM 演算法</span></a>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- ========== 遺傳演算法 ========== -->
+<div class="section" id="genetic">
+<h2>20. 遺傳演算法</h2>
+<p>模仿達爾文演化論：選擇、交叉、突變。經過多代演化，適應度最高的個體即為近似最佳解。</p>
+<div class="sec-grid">
+<div class="algo-card open">
+<div class="algo-header" onclick="this.parentElement.classList.toggle('open')">
+<h3>遺傳演算法框架</h3>
+<span class="arrow">▶</span>
+</div>
+<div class="algo-body">
+<div class="algo-body-inner">
+<div class="code-block"><span class="cm"># 核心流程</span>
+<span class="kw">def</span> <span class="fn">geneticAlgorithm</span>(population, fitness, max_gen=<span class="num">100</span>):
+    <span class="kw">for</span> gen <span class="kw">in</span> range(max_gen):
+        <span class="cm"># 1. 評估適應度</span>
+        scores = [fitness(ind) <span class="kw">for</span> ind <span class="kw">in</span> population]
+        <span class="cm"># 2. 選擇 (輪盤法 / 錦標賽法)</span>
+        selected = selection(population, scores)
+        <span class="cm"># 3. 交叉 (crossover)</span>
+        offspring = crossover(selected)
+        <span class="cm"># 4. 突變 (mutation)</span>
+        population = mutate(offspring)
+    <span class="kw">return</span> best(population, fitness)</div>
+<div class="files">
+  <a href="https://github.com/ccckmit/course0/tree/main/code/%E6%BC%94%E7%AE%97%E6%B3%95/method/09c-遺傳演算法"><span class="tag tag-py">geneticAlgorithm.py</span></a>
+  <a href="https://github.com/ccckmit/course0/tree/main/code/%E6%BC%94%E7%AE%97%E6%B3%95/method/09c-遺傳演算法"><span class="tag tag-py">keyGa.py (金鑰破解)</span></a>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- ========== 資訊理論補充 ========== -->
+<div class="section" id="info">
+<h2>21. 資訊理論</h2>
+<p>量化資訊的度量：熵 (entropy)、交叉熵、KL 散度。是機器學習中損失函數的基礎。</p>
+<div class="sec-grid">
+<div class="algo-card open">
+<div class="algo-header" onclick="this.parentElement.classList.toggle('open')">
+<h3>熵與交叉熵</h3>
+<span class="arrow">▶</span>
+</div>
+<div class="algo-body">
+<div class="algo-body-inner">
+<div class="code-block"><span class="cm"># 熵：H(X) = -Σ p(x) log p(x)</span>
+<span class="kw">def</span> <span class="fn">entropy</span>(probs):
+    <span class="kw">return</span> -sum(p * math.log2(p) <span class="kw">for</span> p <span class="kw">in</span> probs <span class="kw">if</span> p &gt; <span class="num">0</span>)
+
+<span class="cm"># 交叉熵：H(p,q) = -Σ p(x) log q(x)</span>
+<span class="kw">def</span> <span class="fn">crossEntropy</span>(true_probs, pred_probs):
+    <span class="kw">return</span> -sum(p * math.log(q) <span class="kw">for</span> p, q <span class="kw">in</span> zip(true_probs, pred_probs) <span class="kw">if</span> p &gt; <span class="num">0</span>)
+
+<span class="cm"># KL 散度：D_KL(p||q) = Σ p(x) log(p(x)/q(x))</span>
+<span class="cm"># = H(p,q) - H(p)  (交叉熵 - 熵)</span></div>
+<div class="files">
+  <a href="https://github.com/ccckmit/course0/tree/main/code/%E6%BC%94%E7%AE%97%E6%B3%95/method/09d-資訊理論補充"><span class="tag tag-py">資訊理論</span></a>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- ========== 計算理論 ========== -->
+<div class="section" id="theory">
+<h2>22. 計算理論</h2>
+<p>探索計算的本質與極限：有限狀態機、形式文法、λ 演算、圖靈機。這些是計算機科學的理論基礎。</p>
+<div class="sec-grid">
+<div class="algo-card open">
+<div class="algo-header" onclick="this.parentElement.classList.toggle('open')">
+<h3>有限狀態機</h3>
+<span class="arrow">▶</span>
+</div>
+<div class="algo-body">
+<div class="algo-body-inner">
+<p>DFA (決定性有限自動機) 是最簡單的計算模型，只能辨識正規語言。</p>
+<div class="code-block"><span class="cm"># 接受偶數個 0 的二進位字串</span>
+<span class="kw">class</span> <span class="fn">DFA</span>:
+    <span class="kw">def</span> <span class="fn">__init__</span>(self):
+        self.state = <span class="str">'even'</span>     <span class="cm"># even / odd</span>
+    <span class="kw">def</span> <span class="fn">transition</span>(self, c):
+        <span class="kw">if</span> c == <span class="str">'0'</span>:
+            self.state = <span class="str">'odd'</span> <span class="kw">if</span> self.state==<span class="str">'even'</span> <span class="kw">else</span> <span class="str">'even'</span>
+    <span class="kw">def</span> <span class="fn">accept</span>(self):
+        <span class="kw">return</span> self.state == <span class="str">'even'</span></div>
+</div>
+</div>
+</div>
+
+<div class="algo-card open">
+<div class="algo-header" onclick="this.parentElement.classList.toggle('open')">
+<h3>形式文法</h3>
+<span class="arrow">▶</span>
+</div>
+<div class="algo-body">
+<div class="algo-body-inner">
+<p>Chomsky 階層：Type 3 (正規) → Type 2 (上下文無關) → Type 1 (上下文相關) → Type 0 (無限制)。</p>
+<div class="code-block"><span class="cm"># 上下文無關文法: S → aSb | ε</span>
+<span class="cm"># 產生 aⁿbⁿ 字串</span>
+<span class="kw">def</span> <span class="fn">anbn</span>(n):
+    <span class="kw">return</span> <span class="str">'a'</span>*n + <span class="str">'b'</span>*n
+
+<span class="cm"># 上下文相關文法: aⁿbⁿcⁿ  (需要計數到 n)</span>
+<span class="kw">def</span> <span class="fn">anbncn</span>(n):
+    <span class="kw">return</span> <span class="str">'a'</span>*n + <span class="str">'b'</span>*n + <span class="str">'c'</span>*n</div>
+</div>
+</div>
+</div>
+
+<div class="algo-card open">
+<div class="algo-header" onclick="this.parentElement.classList.toggle('open')">
+<h3>圖靈機</h3>
+<span class="arrow">▶</span>
+</div>
+<div class="algo-body">
+<div class="algo-body-inner">
+<p>圖靈機是通用計算模型，能模擬任何演算法。但存在不可判定問題，如停機問題。</p>
+<div class="code-block"><span class="cm"># 圖靈機模擬 aⁿbⁿcⁿ</span>
+<span class="cm"># 狀態: q0 (找 a), q1 (找 b), q2 (找 c), q3 (返回)</span>
+<span class="cm"># 規則: a→X-&gt;R, b→Y-&gt;R, c→Z-&gt;L, ...</span>
+<span class="cm"># 圖靈機可以辨識任何遞迴可枚舉語言</span></div>
+</div>
+</div>
+</div>
+
+<div class="algo-card open">
+<div class="algo-header" onclick="this.parentElement.classList.toggle('open')">
+<h3>Chomsky 階層對照</h3>
+<span class="arrow">▶</span>
+</div>
+<div class="algo-body">
+<div class="algo-body-inner">
+<table>
+<tr><th>層次</th><th>名稱</th><th>自動機</th><th>範例</th></tr>
+<tr><td>Type 0</td><td>無限制文法</td><td>圖靈機</td><td>任意語言</td></tr>
+<tr><td>Type 1</td><td>上下文相關</td><td>線性有界自動機</td><td>aⁿbⁿcⁿ</td></tr>
+<tr><td>Type 2</td><td>上下文無關</td><td>下推自動機</td><td>aⁿbⁿ</td></tr>
+<tr><td>Type 3</td><td>正規文法</td><td>有限狀態機</td><td>a*</td></tr>
+</table>
+<div class="files" style="margin-top:10px">
+  <a href="https://github.com/ccckmit/course0/tree/main/code/%E6%BC%94%E7%AE%97%E6%B3%95/theory/finiteStateMachine"><span class="tag tag-py">有限狀態機</span></a>
+  <a href="https://github.com/ccckmit/course0/tree/main/code/%E6%BC%94%E7%AE%97%E6%B3%95/theory/grammar"><span class="tag tag-py">形式文法</span></a>
+  <a href="https://github.com/ccckmit/course0/tree/main/code/%E6%BC%94%E7%AE%97%E6%B3%95/theory/lambda"><span class="tag tag-py">λ 演算</span></a>
+  <a href="https://github.com/ccckmit/course0/tree/main/code/%E6%BC%94%E7%AE%97%E6%B3%95/theory/turingMachine"><span class="tag tag-py">圖靈機</span></a>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- Footer -->
+<div class="section">
+<h2>🔗 延伸資源</h2>
+<ul>
+  <li><a href="https://github.com/ccckmit/course0/tree/main/code/%E6%BC%94%E7%AE%97%E6%B3%95">GitHub: code/演算法/</a> — 完整程式碼與演算法目錄</li>
+  <li><a href="../%E6%BC%94%E7%AE%97%E6%B3%95/main.html">演算法主題索引 (原始版)</a> — 依主題分類的頁面</li>
+  <li><a href="../main.html">課程首頁</a></li>
+</ul>
+</div>
+
+</main>
+</div>
+
+<footer>
+  <p>基礎來源：<a href="https://github.com/ccckmit/course0">陳鍾誠的課程教材</a> · 以「演算法設計方法」為主軸組織</p>
+</footer>
+
+</body>
+</html>
