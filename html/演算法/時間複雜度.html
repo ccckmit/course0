@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>時間複雜度 — 演算法電子書</title>
+<link rel="stylesheet" href="book.css">
+<style>
+.chapter-nav { display: flex; gap: 8px; margin: 16px 0; flex-wrap: wrap; }
+.chapter-nav a { padding: 8px 16px; border: 1px solid var(--border); background: var(--surface); border-radius: 8px; text-decoration: none; font-size: 0.85rem; color: var(--text); transition: all 0.2s; }
+.chapter-nav a:hover { border-color: var(--primary); color: var(--primary); }
+.chapter-nav .back-btn { background: var(--primary); color: #fff; border-color: var(--primary); }
+.chapter-nav .back-btn:hover { opacity: 0.9; color: #fff; }
+</style>
+</head>
+<body>
+<header class="book-header">
+  <div class="back-link"><a href="index.html">← 回電子書首頁</a></div>
+  <button class="theme-toggle" id="themeBtn" onclick="document.body.classList.toggle('dark')" title="切換深色模式">☾</button>
+  <h1>時間複雜度</h1>
+  <p class="subtitle">Time Complexity — 演算法效率分析的核心工具</p>
+</header>
+<div class="container">
+  <div class="chapter-nav">
+    <a href="index.html" class="back-btn">← 回目錄</a>
+    <a href="空間複雜度.html">下一篇：空間複雜度 →</a>
+  </div>
+  <div class="reader-content">
+    <h2>什麼是時間複雜度？</h2>
+    <p>時間複雜度（Time Complexity）描述演算法執行時間隨輸入規模增長的趨勢。我們使用 Big-O 記號來表示最壞情況下的漸進上界，忽略常數因子和低階項。</p>
+
+    <h2>常見複雜度等級</h2>
+    <table>
+      <tr><th>記號</th><th>名稱</th><th>範例</th><th>輸入規模建議</th></tr>
+      <tr><td>O(1)</td><td>常數時間</td><td>陣列隨機存取</td><td>任意</td></tr>
+      <tr><td>O(log n)</td><td>對數時間</td><td>二分搜尋</td><td>任意</td></tr>
+      <tr><td>O(n)</td><td>線性時間</td><td>線性搜尋</td><td>~10⁸</td></tr>
+      <tr><td>O(n log n)</td><td>線性對數時間</td><td>合併排序</td><td>~10⁷</td></tr>
+      <tr><td>O(n²)</td><td>平方時間</td><td>氣泡排序</td><td>~10⁴</td></tr>
+      <tr><td>O(n³)</td><td>立方時間</td><td>矩陣乘法</td><td>~500</td></tr>
+      <tr><td>O(2ⁿ)</td><td>指數時間</td><td>費波那契遞迴</td><td>~30</td></tr>
+    </table>
+
+    <h2>分析要點</h2>
+    <p><strong>最壞情況 vs 平均情況：</strong>Big-O 通常表示最壞情況。例如快速排序平均 O(n log n)，最壞 O(n²)。</p>
+    <p><strong>忽略常數：</strong>O(2n) 和 O(n) 等價，常數因子在漸進分析中被忽略。</p>
+    <p><strong>忽略低階項：</strong>O(n² + n) = O(n²)，只保留增長最快的項。</p>
+
+    <h2>程式碼範例</h2>
+    <div class="code-block">def linear_search(arr, target):
+    for i in range(len(arr)):
+        if arr[i] == target:
+            return i
+    return -1
+# 時間：O(n)，空間：O(1)</div>
+
+    <div class="code-block">def binary_search(arr, target):
+    left, right = 0, len(arr) - 1
+    while left <= right:
+        mid = (left + right) // 2
+        if arr[mid] == target:
+            return mid
+        elif arr[mid] < target:
+            left = mid + 1
+        else:
+            right = mid - 1
+    return -1
+# 時間：O(log n)，空間：O(1)</div>
+
+    <div class="code-block">def bubble_sort(arr):
+    n = len(arr)
+    for i in range(n):
+        for j in range(0, n - i - 1):
+            if arr[j] > arr[j + 1]:
+                arr[j], arr[j + 1] = arr[j + 1], arr[j]
+# 時間：O(n²)，空間：O(1)</div>
+
+    <h2>相關連結</h2>
+    <ul>
+      <li><a href="index.html">回電子書首頁</a></li>
+      <li><a href="空間複雜度.html">空間複雜度</a></li>
+      <li><a href="排序演算法.html">排序演算法</a></li>
+      <li><a href="搜尋法.html">搜尋法</a></li>
+      <li><a href="https://github.com/ccckmit/course0/blob/main/wiki/%E6%BC%94%E7%AE%97%E6%B3%95/%E6%99%82%E9%96%93%E8%A4%87%E9%9B%9C%E5%BA%A6.md" target="_blank">Wiki 原文</a></li>
+    </ul>
+  </div>
+</div>
+<footer class="book-footer">
+  <p><a href="index.html">演算法電子書</a> | <a href="https://github.com/ccckmit/course0">課程首頁</a></p>
+</footer>
+<script>var btn=document.getElementById('themeBtn');btn.onclick=function(){document.body.classList.toggle('dark');btn.textContent=document.body.classList.contains('dark')?'☀':'☾';}</script>
+</body>
+</html>

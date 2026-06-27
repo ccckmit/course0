@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>分割擊破法 — 演算法電子書</title>
+<link rel="stylesheet" href="book.css">
+<style>
+.chapter-nav { display: flex; gap: 8px; margin: 16px 0; flex-wrap: wrap; }
+.chapter-nav a { padding: 8px 16px; border: 1px solid var(--border); background: var(--surface); border-radius: 8px; text-decoration: none; font-size: 0.85rem; color: var(--text); transition: all 0.2s; }
+.chapter-nav a:hover { border-color: var(--primary); color: var(--primary); }
+.chapter-nav .back-btn { background: var(--primary); color: #fff; border-color: var(--primary); }
+.chapter-nav .back-btn:hover { opacity: 0.9; color: #fff; }
+</style>
+</head>
+<body>
+<header class="book-header">
+  <div class="back-link"><a href="index.html">← 回電子書首頁</a></div>
+  <button class="theme-toggle" id="themeBtn" onclick="document.body.classList.toggle('dark')" title="切換深色模式">☾</button>
+  <h1>分割擊破法</h1>
+  <p class="subtitle">Divide and Conquer — 分而治之的經典策略</p>
+</header>
+<div class="container">
+  <div class="chapter-nav">
+    <a href="index.html" class="back-btn">← 回目錄</a>
+    <a href="遞迴法.html">上一篇：遞迴法</a>
+    <a href="動態規劃法.html">下一篇：動態規劃法 →</a>
+  </div>
+  <div class="reader-content">
+    <h2>核心概念</h2>
+    <p>分割擊破法（Divide and Conquer）是將一個大問題分割成數個規模較小的子問題，遞迴解決子問題，再將子問題的解合併為原問題的解。三步驟：</p>
+    <ol>
+      <li><strong>分割（Divide）：</strong>將原問題分割成數個規模較小的相同類型子問題。</li>
+      <li><strong>解決（Conquer）：</strong>遞迴解決子問題。當子問題夠小時直接求解。</li>
+      <li><strong>合併（Merge）：</strong>將子問題的解合併為原問題的解。</li>
+    </ol>
+
+    <h2>合併排序 (Merge Sort)</h2>
+    <p>將陣列遞迴平分，分別排序後合併。時間 O(n log n)，空間 O(n)。</p>
+    <div class="code-block">def merge_sort(arr):
+    if len(arr) <= 1:
+        return arr
+    mid = len(arr) // 2
+    left = merge_sort(arr[:mid])
+    right = merge_sort(arr[mid:])
+    return merge(left, right)
+
+def merge(left, right):
+    i = j = 0
+    result = []
+    while i < len(left) and j < len(right):
+        if left[i] <= right[j]:
+            result.append(left[i]); i += 1
+        else:
+            result.append(right[j]); j += 1
+    result.extend(left[i:])
+    result.extend(right[j:])
+    return result</div>
+
+    <h2>快速排序 (Quick Sort)</h2>
+    <p>選 pivot 將陣列分為小於和大於 pivot 的兩部分，遞迴排序。平均 O(n log n)，最壞 O(n²)。</p>
+    <div class="code-block">def quicksort(arr):
+    if len(arr) <= 1:
+        return arr
+    pivot = arr[len(arr) // 2]
+    left = [x for x in arr if x < pivot]
+    middle = [x for x in arr if x == pivot]
+    right = [x for x in arr if x > pivot]
+    return quicksort(left) + middle + quicksort(right)</div>
+
+    <h2>Strassen 矩陣乘法</h2>
+    <p>將矩陣分為四個子矩陣，透過 7 次乘法取代傳統的 8 次乘法。時間 O(n^2.807)，優於傳統 O(n³)。</p>
+
+    <h2>最大子陣列問題</h2>
+    <p>尋找陣列中總和最大的連續子陣列。分割擊破解法：分別求左半最大、右半最大、跨中點最大三者取最大值。</p>
+
+    <h2>相關連結</h2>
+    <ul>
+      <li><a href="index.html">回電子書首頁</a></li>
+      <li><a href="遞迴法.html">遞迴法</a></li>
+      <li><a href="動態規劃法.html">動態規劃法</a></li>
+      <li><a href="排序演算法.html">排序演算法</a></li>
+      <li><a href="https://github.com/ccckmit/course0/blob/main/wiki/%E6%BC%94%E7%AE%97%E6%B3%95/%E5%88%86%E5%89%B2%E6%93%8A%E7%A0%B4%E6%B3%95.md" target="_blank">Wiki 原文</a></li>
+    </ul>
+  </div>
+</div>
+<footer class="book-footer">
+  <p><a href="index.html">演算法電子書</a> | <a href="https://github.com/ccckmit/course0">課程首頁</a></p>
+</footer>
+<script>var btn=document.getElementById('themeBtn');btn.onclick=function(){document.body.classList.toggle('dark');btn.textContent=document.body.classList.contains('dark')?'☀':'☾';}</script>
+</body>
+</html>

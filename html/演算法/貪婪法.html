@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>貪婪法 — 演算法電子書</title>
+<link rel="stylesheet" href="book.css">
+<style>
+.chapter-nav { display: flex; gap: 8px; margin: 16px 0; flex-wrap: wrap; }
+.chapter-nav a { padding: 8px 16px; border: 1px solid var(--border); background: var(--surface); border-radius: 8px; text-decoration: none; font-size: 0.85rem; color: var(--text); transition: all 0.2s; }
+.chapter-nav a:hover { border-color: var(--primary); color: var(--primary); }
+.chapter-nav .back-btn { background: var(--primary); color: #fff; border-color: var(--primary); }
+.chapter-nav .back-btn:hover { opacity: 0.9; color: #fff; }
+</style>
+</head>
+<body>
+<header class="book-header">
+  <div class="back-link"><a href="index.html">← 回電子書首頁</a></div>
+  <button class="theme-toggle" id="themeBtn" onclick="document.body.classList.toggle('dark')" title="切換深色模式">☾</button>
+  <h1>貪婪法</h1>
+  <p class="subtitle">Greedy Algorithm — 局部最優求全域最優</p>
+</header>
+<div class="container">
+  <div class="chapter-nav">
+    <a href="index.html" class="back-btn">← 回目錄</a>
+    <a href="動態規劃法.html">上一篇：動態規劃法</a>
+    <a href="網路流.html">下一篇：網路流 →</a>
+  </div>
+  <div class="reader-content">
+    <h2>核心概念</h2>
+    <p>每一步都選擇當前看起來最優的選項，期望最終能得到全域最優解。貪婪法的三個組成部分：</p>
+    <ul>
+      <li><strong>選擇函數（Selection Function）：</strong>從候選中選出最優者。</li>
+      <li><strong>可行性檢查（Feasibility Check）：</strong>確保選擇可行。</li>
+      <li><strong>目標函數更新：</strong>更新問題狀態和目標值。</li>
+    </ul>
+
+    <h2>活動選擇問題</h2>
+    <p>選擇最多不衝突的活動。策略：按結束時間排序，每次選擇結束最早且不衝突的活動。</p>
+    <div class="code-block">def activity_selection(activities):
+    # activities: list of (start, end)
+    activities.sort(key=lambda x: x[1])
+    selected = [activities[0]]
+    last_end = activities[0][1]
+    for start, end in activities[1:]:
+        if start >= last_end:
+            selected.append((start, end))
+            last_end = end
+    return selected</div>
+
+    <h2>Huffman 編碼</h2>
+    <p>一種無失真資料壓縮演算法。根據字元出現頻率建構最優前綴碼：</p>
+    <ul>
+      <li>將每個字元視為葉節點，頻率為權重</li>
+      <li>重複合併兩個最小頻率的節點</li>
+      <li>最終得到一棵最優二元樹（Huffman Tree）</li>
+    </ul>
+
+    <h2>最小生成樹</h2>
+    <p><strong>Kruskal：</strong>將邊按權重排序，從小到大選擇不形成環的邊（使用 Union-Find 檢測）。</p>
+    <p><strong>Prim：</strong>類似 Dijkstra，從起點開始每次加入最小跨接邊，逐步擴展生成樹。</p>
+
+    <h2>貪婪法 vs 動態規劃</h2>
+    <table>
+      <tr><th>特性</th><th>貪婪法</th><th>動態規劃</th></tr>
+      <tr><td>決策方式</td><td>逐步貪婪選擇</td><td>考慮所有子問題</td></tr>
+      <tr><td>保證最優</td><td>不一定</td><td>是</td></tr>
+      <tr><td>效率</td><td>通常較高</td><td>通常較低</td></tr>
+      <tr><td>適用</td><td>貪婪選擇性質</td><td>最優子結構</td></tr>
+    </table>
+
+    <h2>相關連結</h2>
+    <ul>
+      <li><a href="index.html">回電子書首頁</a></li>
+      <li><a href="動態規劃法.html">動態規劃法</a></li>
+      <li><a href="圖形演算法.html">圖形演算法</a></li>
+      <li><a href="https://github.com/ccckmit/course0/blob/main/wiki/%E6%BC%94%E7%AE%97%E6%B3%95/%E8%B2%AA%E5%AC%AA%E6%B3%95.md" target="_blank">Wiki 原文</a></li>
+    </ul>
+  </div>
+</div>
+<footer class="book-footer">
+  <p><a href="index.html">演算法電子書</a> | <a href="https://github.com/ccckmit/course0">課程首頁</a></p>
+</footer>
+<script>var btn=document.getElementById('themeBtn');btn.onclick=function(){document.body.classList.toggle('dark');btn.textContent=document.body.classList.contains('dark')?'☀':'☾';}</script>
+</body>
+</html>

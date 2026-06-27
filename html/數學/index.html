@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>數學 — 互動網頁電子書</title>
+<link rel="stylesheet" href="book.css">
+</head>
+<body>
+<header class="book-header">
+  <div class="back-link"><a href="../html/index.html">← 回首頁</a></div>
+  <button class="theme-toggle" id="themeBtn" onclick="toggleTheme()" title="切換深色模式">☾</button>
+  <h1>數學</h1>
+  <p class="subtitle">互動網頁電子書 — 陳鍾誠的課程教材</p>
+</header>
+<div class="container">
+  <div class="tabs">
+    <button class="tab active" data-tab="概念">📖 概念 <span class="count" id="c0">0</span></button>
+    <button class="tab" data-tab="程式碼">💻 程式碼 <span class="count" id="c1">0</span></button>
+  </div>
+  <div class="search-wrap">
+    <span class="search-icon">🔍</span>
+    <input type="text" id="search" placeholder="搜尋主題或程式碼..." oninput="doSearch()">
+  </div>
+  <div id="content">
+    <div class="loading">載入中...</div>
+  </div>
+</div>
+<footer class="book-footer">
+  <p>本電子書整合自 <a href="https://github.com/ccckmit/course0/tree/main/wiki/%E6%95%B8%E5%AD%B8" target="_blank">Wiki 知識庫</a> 與 <a href="https://github.com/ccckmit/course0/tree/main/code/%E6%95%B8%E5%AD%B8" target="_blank">程式碼範例</a> | <a href="https://github.com/ccckmit/course0" target="_blank">課程首頁</a></p>
+</footer>
+<script src="book.js"></script>
+</body>
+</html>

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>排序演算法 — 演算法電子書</title>
+<link rel="stylesheet" href="book.css">
+<style>
+.chapter-nav { display: flex; gap: 8px; margin: 16px 0; flex-wrap: wrap; }
+.chapter-nav a { padding: 8px 16px; border: 1px solid var(--border); background: var(--surface); border-radius: 8px; text-decoration: none; font-size: 0.85rem; color: var(--text); transition: all 0.2s; }
+.chapter-nav a:hover { border-color: var(--primary); color: var(--primary); }
+.chapter-nav .back-btn { background: var(--primary); color: #fff; border-color: var(--primary); }
+.chapter-nav .back-btn:hover { opacity: 0.9; color: #fff; }
+</style>
+</head>
+<body>
+<header class="book-header">
+  <div class="back-link"><a href="index.html">← 回電子書首頁</a></div>
+  <button class="theme-toggle" id="themeBtn" onclick="document.body.classList.toggle('dark')" title="切換深色模式">☾</button>
+  <h1>排序演算法</h1>
+  <p class="subtitle">Sorting Algorithms — 從 O(n²) 到 O(n log n) 的經典旅程</p>
+</header>
+<div class="container">
+  <div class="chapter-nav">
+    <a href="index.html" class="back-btn">← 回目錄</a>
+    <a href="搜尋法.html">下一篇：搜尋法 →</a>
+  </div>
+  <div class="reader-content">
+    <h2>排序演算法分類</h2>
+    <p>排序演算法可分為比較排序與非比較排序兩大類。比較排序的理論下限為 O(n log n)，而非比較排序可達到 O(n)。</p>
+
+    <h2>O(n²) 比較排序</h2>
+    <p><strong>氣泡排序（Bubble Sort）：</strong>重複走訪數列，相鄰元素兩兩比較，大的向後移。可加入提早終止優化（若無交換則已排序）。</p>
+    <div class="code-block">def bubble_sort(arr):
+    n = len(arr)
+    for i in range(n):
+        swapped = False
+        for j in range(0, n - i - 1):
+            if arr[j] > arr[j + 1]:
+                arr[j], arr[j + 1] = arr[j + 1], arr[j]
+                swapped = True
+        if not swapped:
+            break
+    return arr</div>
+
+    <p><strong>選擇排序（Selection Sort）：</strong>每次從未排序部分選最小值，放到已排序部分的末尾。</p>
+
+    <p><strong>插入排序（Insertion Sort）：</strong>將元素插入已排序部分的適當位置。對幾乎已排序的資料效率極高（O(n)）。</p>
+
+    <h2>O(n log n) 比較排序</h2>
+    <p><strong>合併排序（Merge Sort）：</strong>分治策略，將陣列分成兩半分別排序再合併。穩定排序，需要 O(n) 額外空間。</p>
+    <div class="code-block">def merge_sort(arr):
+    if len(arr) <= 1:
+        return arr
+    mid = len(arr) // 2
+    left = merge_sort(arr[:mid])
+    right = merge_sort(arr[mid:])
+    return merge(left, right)
+
+def merge(left, right):
+    result = []
+    i = j = 0
+    while i < len(left) and j < len(right):
+        if left[i] <= right[j]:
+            result.append(left[i]); i += 1
+        else:
+            result.append(right[j]); j += 1
+    result.extend(left[i:])
+    result.extend(right[j:])
+    return result</div>
+
+    <p><strong>快速排序（Quick Sort）：</strong>選 pivot 分區，左小右大。平均最快但最壞 O(n²)，可透過隨機選 pivot 規避。</p>
+
+    <p><strong>堆積排序（Heap Sort）：</strong>利用最大堆積進行排序。時間 O(n log n)，空間 O(1)。</p>
+
+    <h2>非比較排序</h2>
+    <p><strong>計數排序（Counting Sort）：</strong>O(n+k)，適用於範圍有限的整數。統計每個值出現次數。</p>
+    <p><strong>基數排序（Radix Sort）：</strong>按位數逐位排序，從最低位到最高位。</p>
+    <p><strong>桶排序（Bucket Sort）：</strong>將資料均勻分配到桶中，各桶分別排序。</p>
+
+    <h2>時間複雜度比較</h2>
+    <table>
+      <tr><th>演算法</th><th>最好</th><th>平均</th><th>最壞</th><th>空間</th><th>穩定</th></tr>
+      <tr><td>氣泡排序</td><td>O(n)</td><td>O(n²)</td><td>O(n²)</td><td>O(1)</td><td>是</td></tr>
+      <tr><td>選擇排序</td><td>O(n²)</td><td>O(n²)</td><td>O(n²)</td><td>O(1)</td><td>否</td></tr>
+      <tr><td>插入排序</td><td>O(n)</td><td>O(n²)</td><td>O(n²)</td><td>O(1)</td><td>是</td></tr>
+      <tr><td>合併排序</td><td>O(n log n)</td><td>O(n log n)</td><td>O(n log n)</td><td>O(n)</td><td>是</td></tr>
+      <tr><td>快速排序</td><td>O(n log n)</td><td>O(n log n)</td><td>O(n²)</td><td>O(log n)</td><td>否</td></tr>
+      <tr><td>堆積排序</td><td>O(n log n)</td><td>O(n log n)</td><td>O(n log n)</td><td>O(1)</td><td>否</td></tr>
+    </table>
+
+    <h2>相關連結</h2>
+    <ul>
+      <li><a href="index.html">回電子書首頁</a></li>
+      <li><a href="時間複雜度.html">時間複雜度</a></li>
+      <li><a href="搜尋法.html">搜尋法</a></li>
+      <li><a href="https://github.com/ccckmit/course0/tree/main/code/%E6%BC%94%E7%AE%97%E6%B3%95/method/07-%E5%88%86%E5%89%B2%E6%93%8A%E7%A0%B4%E6%B3%95/mergeSort" target="_blank">合併排序程式碼</a></li>
+      <li><a href="https://github.com/ccckmit/course0/blob/main/wiki/%E6%BC%94%E7%AE%97%E6%B3%95/%E6%8E%92%E5%BA%8F%E6%BC%94%E7%AE%97%E6%B3%95.md" target="_blank">Wiki 原文</a></li>
+    </ul>
+  </div>
+</div>
+<footer class="book-footer">
+  <p><a href="index.html">演算法電子書</a> | <a href="https://github.com/ccckmit/course0">課程首頁</a></p>
+</footer>
+<script>var btn=document.getElementById('themeBtn');btn.onclick=function(){document.body.classList.toggle('dark');btn.textContent=document.body.classList.contains('dark')?'☀':'☾';}</script>
+</body>
+</html>

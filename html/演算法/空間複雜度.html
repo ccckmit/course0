@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>空間複雜度 — 演算法電子書</title>
+<link rel="stylesheet" href="book.css">
+<style>
+.chapter-nav { display: flex; gap: 8px; margin: 16px 0; flex-wrap: wrap; }
+.chapter-nav a { padding: 8px 16px; border: 1px solid var(--border); background: var(--surface); border-radius: 8px; text-decoration: none; font-size: 0.85rem; color: var(--text); transition: all 0.2s; }
+.chapter-nav a:hover { border-color: var(--primary); color: var(--primary); }
+.chapter-nav .back-btn { background: var(--primary); color: #fff; border-color: var(--primary); }
+.chapter-nav .back-btn:hover { opacity: 0.9; color: #fff; }
+</style>
+</head>
+<body>
+<header class="book-header">
+  <div class="back-link"><a href="index.html">← 回電子書首頁</a></div>
+  <button class="theme-toggle" id="themeBtn" onclick="document.body.classList.toggle('dark')" title="切換深色模式">☾</button>
+  <h1>空間複雜度</h1>
+  <p class="subtitle">Space Complexity — 演算法的記憶體使用分析</p>
+</header>
+<div class="container">
+  <div class="chapter-nav">
+    <a href="index.html" class="back-btn">← 回目錄</a>
+    <a href="時間複雜度.html">上一篇：時間複雜度</a>
+    <a href="資料結構.html">下一篇：資料結構 →</a>
+  </div>
+  <div class="reader-content">
+    <h2>什麼是空間複雜度？</h2>
+    <p>空間複雜度評估演算法執行所需的記憶體資源，包含三個部分：輸入空間（儲存輸入資料）、輔助空間（額外的暫存變數和資料結構）、輸出空間（儲存結果）。</p>
+
+    <h2>常見空間複雜度等級</h2>
+    <table>
+      <tr><th>等級</th><th>說明</th><th>範例</th></tr>
+      <tr><td>O(1)</td><td>常數空間</td><td>交換兩數、找最大值</td></tr>
+      <tr><td>O(log n)</td><td>對數空間</td><td>二分搜尋（遞迴版）</td></tr>
+      <tr><td>O(n)</td><td>線性空間</td><td>複製陣列、前綴和</td></tr>
+      <tr><td>O(n²)</td><td>平方空間</td><td>鄰接矩陣、DP 二維表格</td></tr>
+    </table>
+
+    <h2>空間-時間權衡</h2>
+    <p>許多演算法可以在空間和時間之間取捨：</p>
+    <ul>
+      <li><strong>以空間換時間：</strong>使用查表法（Lookup Table）或記憶化（Memoization），將計算結果快取起來避免重複計算。</li>
+      <li><strong>以時間換空間：</strong>使用 in-place 演算法，在原陣列上操作而不建立額外結構。</li>
+    </ul>
+
+    <h2>遞迴空間分析</h2>
+    <p>遞迴演算法的空間複雜度需考慮呼叫堆疊（Call Stack）的深度：</p>
+    <ul>
+      <li>費波那契（樸素遞迴）：O(n) — 堆疊深度為 n</li>
+      <li>二分搜尋（遞迴）：O(log n) — 每次呼叫規模減半</li>
+      <li>合併排序：O(n) — 需要輔助陣列合併</li>
+    </ul>
+
+    <h2>相關連結</h2>
+    <ul>
+      <li><a href="index.html">回電子書首頁</a></li>
+      <li><a href="時間複雜度.html">時間複雜度</a></li>
+      <li><a href="資料結構.html">資料結構</a></li>
+      <li><a href="https://github.com/ccckmit/course0/blob/main/wiki/%E6%BC%94%E7%AE%97%E6%B3%95/%E7%A9%BA%E9%96%93%E8%A4%87%E9%9B%9C%E5%BA%A6.md" target="_blank">Wiki 原文</a></li>
+    </ul>
+  </div>
+</div>
+<footer class="book-footer">
+  <p><a href="index.html">演算法電子書</a> | <a href="https://github.com/ccckmit/course0">課程首頁</a></p>
+</footer>
+<script>var btn=document.getElementById('themeBtn');btn.onclick=function(){document.body.classList.toggle('dark');btn.textContent=document.body.classList.contains('dark')?'☀':'☾';}</script>
+</body>
+</html>

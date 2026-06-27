@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>動態規劃法 — 演算法電子書</title>
+<link rel="stylesheet" href="book.css">
+<style>
+.chapter-nav { display: flex; gap: 8px; margin: 16px 0; flex-wrap: wrap; }
+.chapter-nav a { padding: 8px 16px; border: 1px solid var(--border); background: var(--surface); border-radius: 8px; text-decoration: none; font-size: 0.85rem; color: var(--text); transition: all 0.2s; }
+.chapter-nav a:hover { border-color: var(--primary); color: var(--primary); }
+.chapter-nav .back-btn { background: var(--primary); color: #fff; border-color: var(--primary); }
+.chapter-nav .back-btn:hover { opacity: 0.9; color: #fff; }
+</style>
+</head>
+<body>
+<header class="book-header">
+  <div class="back-link"><a href="index.html">← 回電子書首頁</a></div>
+  <button class="theme-toggle" id="themeBtn" onclick="document.body.classList.toggle('dark')" title="切換深色模式">☾</button>
+  <h1>動態規劃法</h1>
+  <p class="subtitle">Dynamic Programming — 最優子結構與重疊子問題</p>
+</header>
+<div class="container">
+  <div class="chapter-nav">
+    <a href="index.html" class="back-btn">← 回目錄</a>
+    <a href="分割擊破法.html">上一篇：分割擊破法</a>
+    <a href="貪婪法.html">下一篇：貪婪法 →</a>
+  </div>
+  <div class="reader-content">
+    <h2>核心概念</h2>
+    <p>動態規劃（Dynamic Programming, DP）是一種將複雜問題分解為重疊子問題的演算法策略。適用於具備以下兩個性質的問題：</p>
+    <ul>
+      <li><strong>最優子結構（Optimal Substructure）：</strong>問題的最優解包含子問題的最優解。</li>
+      <li><strong>重疊子問題（Overlapping Subproblems）：</strong>子問題會被多次重複計算。</li>
+    </ul>
+
+    <h2>實作方法</h2>
+    <p><strong>自頂向下（Top-down）：</strong>遞迴 + 記憶化（Memoization）。保留遞迴的直觀性，只計算需要的子問題。</p>
+    <p><strong>自底向上（Bottom-up）：</strong>迭代填表（Tabulation）。計算所有子問題，無遞迴開銷，通常效率更高。</p>
+
+    <h2>費波那契數列</h2>
+    <p>樸素遞迴為 O(2ⁿ)，動態規劃可優化至 O(n)。</p>
+    <div class="code-block">def fibonacci_dp(n):
+    if n <= 1:
+        return n
+    dp = [0] * (n + 1)
+    dp[1] = 1
+    for i in range(2, n + 1):
+        dp[i] = dp[i - 1] + dp[i - 2]
+    return dp[n]
+
+# 空間優化版：O(1)
+def fibonacci_opt(n):
+    if n <= 1:
+        return n
+    a, b = 0, 1
+    for _ in range(2, n + 1):
+        a, b = b, a + b
+    return b</div>
+
+    <h2>0/1 背包問題</h2>
+    <p>在容量 W 的限制下，從 n 個物品中選擇最大化總價值。每個物品只能選或不選。</p>
+    <div class="code-block">def knapsack(weights, values, W):
+    n = len(weights)
+    dp = [[0] * (W + 1) for _ in range(n + 1)]
+    for i in range(1, n + 1):
+        for w in range(1, W + 1):
+            if weights[i - 1] <= w:
+                dp[i][w] = max(dp[i - 1][w],
+                    dp[i - 1][w - weights[i - 1]] + values[i - 1])
+            else:
+                dp[i][w] = dp[i - 1][w]
+    return dp[n][W]</div>
+
+    <h2>最長公共子序列 (LCS)</h2>
+    <div class="code-block">def lcs(s1, s2):
+    m, n = len(s1), len(s2)
+    dp = [[0] * (n + 1) for _ in range(m + 1)]
+    for i in range(1, m + 1):
+        for j in range(1, n + 1):
+            if s1[i - 1] == s2[j - 1]:
+                dp[i][j] = dp[i - 1][j - 1] + 1
+            else:
+                dp[i][j] = max(dp[i - 1][j], dp[i][j - 1])
+    return dp[m][n]</div>
+
+    <h2>其他經典 DP 問題</h2>
+    <ul>
+      <li><strong>編輯距離（Edit Distance / Levenshtein Distance）：</strong>計算將一個字串轉為另一個所需的最少操作次數。</li>
+      <li><strong>矩陣鏈乘積（Matrix Chain Multiplication）：</strong>找出最優的矩陣相乘順序，最小化乘法次數。</li>
+      <li><strong>最長遞增子序列（LIS）：</strong>O(n²) DP 或 O(n log n) 貪婪 + 二分搜尋。</li>
+      <li><strong>旅行推銷員問題（TSP）：</strong>狀態壓縮 DP，O(n² · 2ⁿ)。</li>
+    </ul>
+
+    <h2>相關連結</h2>
+    <ul>
+      <li><a href="index.html">回電子書首頁</a></li>
+      <li><a href="分割擊破法.html">分割擊破法</a></li>
+      <li><a href="貪婪法.html">貪婪法</a></li>
+      <li><a href="遞迴法.html">遞迴法</a></li>
+      <li><a href="https://github.com/ccckmit/course0/blob/main/wiki/%E6%BC%94%E7%AE%97%E6%B3%95/%E5%8B%95%E6%85%8B%E8%A6%8F%E5%8A%83%E6%B3%95.md" target="_blank">Wiki 原文</a></li>
+    </ul>
+  </div>
+</div>
+<footer class="book-footer">
+  <p><a href="index.html">演算法電子書</a> | <a href="https://github.com/ccckmit/course0">課程首頁</a></p>
+</footer>
+<script>var btn=document.getElementById('themeBtn');btn.onclick=function(){document.body.classList.toggle('dark');btn.textContent=document.body.classList.contains('dark')?'☀':'☾';}</script>
+</body>
+</html>

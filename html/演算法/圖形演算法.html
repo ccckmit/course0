@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>圖形演算法 — 演算法電子書</title>
+<link rel="stylesheet" href="book.css">
+<style>
+.chapter-nav { display: flex; gap: 8px; margin: 16px 0; flex-wrap: wrap; }
+.chapter-nav a { padding: 8px 16px; border: 1px solid var(--border); background: var(--surface); border-radius: 8px; text-decoration: none; font-size: 0.85rem; color: var(--text); transition: all 0.2s; }
+.chapter-nav a:hover { border-color: var(--primary); color: var(--primary); }
+.chapter-nav .back-btn { background: var(--primary); color: #fff; border-color: var(--primary); }
+.chapter-nav .back-btn:hover { opacity: 0.9; color: #fff; }
+</style>
+</head>
+<body>
+<header class="book-header">
+  <div class="back-link"><a href="index.html">← 回電子書首頁</a></div>
+  <button class="theme-toggle" id="themeBtn" onclick="document.body.classList.toggle('dark')" title="切換深色模式">☾</button>
+  <h1>圖形演算法</h1>
+  <p class="subtitle">Graph Algorithms — BFS、DFS、最短路徑、最小生成樹</p>
+</header>
+<div class="container">
+  <div class="chapter-nav">
+    <a href="index.html" class="back-btn">← 回目錄</a>
+    <a href="搜尋法.html">上一篇：搜尋法</a>
+    <a href="網路流.html">下一篇：網路流 →</a>
+  </div>
+  <div class="reader-content">
+    <h2>圖的表示</h2>
+    <p>圖由頂點（Vertex）和邊（Edge）組成，常見的表示方式有三種：</p>
+    <ul>
+      <li><strong>鄰接矩陣（Adjacency Matrix）：</strong>2D 陣列，matrix[i][j] 表示頂點 i 到 j 是否有邊。適合稠密圖，空間 O(V²)。</li>
+      <li><strong>鄰接串列（Adjacency List）：</strong>每個頂點維護一個鄰居串列。適合稀疏圖，空間 O(V+E)。</li>
+      <li><strong>邊串列（Edge List）：</strong>儲存所有邊的列表。適合需要枚舉所有邊的演算法。</li>
+    </ul>
+
+    <h2>BFS 與 DFS</h2>
+    <p><strong>廣度優先搜尋（BFS）：</strong>使用佇列，逐層探索。可求無權重圖的最短路徑，時間 O(V+E)。</p>
+    <div class="code-block">def bfs(graph, start):
+    visited = set()
+    queue = [start]
+    visited.add(start)
+    while queue:
+        v = queue.pop(0)
+        for neighbor in graph[v]:
+            if neighbor not in visited:
+                visited.add(neighbor)
+                queue.append(neighbor)
+    return visited</div>
+
+    <p><strong>深度優先搜尋（DFS）：</strong>使用堆疊或遞迴，用於拓撲排序、連通分量、環檢測。</p>
+    <div class="code-block">def dfs(graph, start, visited=None):
+    if visited is None:
+        visited = set()
+    visited.add(start)
+    for neighbor in graph[start]:
+        if neighbor not in visited:
+            dfs(graph, neighbor, visited)
+    return visited</div>
+
+    <h2>最短路徑</h2>
+    <table>
+      <tr><th>演算法</th><th>時間</th><th>限制</th><th>說明</th></tr>
+      <tr><td>Dijkstra</td><td>O((V+E)log V)</td><td>非負權重</td><td>使用優先佇列</td></tr>
+      <tr><td>Bellman-Ford</td><td>O(VE)</td><td>可處理負權重</td><td>可檢測負環</td></tr>
+      <tr><td>Floyd-Warshall</td><td>O(V³)</td><td>任意</td><td>全點對最短路徑</td></tr>
+      <tr><td>A*</td><td>視啟發函數</td><td>非負權重</td><td>啟發式搜尋</td></tr>
+    </table>
+
+    <h2>最小生成樹 (MST)</h2>
+    <p><strong>Kruskal 演算法：</strong>將邊按權重排序，從最小邊開始，使用 Union-Find 避免形成環。</p>
+    <p><strong>Prim 演算法：</strong>類似 Dijkstra，從起點開始每次加入最小跨接邊。</p>
+
+    <h2>相關連結</h2>
+    <ul>
+      <li><a href="index.html">回電子書首頁</a></li>
+      <li><a href="搜尋法.html">搜尋法</a></li>
+      <li><a href="網路流.html">網路流</a></li>
+      <li><a href="貪婪法.html">貪婪法</a></li>
+      <li><a href="https://github.com/ccckmit/course0/blob/main/wiki/%E6%BC%94%E7%AE%97%E6%B3%95/%E5%9C%96%E5%BD%A2%E6%BC%94%E7%AE%97%E6%B3%95.md" target="_blank">Wiki 原文</a></li>
+    </ul>
+  </div>
+</div>
+<footer class="book-footer">
+  <p><a href="index.html">演算法電子書</a> | <a href="https://github.com/ccckmit/course0">課程首頁</a></p>
+</footer>
+<script>var btn=document.getElementById('themeBtn');btn.onclick=function(){document.body.classList.toggle('dark');btn.textContent=document.body.classList.contains('dark')?'☀':'☾';}</script>
+</body>
+</html>

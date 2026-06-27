@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>搜尋法 — 演算法電子書</title>
+<link rel="stylesheet" href="book.css">
+<style>
+.chapter-nav { display: flex; gap: 8px; margin: 16px 0; flex-wrap: wrap; }
+.chapter-nav a { padding: 8px 16px; border: 1px solid var(--border); background: var(--surface); border-radius: 8px; text-decoration: none; font-size: 0.85rem; color: var(--text); transition: all 0.2s; }
+.chapter-nav a:hover { border-color: var(--primary); color: var(--primary); }
+.chapter-nav .back-btn { background: var(--primary); color: #fff; border-color: var(--primary); }
+.chapter-nav .back-btn:hover { opacity: 0.9; color: #fff; }
+</style>
+</head>
+<body>
+<header class="book-header">
+  <div class="back-link"><a href="index.html">← 回電子書首頁</a></div>
+  <button class="theme-toggle" id="themeBtn" onclick="document.body.classList.toggle('dark')" title="切換深色模式">☾</button>
+  <h1>搜尋法</h1>
+  <p class="subtitle">Search Algorithms — 從線性搜尋到 A* 啟發式搜尋</p>
+</header>
+<div class="container">
+  <div class="chapter-nav">
+    <a href="index.html" class="back-btn">← 回目錄</a>
+    <a href="排序演算法.html">上一篇：排序演算法</a>
+    <a href="圖形演算法.html">下一篇：圖形演算法 →</a>
+  </div>
+  <div class="reader-content">
+    <h2>線性搜尋 (Linear Search)</h2>
+    <p>從資料結構的第一個元素開始逐一比對，直到找到目標或遍歷完整個結構。時間 O(n)。適用於未排序的小型資料集。</p>
+
+    <h2>二分搜尋 (Binary Search)</h2>
+    <p>在已排序陣列中，每次將搜尋範圍縮小一半。時間 O(log n)。需要預先排序。</p>
+    <div class="code-block">def binary_search(arr, target):
+    left, right = 0, len(arr) - 1
+    while left <= right:
+        mid = (left + right) // 2
+        if arr[mid] == target:
+            return mid
+        elif arr[mid] < target:
+            left = mid + 1
+        else:
+            right = mid - 1
+    return -1</div>
+
+    <h2>圖形搜尋</h2>
+    <p><strong>廣度優先搜尋 (BFS)：</strong>使用佇列逐層探索，找到的路徑一定是最短的（無權重圖）。時間 O(V+E)。</p>
+    <p><strong>深度優先搜尋 (DFS)：</strong>使用堆疊或遞迴，沿一條路徑走到盡頭再回溯。用於拓撲排序、連通分量檢測。</p>
+
+    <h2>A* 搜尋演算法</h2>
+    <p>A* 是一種啟發式搜尋演算法，結合了 Dijkstra 的最短路徑保證與貪婪最佳優先搜尋的效率。使用評估函數 f(n) = g(n) + h(n)：</p>
+    <ul>
+      <li><strong>g(n)：</strong>從起點到節點 n 的實際成本</li>
+      <li><strong>h(n)：</strong>從節點 n 到終點的啟發式估計成本</li>
+    </ul>
+    <p>只要 h(n) 是可容許的（不高估實際成本），A* 保證找到最短路徑。</p>
+
+    <h2>相關連結</h2>
+    <ul>
+      <li><a href="index.html">回電子書首頁</a></li>
+      <li><a href="排序演算法.html">排序演算法</a></li>
+      <li><a href="圖形演算法.html">圖形演算法</a></li>
+      <li><a href="https://github.com/ccckmit/course0/blob/main/wiki/%E6%BC%94%E7%AE%97%E6%B3%95/%E6%90%9C%E5%B0%8B%E6%B3%95.md" target="_blank">Wiki 原文</a></li>
+    </ul>
+  </div>
+</div>
+<footer class="book-footer">
+  <p><a href="index.html">演算法電子書</a> | <a href="https://github.com/ccckmit/course0">課程首頁</a></p>
+</footer>
+<script>var btn=document.getElementById('themeBtn');btn.onclick=function(){document.body.classList.toggle('dark');btn.textContent=document.body.classList.contains('dark')?'☀':'☾';}</script>
+</body>
+</html>
